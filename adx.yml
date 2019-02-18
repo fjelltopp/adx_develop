@@ -4,7 +4,6 @@ services:
   ckan:
     volumes:
       - ./adx_config.ini:/etc/ckan/production.ini
-      - ../ckanext-superset:/etc/ckanext-superset
       - ../ckanext-unaids:/etc/ckanext-unaids
       - ./ckan-entrypoint-adx.sh:/ckan-entrypoint.sh
     command: ["ckan-paster","serve","--reload", "/etc/ckan/production.ini"]

@@ -43,27 +43,7 @@ def up(args, extra_args):
 
     # Run the command
     call_command([SUDO, 'sh', '-c', command])
-
-
-def js_dev(args, extra_args):
-    """
-    Starts the js webpack dev setup
-
-    Args:
-        args (NameSpace): The known args NameSpace object returned by argsparse
-        extra ([str]): A list of strings detailing any extra unkown args
-            supplied by the user.
-    """
-    # Export environment variables for dev_env options.
-
-    # Build the complete command
-    up = ["exec",  "-w", "/home/work/incubator-superset/superset/assets",
-          "superset", "npm", "run", "dev"]
-    command = '"{}"'.format(' '.join(compose + up))
-
-    # Run the command
-    call_command([SUDO, 'sh', '-c', command])
-
+    
 
 def run_docker_compose(args, extra_args):
     """
