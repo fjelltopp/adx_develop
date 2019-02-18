@@ -1,0 +1,64 @@
+# docker-compose build && docker-compose up -d
+# If "docker-compose logs ckan" shows DB not ready, run "docker-compose restart ckan" a few times.
+version: "3"
+
+volumes:
+  ckan_storage:
+  pg_data:
+
+services:
+  ckan:
+    container_name: ckan
+    build:
+      context: ../ckan/
+      args:
+          - CKAN_SITE_URL=${CKAN_SITE_URL}
+    links:
+      - db
+      - solr
+      - redis
+    ports:
+      - "0.0.0.0:5000:5000"
+    environment:
+      # Defaults work with linked containers, change to use own Postgres, SolR, Redis or Datapusher
+      - CKAN_MAX_UPLOAD_SIZE_MB=${CKAN_MAX_UPLOAD_SIZE_MB}
+      - CKAN_SQLALCHEMY_URL=postgresql://ckan:ckan@db/ckan
+      - CKAN_SOLR_URL=http://solr:8983/solr/ckan
+      - CKAN_REDIS_URL=redis://redis:6379/1
+      - CKAN_DATAPUSHER_URL=http://datapusher:8800/
+    volumes:
+      - ckan_storage:/var/lib/ckan
+
+
+  datapusher:
+    container_name: datapusher
+    image: clementmouchet/datapusher
+    ports:
+      - "8800:8800"
+
+  db:
+    container_name: db
+    ports:
+      - "5433:5432"
+    build:
+      context: ../ckan/
+      dockerfile: contrib/docker/postgresql/Dockerfile
+      args:
+        - DS_RO_PASS=datastore
+        - POSTGRES_PASSWORD=ckan
+    environment:
+      - DS_RO_PASS=datastore
+      - POSTGRES_PASSWORD=ckan
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+
+  solr:
+    container_name: solr
+    build:
+      context: ../ckan/
+      dockerfile: contrib/docker/solr/Dockerfile
+
+
+  redis:
+    container_name: redis
+    image: redis:latest
