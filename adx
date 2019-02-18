@@ -1,0 +1,95 @@
+#!/usr/bin/env python3
+
+import argparse
+import sys
+import util
+
+parser = argparse.ArgumentParser(
+    description='This script provides a variety of tools for managing the'
+                ' ADX development environment.'
+)
+subparsers = parser.add_subparsers(
+    title='Actions',
+    description='Choose which action to take.',
+    metavar='action',
+    dest='action'
+)
+actions = {}
+actions['up'] = actions['dc'] = subparsers.add_parser(
+    'up',
+    description="Start docker containers (docker-compose).",
+    help="Start docker containers (docker-compose)."
+)
+actions['up'].set_defaults(func=util.up)
+
+actions['stop'] = subparsers.add_parser(
+    'stop',
+    description="Stop docker containers (docker-compose).",
+    help="Stop docker containers (docker-compose)."
+)
+actions['stop'].set_defaults(func=util.run_docker_compose)
+
+actions['down'] = subparsers.add_parser(
+    'down',
+    description="Stop and destroy docker containers (docker-compose).",
+    help="Stop and destroy docker containers (docker-compose)."
+)
+actions['down'].set_defaults(func=util.run_docker_compose)
+
+actions['restart'] = subparsers.add_parser(
+    'restart',
+    description="Restart docker containers (docker-compose).",
+    help="Restart docker containers (docker-compose)."
+)
+actions['restart'].set_defaults(func=util.run_docker_compose)
+
+actions['build'] = subparsers.add_parser(
+    'build',
+    description="Restart docker containers (docker-compose).",
+    help="Restart docker containers (docker-compose)."
+)
+actions['build'].set_defaults(func=util.run_docker_compose)
+
+actions['logs'] = subparsers.add_parser(
+    'logs',
+    description="Open the logs for a service (docker-compose)",
+    help="Open the logs for a service (docker-compose)"
+)
+actions['logs'].set_defaults(func=util.run_docker_compose)
+
+actions['dc'] = subparsers.add_parser(
+    'dc',
+    description="Run any docker-compose command.",
+    help='Run any docker-compose command'
+)
+actions['dc'].set_defaults(func=util.run_docker_compose)
+
+actions['exec'] = subparsers.add_parser(
+    'exec',
+    description="Run any docker-compose exec command.",
+    help='Run any docker-compose exec command.'
+)
+actions['exec'].set_defaults(func=util.run_docker_compose)
+
+# Docker exec bash
+actions['bash'] = subparsers.add_parser(
+    'bash',
+    description="Open a bash prompt in the specified container.",
+    help='Open a bash prompt in the specified container'
+)
+actions['bash'].set_defaults(func=util.run_docker_compose)
+actions['bash'].add_argument('container', metavar='container', type=str,
+                             help='The service name e.g."frontend."')
+
+
+def main(orig_args):
+    # Parse both args we recognise
+    args, extra_args = parser.parse_known_args(orig_args)
+    if hasattr(args, 'func'):
+        # Parse the args!
+        args.func(args, extra_args)
+    else:
+        parser.print_help()
+
+if __name__ == '__main__':
+    main(sys.argv[1:])
