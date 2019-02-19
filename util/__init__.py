@@ -95,7 +95,7 @@ def run_repo(args, extra):
 
 def init(args, extra):
     print("Initializing the ADX codebase...")
-    manifest = args.manifest + '.xml' if args.manifest else DEFAULT_MANIFEST
+    manifest = args.manifest if args.manifest else DEFAULT_MANIFEST
     repo.main(['init', '-u', MANIFEST_URL, '-m', manifest])
     print("ADX status:")
     repo.main(['status'])
@@ -110,7 +110,8 @@ def setup(args, extra):
     print('This will destroy changes, resetting everything to the remote.')
 
     if raw_input('SURE YOU WANT TO CONTINUE? (y/N) ').lower() in ['y', 'yes']:
-        repo.main(['init', '-u', MANIFEST_URL, '-m', DEFAULT_MANIFEST])
+        manifest = args.manifest if args.manifest else DEFAULT_MANIFEST
+        repo.main(['init', '-u', MANIFEST_URL, '-m', manifest])
         repo.main(['sync', '--force-sync'])
         print('ADX code synced')
         repo.main(['forall', '-c', 'git', 'checkout', 'master'])
