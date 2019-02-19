@@ -135,7 +135,7 @@ actions['setup'].add_argument(
     '-m', '--manifest',
     help='Specify the particular manifest which defines the dev env you want '
          'to run  N.B. some manifests may require extra access to Git repos.',
-    choices=['all']
+    choices=['all.xml', 'deafult.xml']
 )
 actions['setup'].set_defaults(func=util.setup)
 
@@ -151,7 +151,7 @@ actions['init'].add_argument(
     '-m', '--manifest',
     help='Specify the particular manifest which defines the dev env you want '
          'to run  N.B. some manifests may require extra access to Git repos.',
-    choices=['all']
+    choices=['all.xml', 'deafult.xml']
 )
 
 
