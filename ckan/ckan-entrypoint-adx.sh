@@ -62,23 +62,4 @@ if [ -z "$CKAN_DATAPUSHER_URL" ]; then
     abort "ERROR: no CKAN_DATAPUSHER_URL specified in docker-compose.yml"
 fi
 
-# Install extensions
-
-ckan-pip install -r /usr/lib/ckan/venv/src/ckan/dev-requirements.txt
-
-ckan-pip install -e "git+https://github.com/ckan/ckanext-spatial.git#egg=ckanext-spatial"
-ckan-pip install -r /usr/lib/ckan/venv/src/ckanext-spatial/pip-requirements.txt
-
-ckan-pip install -e "git+https://github.com/ckan/ckanext-geoview.git#egg=ckanext-geoview"
-ckan-pip install -r /usr/lib/ckan/venv/src/ckanext-geoview/pip-requirements.txt
-
-rm -rf /usr/lib/ckan/ckanext-unaids
-cp -r /etc/ckanext-unaids /usr/lib/ckan/.
-ckan-pip install --force-reinstall -e  /usr/lib/ckan/ckanext-unaids
-
-set_environment
-ckan-paster --plugin=ckan db init -c "${CKAN_CONFIG}/production.ini"
-
-
-
 exec "$@"

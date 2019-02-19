@@ -10,9 +10,8 @@ services:
   ckan:
     container_name: ckan
     build:
-      context: ../ckan/
-      args:
-          - CKAN_SITE_URL=${CKAN_SITE_URL}
+      context: ../
+      dockerfile: adx_develop/ckan/Dockerfile
     links:
       - db
       - solr
@@ -21,6 +20,7 @@ services:
       - "0.0.0.0:5000:5000"
     environment:
       # Defaults work with linked containers, change to use own Postgres, SolR, Redis or Datapusher
+      - CKAN_SITE_URL=${CKAN_SITE_URL}
       - CKAN_MAX_UPLOAD_SIZE_MB=${CKAN_MAX_UPLOAD_SIZE_MB}
       - CKAN_SQLALCHEMY_URL=postgresql://ckan:ckan@db/ckan
       - CKAN_SOLR_URL=http://solr:8983/solr/ckan
@@ -28,6 +28,8 @@ services:
       - CKAN_DATAPUSHER_URL=http://datapusher:8800/
     volumes:
       - ckan_storage:/var/lib/ckan
+      - ../:/usr/lib/adx
+    command: ["ckan-paster","serve","--reload", "/etc/ckan/production.ini"]
 
 
   datapusher:

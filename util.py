@@ -3,8 +3,7 @@ import subprocess
 import sys
 SUDO = os.environ.get('MEERKAT_SUDO', '')
 
-compose_file = "adx.yml"
-compose = ["docker-compose", "-f" , "docker-compose.yml", "-f", compose_file]
+compose = ["docker-compose"]
 
 COMPOSE_PATH = os.path.abspath(os.path.dirname(__file__))
 
@@ -43,7 +42,7 @@ def up(args, extra_args):
 
     # Run the command
     call_command([SUDO, 'sh', '-c', command])
-    
+
 
 def run_docker_compose(args, extra_args):
     """
