@@ -135,7 +135,7 @@ actions['setup'].add_argument(
     '-m', '--manifest',
     help='Specify the particular manifest which defines the dev env you want '
          'to run  N.B. some manifests may require extra access to Git repos.',
-    choices=['all', 'jordan', 'mad', 'somalia']
+    choices=['all']
 )
 actions['setup'].set_defaults(func=util.setup)
 
@@ -148,10 +148,10 @@ actions['init'] = subparsers.add_parser(
 actions['init'].set_defaults(func=util.init)
 
 actions['init'].add_argument(
-    '-c', '--country',
-    help='Initialize the development environment for a specific country (or '
-         '"all"). N.B you will need access to the Gitub country config repos',
-    choices=['all', 'jordan', 'mad', 'somalia']
+    '-m', '--manifest',
+    help='Specify the particular manifest which defines the dev env you want '
+         'to run  N.B. some manifests may require extra access to Git repos.',
+    choices=['all']
 )
 
 
