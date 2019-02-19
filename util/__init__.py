@@ -1,7 +1,7 @@
 import os
 import subprocess
 import sys
-import repo
+from . import repo
 
 SUDO = os.environ.get('MEERKAT_SUDO', '')
 
