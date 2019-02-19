@@ -112,16 +112,7 @@ def setup(args, extra):
     if raw_input('SURE YOU WANT TO CONTINUE? (y/N) ').lower() in ['y', 'yes']:
         repo.main(['init', '-u', MANIFEST_URL, '-m', DEFAULT_MANIFEST])
         repo.main(['sync', '--force-sync'])
-        print('Meerkat code synced')
+        print('ADX code synced')
         repo.main(['forall', '-c', 'git', 'checkout', 'master'])
-        try:
-            repo.main(['forall', '-c', 'git', 'checkout',
-                       '-q', 'development'])
-        except subprocess.CalledProcessError:
-            print('Some repos do not have a development branch.')
-
-        print('Master and Development branches created on your '
-              'local machine.\nDevelopment branch checked out where '
-              'available.')
         repo.main(['status'])
         print('--SETUP COMPLETE--')
