@@ -62,4 +62,7 @@ if [ -z "$CKAN_DATAPUSHER_URL" ]; then
     abort "ERROR: no CKAN_DATAPUSHER_URL specified in docker-compose.yml"
 fi
 
+ckan-pip install -e /usr/lib/adx/ckanext-unaids
+ckan-pip install -e /usr/lib/adx/ckanext-cloudstorage
+
 exec "$@"
