@@ -3,14 +3,19 @@
 
 FROM alpine:latest
 
+RUN apk --no-cache add bash curl jq
+
 ENV APP_USER adxuser
 
 RUN adduser -g "App User" -D $APP_USER
 
 COPY crontab /var/spool/cron/crontabs/$APP_USER
 
-RUN chmod 0600 /var/spool/cron/crontabs/$APP_USER
+COPY entrypoint.sh /usr/local/bin/entrypoint.sh
 
-ENTRYPOINT "crond"
+RUN chmod 0600 /var/spool/cron/crontabs/$APP_USER && \
+    chmod +x /usr/local/bin/entrypoint.sh
 
-CMD ["-f", "-d", "8"]
+ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
+
+CMD ["crond", "-f", "-d", "8"]
