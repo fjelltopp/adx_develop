@@ -34,10 +34,11 @@ services:
   cron:
     container_name: cron
     build: cron
-    entrypoint: ""
-    command: crond -f -d 8
+    environment:
+      # Set the ADX_SYSADMIN_API_KEY env var on the host to auto send emails
+      - SECRET_ENVS={"ADX_SYSADMIN_API_KEY":"${ADX_SYSADMIN_API_KEY}"}
     volumes:
-    - /etc/localtime:/etc/localtime:ro
+      - /etc/localtime:/etc/localtime:ro
 
   datapusher:
     container_name: datapusher
