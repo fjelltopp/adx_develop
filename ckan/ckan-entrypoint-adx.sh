@@ -64,6 +64,12 @@ fi
 
 ckan-pip install -e /usr/lib/adx/ckanext-unaids
 ckan-pip install -e /usr/lib/adx/ckanext-cloudstorage
+ckan-pip install -e /usr/lib/adx/ckanext-validator
+ckan-pip install -r /usr/lib/adx/ckanext-validator/requirements.txt
+
+ckan-pip install -e /usr/lib/adx/ckanext-scheming
+#ckan-pip install -r /usr/lib/adx/ckanext-scheming/requirements.txt
+
 
 set_environment
 ckan-paster --plugin=ckan db init -c "${CKAN_CONFIG}/production.ini"
