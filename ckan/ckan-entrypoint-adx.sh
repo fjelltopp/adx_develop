@@ -63,6 +63,7 @@ if [ -z "$CKAN_DATAPUSHER_URL" ]; then
 fi
 
 # Reinstall extensions with local source, now container has the latest code.
+# No need to install deps since they have already been installed during build
 ckan-pip install --no-deps -e /usr/lib/adx/ckanext-unaids
 ckan-pip install --no-deps -e /usr/lib/adx/ckanext-cloudstorage
 ckan-pip install --no-deps -e /usr/lib/adx/ckanext-validator
