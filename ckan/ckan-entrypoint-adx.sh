@@ -67,10 +67,9 @@ fi
 ckan-pip install --no-deps -e /usr/lib/adx/ckanext-unaids
 ckan-pip install --no-deps -e /usr/lib/adx/ckanext-validator
 ckan-pip install --no-deps -e /usr/lib/adx/ckanext-restricted
+ckan-pip install --no-deps -e /usr/lib/adx/ckanext-scheming
 
-ckan-pip install -e /usr/lib/adx/ckanext-scheming
 set_environment
 ckan-paster --plugin=ckan db init -c "${CKAN_CONFIG}/production.ini"
-
 
 exec "$@"
