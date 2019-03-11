@@ -69,6 +69,8 @@ services:
     build:
       context: ../ckan/
       dockerfile: contrib/docker/solr/Dockerfile
+    environment:
+      - SOLR_LOG_LEVEL=WARN
 
 
   redis:
