@@ -71,7 +71,8 @@ services:
       dockerfile: contrib/docker/solr/Dockerfile
     environment:
       - SOLR_LOG_LEVEL=WARN
-
+    volumes:
+      - ../ckan/ckan/config/solr/schema.xml:/opt/solr/server/solr/ckan/conf/schema.xml
 
   redis:
     container_name: redis
