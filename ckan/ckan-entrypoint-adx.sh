@@ -66,7 +66,7 @@ fi
 # No need to install deps since they have already been installed during build
 ckan-pip install --no-deps -e /usr/lib/adx/ckanext-unaids
 ckan-pip install -e /usr/lib/adx/ckanext-validator
-ckan-pip install --no-deps -e /usr/lib/adx/ckanext-restricted
+ckan-pip install -e /usr/lib/adx/ckanext-restricted
 ckan-pip install --no-deps -e /usr/lib/adx/ckanext-scheming
 
 set_environment

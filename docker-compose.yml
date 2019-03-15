@@ -31,6 +31,7 @@ services:
     volumes:
       - ckan_storage:/var/lib/ckan
       - ../:/usr/lib/adx
+      - ./ckan/adx_config.ini:/etc/ckan/production.ini
     command: ["ckan-paster","serve","--reload", "/etc/ckan/production.ini"]
 
   cron:
