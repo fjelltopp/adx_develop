@@ -62,6 +62,8 @@ if [ -z "$CKAN_DATAPUSHER_URL" ]; then
     abort "ERROR: no CKAN_DATAPUSHER_URL specified in docker-compose.yml"
 fi
 
+ckan-pip install -e $CKAN_VENV/src/ckan/ 
+
 # Reinstall extensions with local source, now container has the latest code.
 # No need to install deps since they have already been installed during build
 ckan-pip install --no-deps -e /usr/lib/adx/ckanext-unaids
