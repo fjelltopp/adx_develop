@@ -110,7 +110,9 @@ def setup(args, extra):
     print('This will destroy changes, resetting everything to the remote.')
 
     if raw_input('SURE YOU WANT TO CONTINUE? (y/N) ').lower() in ['y', 'yes']:
+        print("manifest:", args.manifest)
         manifest = args.manifest if args.manifest else DEFAULT_MANIFEST
+        print("manifest:", manifest)
         repo.main(['init', '-u', MANIFEST_URL, '-m', manifest])
         repo.main(['sync', '--force-sync'])
         print('ADX code synced')
