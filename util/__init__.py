@@ -115,5 +115,7 @@ def setup(args, extra):
         repo.main(['sync', '--force-sync'])
         print('ADX code synced')
         repo.main(['forall', '-c', 'git', 'checkout', 'master'])
+        repo.main(['forall', 'ckan', '-c', 'git', 'checkout', 'refs/tags/ckan-2.8.2'])
+        repo.main(['forall', 'ckanext-scheming', '-c', 'git', 'checkout', 'validator'])
         repo.main(['status'])
         print('--SETUP COMPLETE--')
