@@ -70,6 +70,7 @@ RUN ckan-pip install -e "git+https://github.com/ckan/ckanext-geoview.git#egg=cka
 RUN ckan-pip install -e "git+https://github.com/EnviDat/ckanext-composite.git#egg=ckanext-composite"
 RUN ckan-pip install -e "git+https://github.com/open-data/ckanext-repeating.git#egg=ckanext-repeating"
 
+
 # Install requirements for extensions with a local source
 COPY ./ckanext-validator/requirements.txt /usr/lib/ckan/validator-req.txt
 RUN ckan-pip install -r /usr/lib/ckan/validator-req.txt && \
