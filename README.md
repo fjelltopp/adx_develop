@@ -38,10 +38,11 @@ Repository to the development environment for the AIDS data exchange.
    adx up
    ```
 
-7. After the images have been built and started run the following command to set
-   up DB for datastore:
+7. After the images have been built and started run the following commands to set
+   up DB for data-store:
    ```
    docker exec ckan /usr/local/bin/ckan-paster --plugin=ckan datastore set-permissions -c /etc/ckan/production.ini | docker exec -i db psql -U ckan
+   docker exec ckan /usr/local/bin/ckan-paster --plugin=ckanext-ytp-request initdb -c /etc/ckan/production.ini
    ```
 
 8. Create an admin user:
