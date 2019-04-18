@@ -1,6 +1,13 @@
 # adx_develop
 
-Repository to the development environment for the AIDS data exchange.
+Repository storing the development environment for the AIDS data exchange.
+
+## Linked Repositories
+
+Setting up the ADX development environment locally will clone a collection of different Github repos specified in [this file](https://github.com/fjelltopp/adx_manifest/blob/master/default.xml).  This includes the base [CKAN](https://github.com/ckan/ckan) repository and a variety of of forked CKAN extensions.
+
+
+## Setup
 
 1. Create a directory to store the ADX development environment, then change
    directory into it e.g.
