@@ -44,6 +44,10 @@ Repository to the development environment for the AIDS data exchange.
    docker exec ckan /usr/local/bin/ckan-paster --plugin=ckan datastore set-permissions -c /etc/ckan/production.ini | docker exec -i db psql -U ckan
    docker exec ckan /usr/local/bin/ckan-paster --plugin=ckanext-ytp-request initdb -c /etc/ckan/production.ini
    ```
+   For harvest ext:
+   ```
+   docker exec -it ckan /usr/local/bin/ckan-paster --plugin=ckanext-harvest harvester initdb -c /etc/ckan/production.ini
+   ```
 
 8. Create an admin user:
    ```
