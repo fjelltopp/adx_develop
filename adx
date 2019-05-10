@@ -153,7 +153,14 @@ actions['init'].add_argument(
          'to run  N.B. some manifests may require extra access to Git repos.',
     choices=['all.xml', 'deafult.xml']
 )
-
+# Add the setup command arguments
+actions['initCkanDb'] = subparsers.add_parser(
+    'initCkanDb',
+    description='Runs the initial configuration for CKAN plugins. Should be run'
+                'after the initial Ckan startup',
+    help='Performs initial CKAN database setup.',
+)
+actions['initCkanDb'].set_defaults(func=util.init_ckan_db)
 
 def main(orig_args):
     # Parse both args we recognise

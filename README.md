@@ -38,31 +38,40 @@ Repository to the development environment for the AIDS data exchange.
    adx up
    ```
 
-7. After the images have been built and started run the following commands to set
-   up DB for data-store:
-   ```
-   docker exec ckan /usr/local/bin/ckan-paster --plugin=ckan datastore set-permissions -c /etc/ckan/production.ini | docker exec -i db psql -U ckan
-   docker exec ckan /usr/local/bin/ckan-paster --plugin=ckanext-ytp-request initdb -c /etc/ckan/production.ini
-   ```
-   For the request-access (ytp-requests) extension:
-   ```
-   docker exec ckan /usr/local/bin/ckan-paster --plugin=ckanext-ytp-request initdb -c /etc/ckan/production.ini
-   ```
-   For harvest ext:
-   ```
-   docker exec -it ckan /usr/local/bin/ckan-paster --plugin=ckanext-harvest harvester initdb -c /etc/ckan/production.ini
-   ```
 
-8. Create an admin user:
-   ```
-   docker exec -it ckan /usr/local/bin/ckan-paster --plugin=ckan sysadmin -c /etc/ckan/production.ini add admin
-   ```
-   The db should persist in a docker volume, so these commands will only need to
-   be run again if you delete corresponding docker volume.
+7. Do the initial CKAN configuration with:
+    ```
+    adx initCkanDb
+    ```
+    Which wraps the following steps for you:
+    1. After the images have been built and started run the following commands to set
+       up DB for data-store:
+       ```
+       docker exec ckan /usr/local/bin/ckan-paster --plugin=ckan datastore set-permissions -c /etc/ckan/production.ini | docker exec -i db psql -U ckan
+       docker exec ckan /usr/local/bin/ckan-paster --plugin=ckanext-ytp-request initdb -c /etc/ckan/production.ini
+       ```
+       For harvest ext:
+       ```
+       docker exec -it ckan /usr/local/bin/ckan-paster --plugin=ckanext-harvest harvester initdb -c /etc/ckan/production.ini
+       ```
 
+    1. Create an admin user:
+       ```
+       docker exec -it ckan /usr/local/bin/ckan-paster --plugin=ckan sysadmin -c /etc/ckan/production.ini add admin
+       ```
+       The db should persist in a docker volume, so these commands will only need to
+       be run again if you delete corresponding docker volume.
 9. Then restart the ckan container:
    ```
    adx restart ckan
    ```
 
 10. CKAN should be available at http://localhost:5000
+
+11. Harvester extension in development run:
+    ```
+    adx bash ckan
+    # run harvester fetch and gather consumer as bg tasks
+    /adx_utils/harvester_bg_tasks.sh
+    # then after each run of harvest job you need to run
+    /adx_utils/harvester_run_task.sh
