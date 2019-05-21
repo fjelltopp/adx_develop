@@ -21,7 +21,8 @@ RUN apt-get -q -y update \
         git-core \
         vim \
         wget \
-	jq \
+        jq \
+        supervisor \
     && apt-get -q clean \
     && rm -rf /var/lib/apt/lists/*
 
@@ -85,6 +86,5 @@ RUN ckan-pip install -r /usr/lib/ckan/scheming-req.txt && \
 # Configs
 COPY ./adx_develop/ckan/ckan-entrypoint-adx.sh /ckan-entrypoint.sh
 COPY ./adx_develop/ckan/adx_config.ini /etc/ckan/production.ini
-
 ENTRYPOINT ["/ckan-entrypoint.sh"]
 CMD ["ckan-paster","serve","/etc/ckan/production.ini"]
