@@ -33,7 +33,31 @@ services:
       - ../:/usr/lib/adx
       - ../ckan:/usr/lib/ckan/venv/src/ckan
       - ./ckan/adx_config.ini:/etc/ckan/production.ini
+      - ./ckan/utils/:/adx_utils
     command: ["ckan-paster","serve","--reload", "/etc/ckan/production.ini"]
+
+  supervisor:
+    container_name: supervisor
+    build:
+      context: ../
+      dockerfile: adx_develop/ckan/Dockerfile
+    links:
+      - db
+      - solr
+      - redis
+    environment:
+#      # Defaults work with linked containers, change to use own Postgres, SolR, Redis or Datapusher
+      - CKAN_SQLALCHEMY_URL=postgresql://ckan:ckan@db/ckan
+      - CKAN_SOLR_URL=http://solr:8983/solr/ckan
+      - CKAN_REDIS_URL=redis://redis:6379/1
+      - CKAN_DATAPUSHER_URL=http://datapusher:8800/
+    volumes:
+      - ckan_storage:/var/lib/ckan
+      - ../:/usr/lib/adx
+      - ../ckan:/usr/lib/ckan/venv/src/ckan
+      - ./ckan/adx_config.ini:/etc/ckan/production.ini
+      - ./ckan/ckan_supervisor_harvester.conf:/etc/supervisor/conf.d/ckan_harvester.conf
+    command: ["/usr/bin/supervisord"]
 
   cron:
     container_name: cron
@@ -43,6 +67,7 @@ services:
       - SECRET_ENVS={"ADX_SYSADMIN_API_KEY":"${ADX_SYSADMIN_API_KEY}"}
     volumes:
       - /etc/localtime:/etc/localtime:ro
+      - ../ckan:/usr/lib/ckan/venv/src/ckan
 
   datapusher:
     container_name: datapusher
@@ -53,7 +78,7 @@ services:
   db:
     container_name: db
     ports:
-      - "5433:5432"
+      - "5432:5432"
     build:
       context: ../ckan/
       dockerfile: contrib/docker/postgresql/Dockerfile
