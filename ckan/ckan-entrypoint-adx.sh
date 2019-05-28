@@ -71,6 +71,7 @@ ckan-pip install -e /usr/lib/adx/ckanext-validator
 ckan-pip install -e /usr/lib/adx/ckanext-restricted
 ckan-pip install --no-deps -e /usr/lib/adx/ckanext-scheming
 ckan-pip install -e /usr/lib/adx/ckanext-ytp-request
+ckan-pip install -e /usr/lib/adx/ckanext-pages
 ckan-pip install -e /usr/lib/adx/ckanext-dhis2harvester
 
 set_environment
