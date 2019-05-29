@@ -1,6 +1,6 @@
 # adx_develop
 
-Repository storing the development environment for the AIDS data exchange.
+Repository storing the development environment for _The AIDS Data Repository_.
 
 ## Linked Repositories
 
