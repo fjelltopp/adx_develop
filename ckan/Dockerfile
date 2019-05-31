@@ -41,8 +41,10 @@ RUN useradd -r -u 900 -m -c "ckan account" -d $CKAN_HOME -s /bin/false ckan
 # Setup virtual environment for CKAN
 RUN mkdir -p $CKAN_VENV $CKAN_CONFIG $CKAN_STORAGE_PATH && \
     virtualenv $CKAN_VENV && \
-    ln -s $CKAN_VENV/bin/pip /usr/local/bin/ckan-pip &&\
-    ln -s $CKAN_VENV/bin/paster /usr/local/bin/ckan-paster
+    ln -s $CKAN_VENV/bin/pip /usr/local/bin/ckan-pip && \
+    ln -s $CKAN_VENV/bin/paster /usr/local/bin/ckan-paster && \
+    ln -s $CKAN_VENV/bin/python /usr/local/bin/ckan-python && \
+    ln -s $CKAN_VENV/bin/sphinx-build /usr/local/bin/ckan-sphinx-build
 
 COPY ckan $CKAN_VENV/src/ckan
 
@@ -73,6 +75,8 @@ RUN ckan-pip install -e "git+https://github.com/open-data/ckanext-repeating.git#
 RUN ckan-pip install -e "git+https://github.com/ckan/ckanext-harvest.git#egg=ckanext-harvest" && \
     ckan-pip install -r /usr/lib/ckan/venv/src/ckanext-harvest/pip-requirements.txt
 
+COPY ./adx_develop/docs/docs-requirements.txt /docs/docs-requirements.txt
+RUN ckan-pip install -r /docs/docs-requirements.txt
 
 # Install requirements for extensions with a local source
 COPY ./ckanext-validator/requirements.txt /usr/lib/ckan/validator-req.txt

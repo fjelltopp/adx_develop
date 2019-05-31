@@ -34,6 +34,7 @@ services:
       - ../ckan:/usr/lib/ckan/venv/src/ckan
       - ./ckan/adx_config.ini:/etc/ckan/production.ini
       - ./ckan/utils/:/adx_utils
+      - ./docs:/docs
     command: ["ckan-paster","serve","--reload", "/etc/ckan/production.ini"]
 
   supervisor:
