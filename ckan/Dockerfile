@@ -50,8 +50,6 @@ COPY ckan $CKAN_VENV/src/ckan
 
 WORKDIR $CKAN_VENV/src/ckan
 
-
-
 # Setup CKAN
 RUN ckan-pip install -U pip && \
     ckan-pip install --upgrade -r $CKAN_VENV/src/ckan/requirement-setuptools.txt && \
@@ -75,9 +73,6 @@ RUN ckan-pip install -e "git+https://github.com/open-data/ckanext-repeating.git#
 RUN ckan-pip install -e "git+https://github.com/ckan/ckanext-harvest.git#egg=ckanext-harvest" && \
     ckan-pip install -r /usr/lib/ckan/venv/src/ckanext-harvest/pip-requirements.txt
 
-COPY ./adx_develop/docs/docs-requirements.txt /docs/docs-requirements.txt
-RUN ckan-pip install -r /docs/docs-requirements.txt
-
 # Install requirements for extensions with a local source
 COPY ./ckanext-validator/requirements.txt /usr/lib/ckan/validator-req.txt
 RUN ckan-pip install -r /usr/lib/ckan/validator-req.txt && \
@@ -86,6 +81,10 @@ RUN ckan-pip install -r /usr/lib/ckan/validator-req.txt && \
 COPY ./ckanext-scheming/requirements.txt /usr/lib/ckan/scheming-req.txt
 RUN ckan-pip install -r /usr/lib/ckan/scheming-req.txt && \
     rm /usr/lib/ckan/scheming-req.txt
+
+# Docs building
+COPY ./adx_develop/docs/docs-requirements.txt /docs/docs-requirements.txt
+RUN ckan-pip install -r /docs/docs-requirements.txt
 
 # Configs
 COPY ./adx_develop/ckan/ckan-entrypoint-adx.sh /ckan-entrypoint.sh

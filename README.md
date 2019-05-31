@@ -7,7 +7,7 @@ Repository storing the development environment for _The AIDS Data Repository_.
 Setting up the ADX development environment locally will clone a collection of different Github repos specified in [this file](https://github.com/fjelltopp/adx_manifest/blob/master/default.xml).  This includes the base [CKAN](https://github.com/ckan/ckan) repository and a variety of of forked CKAN extensions.
 
 
-## Setup
+## Installation
 
 1. Create a directory to store the ADX development environment, then change
    directory into it e.g.
@@ -82,3 +82,19 @@ Setting up the ADX development environment locally will clone a collection of di
     /adx_utils/harvester_bg_tasks.sh
     # then after each run of harvest job you need to run
     /adx_utils/harvester_run_task.sh
+    ```
+
+## Docs
+
+The docs for the project are built through the dockerised development
+environment using Sphinx. They can be built using the command:
+```
+adx docs
+```
+To view the docs open the file `adx_develop/docs/html/index.html` in a web browser.
+
+If you have the required permissions, you can use the following command to deploy
+the docs to web where they are hosted by S3 as a static website:
+```
+aws s3 sync adx_develop/docs/html s3://unaids-technical-documentation --profile unaids
+```

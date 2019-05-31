@@ -162,6 +162,15 @@ actions['initCkanDb'] = subparsers.add_parser(
 )
 actions['initCkanDb'].set_defaults(func=util.init_ckan_db)
 
+# Build the docs
+actions['docs'] = subparsers.add_parser(
+    'docs',
+    description='Uses Sphinx to build the project\'s documentation',
+    help='Uses Sphinx to build the project\'s documentation.',
+)
+actions['docs'].set_defaults(func=util.build_docs)
+
+
 def main(orig_args):
     # Parse both args we recognise
     args, extra_args = parser.parse_known_args(orig_args)
