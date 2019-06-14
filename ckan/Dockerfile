@@ -75,14 +75,17 @@ RUN ckan-pip install -e "git+https://github.com/ckan/ckanext-harvest.git#egg=cka
 
 
 # Install requirements for extensions with a local source
-COPY ./ckanext-validator/requirements.txt /usr/lib/ckan/validator-req.txt
-RUN ckan-pip install -r /usr/lib/ckan/validator-req.txt && \
-    rm /usr/lib/ckan/validator-req.txt
+COPY ./ckanext-validator/requirements.txt /usr/lib/ckan/validator-requirements.txt
+RUN ckan-pip install -r /usr/lib/ckan/validator-requirements.txt
 
-COPY ./ckanext-scheming/requirements.txt /usr/lib/ckan/scheming-req.txt
-RUN ckan-pip install -r /usr/lib/ckan/scheming-req.txt && \
-    rm /usr/lib/ckan/scheming-req.txt
+COPY ./ckanext-scheming/requirements.txt /usr/lib/ckan/scheming-requirements.txt
+RUN ckan-pip install -r /usr/lib/ckan/scheming-requirements.txt
 
+COPY ./ckanext-dhis2harvester/pip-requirements.txt /usr/lib/ckan/dhis2-harvester-requriments.txt
+COPY ./ckanext-dhis2harvester/dev-requirements.txt /usr/lib/ckan/dhis2-harvester-dev-requriments.txt
+RUN ckan-pip install -r /usr/lib/ckan/dhis2-harvester-requriments.txt -r /usr/lib/ckan/dhis2-harvester-dev-requriments.txt
+
+RUN rm /usr/lib/ckan/*-requirements.txt
 # Configs
 COPY ./adx_develop/ckan/ckan-entrypoint-adx.sh /ckan-entrypoint.sh
 COPY ./adx_develop/ckan/adx_config.ini /etc/ckan/production.ini
