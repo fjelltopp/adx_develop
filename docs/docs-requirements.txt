@@ -1,6 +1,6 @@
-sphinx==1.6.7
-sphinxcontrib-httpdomain==1.6.0
-sphinxcontrib-napoleon==0.6.1
-sphinx-argparse==0.2.5
+sphinx
+sphinxcontrib-httpdomain
+sphinxcontrib-napoleon
+sphinx-argparse
 sphinx_rtd_theme
-git+https://github.com/lunant/sphinxcontrib-autojs.git
+recommonmark

@@ -3,6 +3,8 @@ The AIDS Data Repository
 Technical Documentation
 =======================
 
+[Technical Overview](overview)
+
 Contents:
 
 .. toctree::
