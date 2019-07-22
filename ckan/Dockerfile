@@ -70,7 +70,7 @@ RUN ckan-pip install -e "git+https://github.com/ckan/ckanext-geoview.git#egg=cka
     ckan-pip install -r /usr/lib/ckan/venv/src/ckanext-geoview/pip-requirements.txt
 RUN ckan-pip install -e "git+https://github.com/EnviDat/ckanext-composite.git#egg=ckanext-composite"
 RUN ckan-pip install -e "git+https://github.com/open-data/ckanext-repeating.git#egg=ckanext-repeating"
-RUN ckan-pip install -e "git+https://github.com/ckan/ckanext-harvest.git#egg=ckanext-harvest" && \
+RUN ckan-pip install -e "git+https://github.com/ckan/ckanext-harvest.git@v1.1.4#egg=ckanext-harvest" && \
     ckan-pip install -r /usr/lib/ckan/venv/src/ckanext-harvest/pip-requirements.txt
 
 
@@ -88,6 +88,5 @@ RUN ckan-pip install -r /usr/lib/ckan/dhis2-harvester-requriments.txt -r /usr/li
 RUN rm /usr/lib/ckan/*-requirements.txt
 # Configs
 COPY ./adx_develop/ckan/ckan-entrypoint-adx.sh /ckan-entrypoint.sh
-COPY ./adx_develop/ckan/adx_config.ini /etc/ckan/production.ini
 ENTRYPOINT ["/ckan-entrypoint.sh"]
 CMD ["ckan-paster","serve","/etc/ckan/production.ini"]
