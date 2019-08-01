@@ -42,13 +42,12 @@ RUN useradd -r -u 900 -m -c "ckan account" -d $CKAN_HOME -s /bin/false ckan
 RUN mkdir -p $CKAN_VENV $CKAN_CONFIG $CKAN_STORAGE_PATH && \
     virtualenv $CKAN_VENV && \
     ln -s $CKAN_VENV/bin/pip /usr/local/bin/ckan-pip &&\
-    ln -s $CKAN_VENV/bin/paster /usr/local/bin/ckan-paster
+    ln -s $CKAN_VENV/bin/paster /usr/local/bin/ckan-paster &&\
+    ln -s $CKAN_VENV/bin/python /usr/local/bin/ckan-python
 
 COPY ckan $CKAN_VENV/src/ckan
 
 WORKDIR $CKAN_VENV/src/ckan
-
-
 
 # Setup CKAN
 RUN ckan-pip install -U pip && \
@@ -80,6 +79,9 @@ RUN ckan-pip install -r /usr/lib/ckan/validator-requirements.txt
 
 COPY ./ckanext-scheming/requirements.txt /usr/lib/ckan/scheming-requirements.txt
 RUN ckan-pip install -r /usr/lib/ckan/scheming-requirements.txt
+
+COPY ./ckanext-validation/requirements.txt /usr/lib/ckan/validation-requirements.txt
+RUN ckan-pip install -r /usr/lib/ckan/validation-requirements.txt
 
 COPY ./ckanext-dhis2harvester/pip-requirements.txt /usr/lib/ckan/dhis2-harvester-requriments.txt
 COPY ./ckanext-dhis2harvester/dev-requirements.txt /usr/lib/ckan/dhis2-harvester-dev-requriments.txt
