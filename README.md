@@ -61,6 +61,10 @@ Setting up the ADX development environment locally will clone a collection of di
        ```
        docker exec -it ckan /usr/local/bin/ckan-paster --plugin=ckanext-harvest harvester initdb -c /etc/ckan/production.ini
        ```
+       For ckanext-validation:
+       ```
+       docker exec -it ckan /usr/local/bin/ckan-paster --plugin=ckanext-validation validation init-db -c /etc/ckan/production.ini
+       ```
 
     1. Create an admin user:
        ```
@@ -68,6 +72,7 @@ Setting up the ADX development environment locally will clone a collection of di
        ```
        The db should persist in a docker volume, so these commands will only need to
        be run again if you delete corresponding docker volume.
+
 9. Then restart the ckan container:
    ```
    adx restart ckan
