@@ -43,7 +43,10 @@ RUN mkdir -p $CKAN_VENV $CKAN_CONFIG $CKAN_STORAGE_PATH && \
     virtualenv $CKAN_VENV && \
     ln -s $CKAN_VENV/bin/pip /usr/local/bin/ckan-pip &&\
     ln -s $CKAN_VENV/bin/paster /usr/local/bin/ckan-paster &&\
-    ln -s $CKAN_VENV/bin/python /usr/local/bin/ckan-python
+    ln -s $CKAN_VENV/bin/python /usr/local/bin/ckan-python &&\
+    ln -s $CKAN_VENV/bin/nosetests-2.7 /usr/local/bin/ckan-nosetests &&\
+    echo "alias ckanext='cd /usr/lib/adx/'" >> $HOME/.bashrc &&\
+    echo "alias ckan='cd /usr/lib/ckan/venv/src/ckan'" >> $HOME/.bashrc
 
 COPY ckan $CKAN_VENV/src/ckan
 
