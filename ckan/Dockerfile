@@ -72,7 +72,6 @@ RUN ckan-pip install -e "git+https://github.com/open-data/ckanext-repeating.git#
 RUN ckan-pip install -e "git+https://github.com/ckan/ckanext-harvest.git@v1.1.4#egg=ckanext-harvest" && \
     ckan-pip install -r /usr/lib/ckan/venv/src/ckanext-harvest/pip-requirements.txt
 
-
 # Install requirements for extensions with a local source
 COPY ./ckanext-validator/requirements.txt /usr/lib/ckan/validator-requirements.txt
 RUN ckan-pip install -r /usr/lib/ckan/validator-requirements.txt
