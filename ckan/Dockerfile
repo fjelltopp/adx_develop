@@ -73,9 +73,6 @@ RUN ckan-pip install -e "git+https://github.com/ckan/ckanext-harvest.git@v1.1.4#
     ckan-pip install -r /usr/lib/ckan/venv/src/ckanext-harvest/pip-requirements.txt
 
 # Install requirements for extensions with a local source
-COPY ./ckanext-validator/requirements.txt /usr/lib/ckan/validator-requirements.txt
-RUN ckan-pip install -r /usr/lib/ckan/validator-requirements.txt
-
 COPY ./ckanext-scheming/requirements.txt /usr/lib/ckan/scheming-requirements.txt
 RUN ckan-pip install -r /usr/lib/ckan/scheming-requirements.txt
 
