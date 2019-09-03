@@ -70,6 +70,7 @@ RUN ckan-pip install -e "git+https://github.com/open-data/ckanext-repeating.git#
 RUN ckan-pip install -e "git+https://github.com/ckan/ckanext-harvest.git@v1.1.4#egg=ckanext-harvest" && \
     ckan-pip install -r /usr/lib/ckan/venv/src/ckanext-harvest/pip-requirements.txt
 RUN ckan-pip install -e "git+https://github.com/okfn/ckanext-sentry#egg=ckanext-sentry"
+RUN ckan-pip install -e "git+https://github.com/ckan/ckanext-pdfview#egg=ckanext-pdfview"
 RUN ckan-pip install -e "git+https://github.com/ckan/ckanext-googleanalytics.git#egg=ckanext-googleanalytics" && \
     ckan-pip install -r /usr/lib/ckan/venv/src/ckanext-googleanalytics/requirements.txt
 
@@ -79,6 +80,9 @@ RUN ckan-pip install -r /usr/lib/ckan/scheming-requirements.txt
 
 COPY ./ckanext-geoview/pip-requirements.txt /usr/lib/ckan/geoview-requirements.txt
 RUN ckan-pip install -r /usr/lib/ckan/geoview-requirements.txt
+
+COPY ./ckanext-issues/dev-requirements.txt /usr/lib/ckan/issues-requirements.txt
+RUN ckan-pip install -r /usr/lib/ckan/issues-requirements.txt
 
 COPY ./ckanext-validation/requirements.txt /usr/lib/ckan/validation-requirements.txt
 RUN ckan-pip install -r /usr/lib/ckan/validation-requirements.txt
