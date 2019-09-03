@@ -127,3 +127,4 @@ def init_ckan_db(args, extra):
     call_command(['docker exec -it ckan /usr/local/bin/ckan-paster --plugin=ckanext-harvest harvester initdb -c /etc/ckan/production.ini'])
     call_command(['docker exec -it ckan /usr/local/bin/ckan-paster --plugin=ckanext-validation validation init-db -c /etc/ckan/production.ini'])
     call_command(['docker exec -it ckan /usr/local/bin/ckan-paster --plugin=ckan sysadmin -c /etc/ckan/production.ini add admin'])
+    call_command(['docker exec -it ckan /usr/local/bin/ckan-paster --plugin=ckanext-issues issues init_db -c /etc/ckan/production.ini '])
