@@ -43,8 +43,13 @@ Setting up the ADX development environment locally will clone a collection of di
    adx up
    ```
 
+6. You can view the start up logs of the ckan container using the command:
+   ```
+   adx logs ckan
+   ```
+   You should watch the logs and wait until all the ckan extensions have been properly installed before continuing. 
 
-6. Do the initial CKAN configuration with:
+7. Do the initial CKAN configuration with:
     ```
     adx initCkanDb
     ```
@@ -64,14 +69,14 @@ Setting up the ADX development environment locally will clone a collection of di
     The db should persist in a docker volume, so these commands will only need to
     be run again if you delete corresponding docker volume.
 
-7. Then restart the ckan container:
+8. Then restart the ckan container:
    ```
    adx restart ckan
    ```
 
-8. CKAN should be available at http://localhost:5000
+9. CKAN should be available at http://localhost:5000
 
-9. To use the Harvester extension in development run:
+10. To use the Harvester extension in development run:
     ```
     adx bash ckan
     # run harvester fetch and gather consumer as bg tasks
