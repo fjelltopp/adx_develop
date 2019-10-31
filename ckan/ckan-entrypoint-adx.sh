@@ -67,13 +67,14 @@ ckan-pip install -e $CKAN_VENV/src/ckan/
 # Reinstall extensions with local source, now container has the latest code.
 # No need to install deps since they have already been installed during build
 ckan-pip install --no-deps -e /usr/lib/adx/ckanext-unaids
-ckan-pip install -e /usr/lib/adx/ckanext-validator
 ckan-pip install -e /usr/lib/adx/ckanext-restricted
 ckan-pip install --no-deps -e /usr/lib/adx/ckanext-scheming
 ckan-pip install --no-deps -e /usr/lib/adx/ckanext-validation
 ckan-pip install -e /usr/lib/adx/ckanext-ytp-request
 ckan-pip install -e /usr/lib/adx/ckanext-pages
 ckan-pip install -e /usr/lib/adx/ckanext-dhis2harvester
+ckan-pip install -e /usr/lib/adx/ckanext-geoview
+ckan-pip install -e /usr/lib/adx/ckanext-issues
 
 set_environment
 ckan-paster --plugin=ckan db init -c "${CKAN_CONFIG}/production.ini"
