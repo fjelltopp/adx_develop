@@ -68,20 +68,24 @@ RUN ckan-pip install -r /usr/lib/ckan/venv/src/ckan/dev-requirements.txt &&\
 # Install all extensions with a remote source
 RUN ckan-pip install -e "git+https://github.com/ckan/ckanext-spatial.git#egg=ckanext-spatial" && \
     ckan-pip install -r /usr/lib/ckan/venv/src/ckanext-spatial/pip-requirements.txt
-RUN ckan-pip install -e "git+https://github.com/ckan/ckanext-geoview.git#egg=ckanext-geoview" && \
-    ckan-pip install -r /usr/lib/ckan/venv/src/ckanext-geoview/pip-requirements.txt
 RUN ckan-pip install -e "git+https://github.com/EnviDat/ckanext-composite.git#egg=ckanext-composite"
 RUN ckan-pip install -e "git+https://github.com/open-data/ckanext-repeating.git#egg=ckanext-repeating"
 RUN ckan-pip install -e "git+https://github.com/ckan/ckanext-harvest.git@v1.1.4#egg=ckanext-harvest" && \
     ckan-pip install -r /usr/lib/ckan/venv/src/ckanext-harvest/pip-requirements.txt
-
+RUN ckan-pip install -e "git+https://github.com/okfn/ckanext-sentry#egg=ckanext-sentry"
+RUN ckan-pip install -e "git+https://github.com/ckan/ckanext-pdfview#egg=ckanext-pdfview"
+RUN ckan-pip install -e "git+https://github.com/ckan/ckanext-googleanalytics.git#egg=ckanext-googleanalytics" && \
+    ckan-pip install -r /usr/lib/ckan/venv/src/ckanext-googleanalytics/requirements.txt
 
 # Install requirements for extensions with a local source
-COPY ./ckanext-validator/requirements.txt /usr/lib/ckan/validator-requirements.txt
-RUN ckan-pip install -r /usr/lib/ckan/validator-requirements.txt
-
 COPY ./ckanext-scheming/requirements.txt /usr/lib/ckan/scheming-requirements.txt
 RUN ckan-pip install -r /usr/lib/ckan/scheming-requirements.txt
+
+COPY ./ckanext-geoview/pip-requirements.txt /usr/lib/ckan/geoview-requirements.txt
+RUN ckan-pip install -r /usr/lib/ckan/geoview-requirements.txt
+
+COPY ./ckanext-issues/dev-requirements.txt /usr/lib/ckan/issues-requirements.txt
+RUN ckan-pip install -r /usr/lib/ckan/issues-requirements.txt
 
 COPY ./ckanext-validation/requirements.txt /usr/lib/ckan/validation-requirements.txt
 RUN ckan-pip install -r /usr/lib/ckan/validation-requirements.txt
