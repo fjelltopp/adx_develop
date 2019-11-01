@@ -47,11 +47,11 @@ Setting up the ADX development environment locally will clone a collection of di
    ```
    adx logs ckan
    ```
-   You should watch the logs and wait until all the ckan extensions have been properly installed before continuing. 
+   You should watch the logs and wait until all the ckan extensions have been properly installed before continuing.
 
 7. Do the initial CKAN configuration with:
     ```
-    adx initCkanDb
+    adx dbsetup
     ```
     Which wraps the following steps for you:
     1. Setting up the db with the required tables for ckan and it's extensions:
