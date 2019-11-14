@@ -100,5 +100,5 @@ Tests should be run with the version of nosetests-2.7 installed in CKAN's virtua
 executable. To run the ckan core tests:
 
 ```
-docker exec -it ckan ckan-nosetests --ckan --with-pylons=/etc/ckan/test-core.ini ckan ckanext
+docker exec -it ckan ckan-nosetests --ckan --with-pylons=/usr/lib/ckan/venv/src/ckan/test-core.ini ckan ckanext
 ```
