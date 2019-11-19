@@ -164,6 +164,23 @@ actions['dbsetup'] = subparsers.add_parser(
 )
 actions['dbsetup'].set_defaults(func=util.init_ckan_db)
 
+# Add the setup command arguments
+actions['testsetup'] = subparsers.add_parser(
+    'testsetup',
+    description='Sets up the db for ckan tests',
+    help='Performs initial CKAN test database setup.',
+)
+actions['testsetup'].set_defaults(func=util.reset_test_db)
+
+actions['test'] = subparsers.add_parser(
+    'test',
+    description="Test a CKAN extension.",
+    help='Test a CKAN extension.'
+)
+actions['test'].set_defaults(func=util.run_tests)
+actions['test'].add_argument('extension', metavar='name', type=str,
+                             help='The extension name e.g."validation", "ytp-request"')
+
 if os.path.exists((util.ADX_PATH+"/adx_deploy/deploy_master.bash")):
     actions['deploy'] = subparsers.add_parser(
         'deploy',
