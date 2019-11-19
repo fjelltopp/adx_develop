@@ -126,12 +126,34 @@ def setup(args, extra):
 
 
 def init_ckan_db(args, extra):
-    call_command(['docker exec ckan /usr/local/bin/ckan-paster --plugin=ckan datastore set-permissions -c /etc/ckan/production.ini | docker exec -i db psql -U ckan'])
-    call_command(['docker exec ckan /usr/local/bin/ckan-paster --plugin=ckanext-ytp-request initdb -c /etc/ckan/production.ini'])
+    call_command(['docker exec -it ckan /usr/local/bin/ckan-paster --plugin=ckan datastore set-permissions -c /etc/ckan/production.ini | docker exec -i db psql -U ckan'])
+    call_command(['docker exec -it ckan /usr/local/bin/ckan-paster --plugin=ckanext-ytp-request initdb -c /etc/ckan/production.ini'])
     call_command(['docker exec -it ckan /usr/local/bin/ckan-paster --plugin=ckanext-harvest harvester initdb -c /etc/ckan/production.ini'])
     call_command(['docker exec -it ckan /usr/local/bin/ckan-paster --plugin=ckanext-validation validation init-db -c /etc/ckan/production.ini'])
     call_command(['docker exec -it ckan /usr/local/bin/ckan-paster --plugin=ckan sysadmin -c /etc/ckan/production.ini add admin'])
     call_command(['docker exec -it ckan /usr/local/bin/ckan-paster --plugin=ckanext-issues issues init_db -c /etc/ckan/production.ini '])
+
+
+def reset_test_db(args, extra):
+    call_command(['docker exec db psql -U postgres -c "create user ckan_default with password \'pass\'"'])
+    call_command(['docker exec db psql -U postgres -c "create user datastore_default with password \'pass\'"'])
+    call_command(['docker exec db psql -U postgres -c "drop database ckan_test;"'])
+    call_command(['docker exec db psql -U postgres -c "drop database datastore_test;"'])
+    call_command(['docker exec db psql -U postgres -c "create database ckan_test owner ckan_default encoding \'utf-8\';"'])
+    call_command(['docker exec db psql -U postgres -c "create database datastore_test owner datastore_default encoding \'utf-8\';"'])
+    call_command(['docker exec ckan ckan-paster datastore set-permissions -c test-core.ini | docker exec -i db psql -U postgres'])
+    call_command(['docker exec ckan ckan-paster db init -c test-core.ini'])
+
+
+def run_tests(args, extra):
+    extension_name = "ckanext-" + args.extension
+    extension_path = "/usr/lib/adx/" + extension_name
+    extension_sub_path = "/".join(extension_name.split("-"))
+    call_command(['docker exec ckan /usr/local/bin/ckan-nosetests --ckan --with-pylons={}/test.ini {}/{}/tests --logging-level=WARNING'.format(
+        extension_path,
+        extension_path,
+        extension_sub_path
+    )] + extra)
 
 
 def deploy_master(args, extra):
