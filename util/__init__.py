@@ -140,7 +140,7 @@ def reset_test_db(args, extra):
     call_command(['docker exec db psql -U postgres -c "drop database ckan_test;"'])
     call_command(['docker exec db psql -U postgres -c "drop database datastore_test;"'])
     call_command(['docker exec db psql -U postgres -c "create database ckan_test owner ckan_default encoding \'utf-8\';"'])
-    call_command(['docker exec db psql -U postgres -c "create database datastore_test owner datastore_default encoding \'utf-8\';"'])
+    call_command(['docker exec db psql -U postgres -c "create database datastore_test owner ckan_default encoding \'utf-8\';"'])
     call_command(['docker exec ckan ckan-paster datastore set-permissions -c test-core.ini | docker exec -i db psql -U postgres'])
     call_command(['docker exec ckan ckan-paster db init -c test-core.ini'])
 
