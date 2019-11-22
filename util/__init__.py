@@ -2,6 +2,7 @@ import os
 import subprocess
 import sys
 from . import repo
+from time import sleep
 
 SUDO = os.environ.get('ADX_SUDO', '')
 
@@ -135,6 +136,9 @@ def init_ckan_db(args, extra):
 
 
 def reset_test_db(args, extra):
+
+    call_command(['docker restart db'])
+    sleep(20)
     call_command(['docker exec db psql -U postgres -c "create user ckan_default with password \'pass\'"'])
     call_command(['docker exec db psql -U postgres -c "create user datastore_default with password \'pass\'"'])
     call_command(['docker exec db psql -U postgres -c "drop database ckan_test;"'])
