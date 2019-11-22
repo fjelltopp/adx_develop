@@ -35,6 +35,7 @@ def call_command(args):
         )
         if retcode is not 0:
             print >> sys.stderr, "Command not successful. Returned", retcode
+        return retcode
     except OSError as e:
         print >> sys.stderr, "Execution failed:", e
 
@@ -138,7 +139,17 @@ def init_ckan_db(args, extra):
 def reset_test_db(args, extra):
 
     call_command(['docker restart db'])
-    sleep(20)
+    retries = 5
+
+    while retries > 0:
+        print('Waiting for database to be set up, {} tries left'.format(retries))
+        ret_code = call_command(['docker exec db psql -U postgres -c "select 1;" > /dev/null 2>&1'])
+        if ret_code == 0:
+            print('Database ready')
+            break
+        retries = retries - 1
+        sleep(1)
+
     call_command(['docker exec db psql -U postgres -c "create user ckan_default with password \'pass\'"'])
     call_command(['docker exec db psql -U postgres -c "create user datastore_default with password \'pass\'"'])
     call_command(['docker exec db psql -U postgres -c "drop database ckan_test;"'])
