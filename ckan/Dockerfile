@@ -90,6 +90,9 @@ RUN ckan-pip install -r /usr/lib/ckan/issues-requirements.txt
 COPY ./ckanext-validation/requirements.txt /usr/lib/ckan/validation-requirements.txt
 RUN ckan-pip install -r /usr/lib/ckan/validation-requirements.txt
 
+COPY ./ckanext-downloadall/dev-requirements.txt /usr/lib/ckan/downloadall-requirements.txt
+RUN ckan-pip install -r /usr/lib/ckan/downloadall-requirements.txt
+
 COPY ./ckanext-dhis2harvester/pip-requirements.txt /usr/lib/ckan/dhis2-harvester-requriments.txt
 COPY ./ckanext-dhis2harvester/dev-requirements.txt /usr/lib/ckan/dhis2-harvester-dev-requriments.txt
 RUN ckan-pip install -r /usr/lib/ckan/dhis2-harvester-requriments.txt -r /usr/lib/ckan/dhis2-harvester-dev-requriments.txt
