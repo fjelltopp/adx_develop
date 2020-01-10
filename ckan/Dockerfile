@@ -73,7 +73,6 @@ RUN ckan-pip install -e "git+https://github.com/okfn/ckanext-sentry#egg=ckanext-
 RUN ckan-pip install -e "git+https://github.com/ckan/ckanext-pdfview#egg=ckanext-pdfview"
 RUN ckan-pip install -e "git+https://github.com/ckan/ckanext-googleanalytics.git#egg=ckanext-googleanalytics" && \
     ckan-pip install -r /usr/lib/ckan/venv/src/ckanext-googleanalytics/requirements.txt
-RUN ckan-pip install -e "git+https://github.com/OriHoch/ckanext-file_uploader_ui#egg=ckanext-file_uploader_ui"
 
 # Install requirements for extensions with a local source
 COPY ./ckanext-scheming/requirements.txt /usr/lib/ckan/scheming-requirements.txt
@@ -91,6 +90,9 @@ RUN ckan-pip install -r /usr/lib/ckan/validation-requirements.txt
 COPY ./ckanext-dhis2harvester/pip-requirements.txt /usr/lib/ckan/dhis2-harvester-requriments.txt
 COPY ./ckanext-dhis2harvester/dev-requirements.txt /usr/lib/ckan/dhis2-harvester-dev-requriments.txt
 RUN ckan-pip install -r /usr/lib/ckan/dhis2-harvester-requriments.txt -r /usr/lib/ckan/dhis2-harvester-dev-requriments.txt
+
+COPY ./ckanext-file_uploader_ui/requirements.txt /usr/lib/ckan/file_uploader_ui-requirements.txt
+RUN ckan-pip install -r /usr/lib/ckan/file_uploader_ui-requirements.txt
 
 RUN rm /usr/lib/ckan/*-requirements.txt
 # Configs
