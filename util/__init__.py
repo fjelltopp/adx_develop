@@ -15,6 +15,10 @@ MANIFEST_URL = os.environ.get(
     'git@github.com:fjelltopp/adx_manifest.git'
 )
 DEFAULT_MANIFEST = 'default.xml'
+ADX_PATH = os.path.expanduser(os.environ.get(
+    "ADX_PATH",
+    "~/fjelltopp/adx"
+))
 
 
 def call_command(args):
@@ -128,3 +132,12 @@ def init_ckan_db(args, extra):
     call_command(['docker exec -it ckan /usr/local/bin/ckan-paster --plugin=ckanext-validation validation init-db -c /etc/ckan/production.ini'])
     call_command(['docker exec -it ckan /usr/local/bin/ckan-paster --plugin=ckan sysadmin -c /etc/ckan/production.ini add admin'])
     call_command(['docker exec -it ckan /usr/local/bin/ckan-paster --plugin=ckanext-issues issues init_db -c /etc/ckan/production.ini '])
+
+
+def deploy_master(args, extra):
+    call_command([
+        "cat {}/adx_manifest/all.xml | {}/adx_deploy/deploy_master.bash".format(
+            ADX_PATH,
+            ADX_PATH
+        )
+    ])
