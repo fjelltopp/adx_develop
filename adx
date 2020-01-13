@@ -3,6 +3,7 @@
 import argparse
 import sys
 import util
+import os
 
 parser = argparse.ArgumentParser(
     description='This script provides a variety of tools for managing the'
@@ -162,6 +163,15 @@ actions['initCkanDb'] = subparsers.add_parser(
 )
 actions['initCkanDb'].set_defaults(func=util.init_ckan_db)
 
+if os.path.exists((util.ADX_PATH+"/adx_deploy/deploy_master.bash")):
+    actions['deploy'] = subparsers.add_parser(
+        'deploy',
+        description='Opens up master/development comparisons of all repos in github.',
+        help='Compare pushed master/development branches and deploy if desired.',
+    )
+    actions['deploy'].set_defaults(func=util.deploy_master)
+
+
 def main(orig_args):
     # Parse both args we recognise
     args, extra_args = parser.parse_known_args(orig_args)
@@ -170,6 +180,7 @@ def main(orig_args):
         args.func(args, extra_args)
     else:
         parser.print_help()
+
 
 if __name__ == '__main__':
     main(sys.argv[1:])
