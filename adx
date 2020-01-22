@@ -155,13 +155,39 @@ actions['init'].add_argument(
     choices=['all.xml', 'deafult.xml']
 )
 # Add the setup command arguments
-actions['initCkanDb'] = subparsers.add_parser(
-    'initCkanDb',
+actions['dbsetup'] = subparsers.add_parser(
+    'dbsetup',
     description='Runs the initial configuration for CKAN plugins. Should be run'
                 'after the initial Ckan startup',
     help='Performs initial CKAN database setup.',
 )
-actions['initCkanDb'].set_defaults(func=util.init_ckan_db)
+actions['dbsetup'].set_defaults(func=util.init_ckan_db)
+
+# Add the setup command arguments
+actions['testsetup'] = subparsers.add_parser(
+    'testsetup',
+    description='Sets up the db for ckan tests',
+    help='Performs initial CKAN test database setup.',
+)
+actions['testsetup'].set_defaults(func=util.reset_test_db)
+
+actions['test'] = subparsers.add_parser(
+    'test',
+    description="Test a CKAN extension.",
+    help='Test a CKAN extension.'
+)
+actions['test'].set_defaults(func=util.run_tests)
+actions['test'].add_argument('extension', metavar='name', type=str,
+                             help='The extension name e.g."validation", "ytp-request"')
+
+if os.path.exists((util.ADX_PATH+"/adx_deploy/deploy_master.bash")):
+    actions['deploy'] = subparsers.add_parser(
+        'deploy',
+        description='Opens up master/development comparisons of all repos in github.',
+        help='Compare pushed master/development branches and deploy if desired.',
+    )
+    actions['deploy'].set_defaults(func=util.deploy_master)
+
 
 if os.path.exists((util.ADX_PATH+"/adx_deploy/deploy_master.bash")):
     actions['deploy'] = subparsers.add_parser(
