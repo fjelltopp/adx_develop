@@ -2,16 +2,17 @@ import os
 import subprocess
 import sys
 from . import repo
+from time import sleep
 
-SUDO = os.environ.get('MEERKAT_SUDO', '')
+SUDO = os.environ.get('ADX_SUDO', '')
 
 compose = ["docker-compose"]
 
 COMPOSE_PATH = os.path.abspath(os.path.dirname(__file__))
 # If you want to fetch containers using https, you should set this env var to
 # https://github.com/meerkat-code/meerkat.git
-MANIFEST_URL = os.environ.get(
-    'MEERKAT_MANIFEST',
+ADX_URL = os.environ.get(
+    'ADX_MANIFEST',
     'git@github.com:fjelltopp/adx_manifest.git'
 )
 DEFAULT_MANIFEST = 'default.xml'
@@ -34,6 +35,7 @@ def call_command(args):
         )
         if retcode is not 0:
             print >> sys.stderr, "Command not successful. Returned", retcode
+        return retcode
     except OSError as e:
         print >> sys.stderr, "Execution failed:", e
 
@@ -126,12 +128,47 @@ def setup(args, extra):
 
 
 def init_ckan_db(args, extra):
-    call_command(['docker exec ckan /usr/local/bin/ckan-paster --plugin=ckan datastore set-permissions -c /etc/ckan/production.ini | docker exec -i db psql -U ckan'])
-    call_command(['docker exec ckan /usr/local/bin/ckan-paster --plugin=ckanext-ytp-request initdb -c /etc/ckan/production.ini'])
+    call_command(['docker exec -it ckan /usr/local/bin/ckan-paster --plugin=ckan datastore set-permissions -c /etc/ckan/production.ini | docker exec -i db psql -U ckan'])
+    call_command(['docker exec -it ckan /usr/local/bin/ckan-paster --plugin=ckanext-ytp-request initdb -c /etc/ckan/production.ini'])
     call_command(['docker exec -it ckan /usr/local/bin/ckan-paster --plugin=ckanext-harvest harvester initdb -c /etc/ckan/production.ini'])
     call_command(['docker exec -it ckan /usr/local/bin/ckan-paster --plugin=ckanext-validation validation init-db -c /etc/ckan/production.ini'])
     call_command(['docker exec -it ckan /usr/local/bin/ckan-paster --plugin=ckan sysadmin -c /etc/ckan/production.ini add admin'])
     call_command(['docker exec -it ckan /usr/local/bin/ckan-paster --plugin=ckanext-issues issues init_db -c /etc/ckan/production.ini '])
+
+
+def reset_test_db(args, extra):
+
+    call_command(['docker restart db'])
+    retries = 5
+
+    while retries > 0:
+        print('Waiting for database to be set up, {} tries left'.format(retries))
+        ret_code = call_command(['docker exec db psql -U postgres -c "select 1;" > /dev/null 2>&1'])
+        if ret_code == 0:
+            print('Database ready')
+            break
+        retries = retries - 1
+        sleep(1)
+
+    call_command(['docker exec db psql -U postgres -c "create user ckan_default with password \'pass\'"'])
+    call_command(['docker exec db psql -U postgres -c "create user datastore_default with password \'pass\'"'])
+    call_command(['docker exec db psql -U postgres -c "drop database ckan_test;"'])
+    call_command(['docker exec db psql -U postgres -c "drop database datastore_test;"'])
+    call_command(['docker exec db psql -U postgres -c "create database ckan_test owner ckan_default encoding \'utf-8\';"'])
+    call_command(['docker exec db psql -U postgres -c "create database datastore_test owner ckan_default encoding \'utf-8\';"'])
+    call_command(['docker exec ckan ckan-paster datastore set-permissions -c test-core.ini | docker exec -i db psql -U postgres'])
+    call_command(['docker exec ckan ckan-paster db init -c test-core.ini'])
+
+
+def run_tests(args, extra):
+    extension_name = "ckanext-" + args.extension
+    extension_path = "/usr/lib/adx/" + extension_name
+    extension_sub_path = "/".join(extension_name.split("-"))
+    call_command(['docker exec ckan /usr/local/bin/ckan-nosetests --ckan --with-pylons={}/test.ini {}/{}/tests --logging-level=WARNING'.format(
+        extension_path,
+        extension_path,
+        extension_sub_path
+    )] + extra)
 
 
 def deploy_master(args, extra):

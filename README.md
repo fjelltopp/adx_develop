@@ -47,11 +47,11 @@ Setting up the ADX development environment locally will clone a collection of di
    ```
    adx logs ckan
    ```
-   You should watch the logs and wait until all the ckan extensions have been properly installed before continuing. 
+   You should watch the logs and wait until all the ckan extensions have been properly installed before continuing.
 
 7. Do the initial CKAN configuration with:
     ```
-    adx initCkanDb
+    adx dbsetup
     ```
     Which wraps the following steps for you:
     1. Setting up the db with the required tables for ckan and it's extensions:
@@ -83,3 +83,22 @@ Setting up the ADX development environment locally will clone a collection of di
     /adx_utils/harvester_bg_tasks.sh
     # then after each run of harvest job you need to run
     /adx_utils/harvester_run_task.sh
+    ```
+
+## Running CKAN tests locally
+
+CKAN tests can be run in the development environment, but some setup is required.
+
+To create and setup the test databases:
+```
+docker exec -it db createdb -O ckan ckan_test -E utf-8 -U postgres
+docker exec -it db createdb -O ckan datastore_test -E utf-8 -U postgres
+docker exec ckan /usr/local/bin/ckan-paster datastore set-permissions -c test-core.ini | docker exec -i db psql -U postgres
+```
+
+Tests should be run with the version of nosetests-2.7 installed in CKAN's virtual environment.  There is an alias set up inside the docker container called "ckan-nosetests" that points to this
+executable. To run the ckan core tests:
+
+```
+docker exec -it ckan ckan-nosetests --ckan --with-pylons=/usr/lib/ckan/venv/src/ckan/test-core.ini ckan ckanext
+```
