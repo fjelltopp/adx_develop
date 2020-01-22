@@ -57,7 +57,6 @@ RUN ckan-pip install -U pip && \
     ckan-pip install --upgrade -r $CKAN_VENV/src/ckan/requirement-setuptools.txt && \
     ckan-pip install --upgrade -r $CKAN_VENV/src/ckan/requirements.txt && \
     ckan-pip install -e $CKAN_VENV/src/ckan/ && \
-    ln -s $CKAN_VENV/src/ckan/ckan/config/who.ini $CKAN_CONFIG/who.ini && \
     chown -R ckan:ckan $CKAN_HOME $CKAN_VENV $CKAN_CONFIG $CKAN_STORAGE_PATH
 USER root
 
@@ -96,6 +95,9 @@ RUN ckan-pip install -r /usr/lib/ckan/dhis2-harvester-requriments.txt -r /usr/li
 
 COPY ./ckanext-file_uploader_ui/requirements.txt /usr/lib/ckan/file_uploader_ui-requirements.txt
 RUN ckan-pip install -r /usr/lib/ckan/file_uploader_ui-requirements.txt
+
+COPY ./ckanext-emailasusername/requirements.txt /usr/lib/ckan/emailasusername-requirements.txt
+RUN ckan-pip install -r /usr/lib/ckan/emailasusername-requirements.txt
 
 RUN rm /usr/lib/ckan/*-requirements.txt
 # Configs
