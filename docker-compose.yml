@@ -21,7 +21,7 @@ services:
     environment:
       # Defaults work with linked containers, change to use own Postgres, SolR, Redis or Datapusher
       - CKAN_SITE_URL=${CKAN_SITE_URL}
-      - CKAN_MAX_UPLOAD_SIZE_MB=${CKAN_MAX_UPLOAD_SIZE_MB}
+      - CKAN_MAX_UPLOAD_SIZE_MB=50
       - CKAN_SMTP_USER=${CKAN_SMTP_USER}
       - CKAN_SMTP_PASSWORD=${CKAN_SMTP_PASSWORD}
       - CKAN_SQLALCHEMY_URL=postgresql://ckan:ckan@db/ckan
