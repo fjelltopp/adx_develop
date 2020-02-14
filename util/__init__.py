@@ -11,8 +11,8 @@ compose = ["docker-compose"]
 COMPOSE_PATH = os.path.abspath(os.path.dirname(__file__))
 # If you want to fetch containers using https, you should set this env var to
 # https://github.com/meerkat-code/meerkat.git
-ADX_URL = os.environ.get(
-    'ADX_MANIFEST',
+ADX_MANIFEST_URL = os.environ.get(
+    'ADX_MANIFEST_URL',
     'git@github.com:fjelltopp/adx_manifest.git'
 )
 DEFAULT_MANIFEST = 'default.xml'
@@ -117,7 +117,7 @@ def setup(args, extra):
 
     if raw_input('SURE YOU WANT TO CONTINUE? (y/N) ').lower() in ['y', 'yes']:
         manifest = args.manifest if args.manifest else DEFAULT_MANIFEST
-        repo.main(['init', '-u', MANIFEST_URL, '-m', manifest])
+        repo.main(['init', '-u', ADX_MANIFEST_URL, '-m', manifest])
         repo.main(['sync', '--force-sync'])
         print('ADX code synced')
         repo.main(['forall', '-c', 'git', 'checkout', 'master'])
