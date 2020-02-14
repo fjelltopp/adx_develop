@@ -57,6 +57,7 @@ services:
       - ../:/usr/lib/adx
       - ../ckan:/usr/lib/ckan/venv/src/ckan
       - ./ckan/adx_config.ini:/etc/ckan/production.ini
+      - ./ckan/adx_who.ini:/etc/ckan/who.ini
       - ./ckan/ckan_supervisor_harvester.conf:/etc/supervisor/conf.d/ckan_harvester.conf
     command: ["/usr/bin/supervisord"]
 
