@@ -69,11 +69,11 @@ RUN ckan-pip install -e "git+https://github.com/ckan/ckanext-spatial.git#egg=cka
     ckan-pip install -r /usr/lib/ckan/venv/src/ckanext-spatial/pip-requirements.txt
 RUN ckan-pip install -e "git+https://github.com/EnviDat/ckanext-composite.git#egg=ckanext-composite"
 RUN ckan-pip install -e "git+https://github.com/open-data/ckanext-repeating.git#egg=ckanext-repeating"
-RUN ckan-pip install -e "git+https://github.com/ckan/ckanext-harvest.git@v1.1.4#egg=ckanext-harvest" && \
+RUN ckan-pip install -e "git+https://github.com/ckan/ckanext-harvest.git#egg=ckanext-harvest" && \
     ckan-pip install -r /usr/lib/ckan/venv/src/ckanext-harvest/pip-requirements.txt
 RUN ckan-pip install -e "git+https://github.com/okfn/ckanext-sentry#egg=ckanext-sentry"
 RUN ckan-pip install -e "git+https://github.com/ckan/ckanext-pdfview#egg=ckanext-pdfview"
-RUN ckan-pip install -e "git+https://github.com/ckan/ckanext-googleanalytics.git#egg=ckanext-googleanalytics" && \
+RUN ckan-pip install -e "git+https://github.com/fjelltopp/ckanext-googleanalytics.git#egg=ckanext-googleanalytics" && \
     ckan-pip install -r /usr/lib/ckan/venv/src/ckanext-googleanalytics/requirements.txt
 
 # Install requirements for extensions with a local source
