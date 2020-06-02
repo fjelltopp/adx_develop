@@ -75,7 +75,7 @@ def run_docker_compose(args, extra_args):
     elif args.action == 'exec':
         call_command(sudo_dc + ["exec"] + extra_args)
     elif args.action == 'logs':
-        call_command(sudo_dc + ["logs", "-f"] + extra_args)
+            call_command(sudo_dc + ["logs", "-f", "--tail 500"] + extra_args)
     elif args.action == 'bash':
         call_command(sudo_dc + ["exec", args.container, "bash"])
     else:
