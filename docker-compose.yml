@@ -96,8 +96,10 @@ services:
   solr:
     container_name: solr
     build:
-      context: ../ckan/
-      dockerfile: contrib/docker/solr/Dockerfile
+      context: .
+      dockerfile: solr/Dockerfile
+      args:
+        - BUILD_CONTEXT=.
     environment:
       - SOLR_LOG_LEVEL=WARN
 
