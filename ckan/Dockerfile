@@ -69,7 +69,7 @@ RUN ckan-pip install -e "git+https://github.com/ckan/ckanext-spatial.git#egg=cka
     ckan-pip install -r /usr/lib/ckan/venv/src/ckanext-spatial/pip-requirements.txt
 RUN ckan-pip install -e "git+https://github.com/EnviDat/ckanext-composite.git#egg=ckanext-composite"
 RUN ckan-pip install -e "git+https://github.com/open-data/ckanext-repeating.git#egg=ckanext-repeating"
-RUN ckan-pip install -e "git+https://github.com/ckan/ckanext-harvest.git#egg=ckanext-harvest" && \
+RUN ckan-pip install -e "git+https://github.com/ckan/ckanext-harvest.git@v1.3.0#egg=ckanext-harvest" && \
     ckan-pip install -r /usr/lib/ckan/venv/src/ckanext-harvest/pip-requirements.txt
 RUN ckan-pip install -e "git+https://github.com/okfn/ckanext-sentry#egg=ckanext-sentry"
 RUN ckan-pip install -e "git+https://github.com/ckan/ckanext-pdfview#egg=ckanext-pdfview"
