@@ -18,6 +18,7 @@ services:
       - redis
     ports:
       - "0.0.0.0:5000:5000"
+      - "0.0.0.0:443:5000"
     environment:
       # Defaults work with linked containers, change to use own Postgres, SolR, Redis or Datapusher
       - CKAN_SITE_URL=${CKAN_SITE_URL}
@@ -35,7 +36,10 @@ services:
       - ./ckan/adx_config.ini:/etc/ckan/production.ini
       - ./ckan/adx_who.ini:/etc/ckan/who.ini
       - ./ckan/utils/:/adx_utils
-    command: ["ckan-paster","serve","--reload", "/etc/ckan/production.ini"]
+      - ./ssl/host.pem:/etc/ssl/host.pem
+      - "/etc/timezone:/etc/timezone:ro"
+      - "/etc/localtime:/etc/localtime:ro"
+    command: ["ckan-paster","serve", "--reload", "/etc/ckan/production.ini"]
 
   supervisor:
     container_name: supervisor

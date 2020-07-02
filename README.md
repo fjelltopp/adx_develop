@@ -85,6 +85,19 @@ Setting up the ADX development environment locally will clone a collection of di
     /adx_utils/harvester_run_task.sh
     ```
 
+## Configuring SSL for the dev environment
+
+Some tasks may require ssl to be configured.  Espcially OAUTH2 authentication.
+The simplest way to configure SSL locally that I have currently found is:
+
+1. Install [mkcert](https://github.com/FiloSottile/mkcert)
+2. Make a sub directory in adx_develop called `ssl` (it will be git ignored). Then run change directory into it: `cd adx_develop/ssl`
+3. Run `mkcert -install` to install a local Certificate Authority on your machine. This Certificate Authority will sign any certificates we create later.
+4. Run `mkcert localhost ckan 127.0.0.1` to create a certificate signed by your own CA for the domains localhost, ckan, and 127.0.0.1
+5. Combine the resulting certificate and key file into a single pem file by running `cat certfile.pem keyfile.pem > host.pem`  
+
+The final file must be called `adx_develop/ssl/host.pem` as it is picked up by the ckan container as a docker volume and then by the ckan config adx_config.ini under `ssl_pem` config parameter. 
+
 ## Running CKAN tests locally
 
 CKAN tests can be run in the development environment, but some setup is required.
