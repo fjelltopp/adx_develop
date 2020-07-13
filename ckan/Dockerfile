@@ -75,6 +75,7 @@ RUN ckan-pip install -e "git+https://github.com/okfn/ckanext-sentry#egg=ckanext-
 RUN ckan-pip install -e "git+https://github.com/ckan/ckanext-pdfview#egg=ckanext-pdfview"
 RUN ckan-pip install -e "git+https://github.com/fjelltopp/ckanext-googleanalytics.git#egg=ckanext-googleanalytics" && \
     ckan-pip install -r /usr/lib/ckan/venv/src/ckanext-googleanalytics/requirements.txt
+RUN ckan-pip install -e "git+https://github.com/conwetlab/ckanext-oauth2.git#egg=ckanext-oauth2"
 
 # Install requirements for extensions with a local source
 COPY ./ckanext-scheming/requirements.txt /usr/lib/ckan/scheming-requirements.txt

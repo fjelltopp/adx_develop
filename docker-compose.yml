@@ -36,7 +36,7 @@ services:
       - ./ckan/adx_config.ini:/etc/ckan/production.ini
       - ./ckan/adx_who.ini:/etc/ckan/who.ini
       - ./ckan/utils/:/adx_utils
-      - ./ssl/host.pem:/etc/ssl/host.pem
+      - ./ssl/:/etc/ssl/
       - "/etc/timezone:/etc/timezone:ro"
       - "/etc/localtime:/etc/localtime:ro"
     command: ["ckan-paster","serve", "--reload", "/etc/ckan/production.ini"]
