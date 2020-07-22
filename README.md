@@ -91,14 +91,21 @@ CKAN tests can be run in the development environment, but some setup is required
 
 To create and setup the test databases:
 ```
-docker exec -it db createdb -O ckan ckan_test -E utf-8 -U postgres
-docker exec -it db createdb -O ckan datastore_test -E utf-8 -U postgres
-docker exec ckan /usr/local/bin/ckan-paster datastore set-permissions -c test-core.ini | docker exec -i db psql -U postgres
+   adx testsetup
 ```
 
 Tests should be run with the version of nosetests-2.7 installed in CKAN's virtual environment.  There is an alias set up inside the docker container called "ckan-nosetests" that points to this
-executable. To run the ckan core tests:
+executable.
 
+```
+adx test extension_name
+```
+e.g.
+```
+adx test restricted
+```
+
+To run the ckan core tests:
 ```
 docker exec -it ckan ckan-nosetests --ckan --with-pylons=/usr/lib/ckan/venv/src/ckan/test-core.ini ckan ckanext
 ```

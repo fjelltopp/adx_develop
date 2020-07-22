@@ -20,6 +20,7 @@ ADX_PATH = os.path.expanduser(os.environ.get(
     "ADX_PATH",
     "~/fjelltopp/adx"
 ))
+PG_USER = os.environ.get('PG_USER', 'ckan')
 
 
 def call_command(args):
@@ -34,10 +35,10 @@ def call_command(args):
             cwd=COMPOSE_PATH
         )
         if retcode is not 0:
-            print >> sys.stderr, "Command not successful. Returned", retcode
+            print(f"Command not successful. Returned {retcode}", file=sys.stderr)
         return retcode
     except OSError as e:
-        print >> sys.stderr, "Execution failed:", e
+        print(f"Execution failed: {e}", file=sys.stderr)
 
 
 def up(args, extra_args):
@@ -137,26 +138,25 @@ def init_ckan_db(args, extra):
 
 
 def reset_test_db(args, extra):
-
     call_command(['docker restart db'])
     retries = 5
 
     while retries > 0:
         print('Waiting for database to be set up, {} tries left'.format(retries))
-        ret_code = call_command(['docker exec db psql -U postgres -c "select 1;" > /dev/null 2>&1'])
+        ret_code = call_command([f'docker exec db psql -U {PG_USER} -c "select 1;" > /dev/null 2>&1'])
         if ret_code == 0:
             print('Database ready')
             break
         retries = retries - 1
         sleep(1)
 
-    call_command(['docker exec db psql -U postgres -c "create user ckan_default with password \'pass\'"'])
-    call_command(['docker exec db psql -U postgres -c "create user datastore_default with password \'pass\'"'])
-    call_command(['docker exec db psql -U postgres -c "drop database ckan_test;"'])
-    call_command(['docker exec db psql -U postgres -c "drop database datastore_test;"'])
-    call_command(['docker exec db psql -U postgres -c "create database ckan_test owner ckan_default encoding \'utf-8\';"'])
-    call_command(['docker exec db psql -U postgres -c "create database datastore_test owner ckan_default encoding \'utf-8\';"'])
-    call_command(['docker exec ckan ckan-paster datastore set-permissions -c test-core.ini | docker exec -i db psql -U postgres'])
+    call_command([f'docker exec db psql -U {PG_USER} -c "CREATE USER ckan_default WITH PASSWORD \'pass\'"'])
+    call_command([f'docker exec db psql -U {PG_USER} -c "CREATE USER datastore_default WITH PASSWORD \'pass\'"'])
+    call_command([f'docker exec db psql -U {PG_USER} -c "DROP DATABASE IF EXISTS ckan_test;"'])
+    call_command([f'docker exec db psql -U {PG_USER} -c "DROP DATABASE IF EXISTS datastore_test;"'])
+    call_command([f'docker exec db psql -U {PG_USER} -c "CREATE DATABASE ckan_test OWNER ckan_default ENCODING \'utf-8\';"'])
+    call_command([f'docker exec db psql -U {PG_USER} -c "CREATE DATABASE datastore_test OWNER ckan_default ENCODING \'utf-8\';"'])
+    call_command([f'docker exec ckan ckan-paster datastore set-permissions -c test-core.ini | docker exec -i db psql -U {PG_USER}'])
     call_command(['docker exec ckan ckan-paster db init -c test-core.ini'])
 
 
@@ -164,11 +164,10 @@ def run_tests(args, extra):
     extension_name = "ckanext-" + args.extension
     extension_path = "/usr/lib/adx/" + extension_name
     extension_sub_path = "/".join(extension_name.split("-"))
-    call_command(['docker exec ckan /usr/local/bin/ckan-nosetests --ckan --with-pylons={}/test.ini {}/{}/tests --logging-level=WARNING'.format(
-        extension_path,
-        extension_path,
-        extension_sub_path
-    )] + extra)
+    call_command([f'docker exec ckan /usr/local/bin/ckan-nosetests --ckan'
+                  f' --with-pylons={extension_path}/test.ini'
+                  f' {extension_path}/{extension_sub_path}/tests --logging-level=WARNING']
+                 + extra)
 
 
 def deploy_master(args, extra):
