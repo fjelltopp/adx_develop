@@ -157,14 +157,14 @@ def reset_test_db(args, extra):
     call_command([f'docker exec db psql -U {PG_USER} -c "CREATE DATABASE ckan_test OWNER ckan_default ENCODING \'utf-8\';"'])
     call_command([f'docker exec db psql -U {PG_USER} -c "CREATE DATABASE datastore_test OWNER ckan_default ENCODING \'utf-8\';"'])
     call_command([f'docker exec ckan ckan-paster datastore set-permissions -c test-core.ini | docker exec -i db psql -U {PG_USER}'])
-    call_command(['docker exec ckan ckan-paster db init -c test-core.ini'])
+    call_command(['docker exec -e CKAN_SQLALCHEMY_URL=postgresql://ckan_default:pass@db/ckan_test ckan ckan-paster db init -c test-core.ini'])
 
 
 def run_tests(args, extra):
     extension_name = "ckanext-" + args.extension
     extension_path = "/usr/lib/adx/" + extension_name
     extension_sub_path = "/".join(extension_name.split("-"))
-    call_command([f'docker exec ckan /usr/local/bin/ckan-nosetests --ckan'
+    call_command([f'docker exec -e CKAN_SQLALCHEMY_URL=postgresql://ckan_default:pass@db/ckan_test ckan /usr/local/bin/ckan-nosetests --ckan'
                   f' --with-pylons={extension_path}/test.ini'
                   f' {extension_path}/{extension_sub_path}/tests --logging-level=WARNING']
                  + extra)
