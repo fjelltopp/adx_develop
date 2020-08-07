@@ -21,7 +21,7 @@ ADX_PATH = os.path.expanduser(os.environ.get(
     "~/fjelltopp/adx"
 ))
 PG_USER = os.environ.get('PG_USER', 'ckan')
-
+CKAN_TEST_SQLALCHEMY_URL = os.environ.get("CKAN_TEST_SQLALCHEMY_URL", "postgresql://ckan_default:pass@db/ckan_test")
 
 def call_command(args):
     """
@@ -156,15 +156,17 @@ def reset_test_db(args, extra):
     call_command([f'docker exec db psql -U {PG_USER} -c "DROP DATABASE IF EXISTS datastore_test;"'])
     call_command([f'docker exec db psql -U {PG_USER} -c "CREATE DATABASE ckan_test OWNER ckan_default ENCODING \'utf-8\';"'])
     call_command([f'docker exec db psql -U {PG_USER} -c "CREATE DATABASE datastore_test OWNER ckan_default ENCODING \'utf-8\';"'])
-    call_command([f'docker exec ckan ckan-paster datastore set-permissions -c test-core.ini | docker exec -i db psql -U {PG_USER}'])
-    call_command(['docker exec ckan ckan-paster db init -c test-core.ini'])
+    call_command([f'docker exec -e CKAN_SQLALCHEMY_URL="{CKAN_TEST_SQLALCHEMY_URL}"'
+                  f' ckan ckan-paster datastore set-permissions -c test-core.ini | docker exec -i db psql -U {PG_USER}'])
+    call_command([f'docker exec -e CKAN_SQLALCHEMY_URL="{CKAN_TEST_SQLALCHEMY_URL}"'
+                  f' ckan ckan-paster db init -c test-core.ini'])
 
 
 def run_tests(args, extra):
     extension_name = "ckanext-" + args.extension
     extension_path = "/usr/lib/adx/" + extension_name
     extension_sub_path = "/".join(extension_name.split("-"))
-    call_command([f'docker exec ckan /usr/local/bin/ckan-nosetests --ckan'
+    call_command([f'docker exec -e CKAN_SQLALCHEMY_URL={CKAN_TEST_SQLALCHEMY_URL} ckan /usr/local/bin/ckan-nosetests --ckan'
                   f' --with-pylons={extension_path}/test.ini'
                   f' {extension_path}/{extension_sub_path}/tests --logging-level=WARNING']
                  + extra)
