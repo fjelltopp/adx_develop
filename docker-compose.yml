@@ -91,6 +91,8 @@ services:
 
   solr:
     container_name: solr
+    ports:
+      - "8983:8983"
     build:
       context: .
       dockerfile: solr/Dockerfile
@@ -101,4 +103,6 @@ services:
 
   redis:
     container_name: redis
+    ports:
+      - "6379:6379"
     image: redis:latest
