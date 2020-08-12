@@ -1,0 +1,2 @@
+# ckanapi==4.3
+-e git://github.com/tomeksabala/ckanapi.git#egg=ckanapi

@@ -140,6 +140,11 @@ def init_ckan_db(args, extra):
     call_command(['docker exec -it ckan /usr/local/bin/ckan-paster --plugin=ckanext-issues issues init_db -c /etc/ckan/production.ini '])
 
 
+def load_demo_data(args, extra):
+    import util.ckan_loader as loader
+    loader.load_data("http://ckan:5000", ADMIN_APIKEY)
+
+
 def reset_test_db(args, extra):
     call_command(['docker restart db'])
     retries = 5
