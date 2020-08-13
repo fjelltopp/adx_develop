@@ -67,6 +67,11 @@ Setting up the ADX development environment locally will clone a collection of di
    ```
    adx restart ckan
    ```
+   
+9. [Optional] Adding demo data to CKAN instance with:
+    ```
+   adx demodata
+   ```
 
 9. CKAN should be available at http://localhost:5000
 
