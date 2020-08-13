@@ -1,5 +1,3 @@
-# docker-compose build && docker-compose up -d
-# If "docker-compose logs ckan" shows DB not ready, run "docker-compose restart ckan" a few times.
 version: "3"
 
 volumes:
@@ -42,12 +40,9 @@ services:
     build:
       context: ../
       dockerfile: adx_develop/ckan/Dockerfile
-    links:
-      - db
-      - solr
-      - redis
+    depends_on:
+      - ckan
     environment:
-#      # Defaults work with linked containers, change to use own Postgres, SolR, Redis or Datapusher
       - CKAN_SQLALCHEMY_URL=postgresql://ckan:ckan@db/ckan
       - CKAN_SOLR_URL=http://solr:8983/solr/ckan
       - CKAN_REDIS_URL=redis://redis:6379/1
@@ -59,6 +54,7 @@ services:
       - ./ckan/adx_config.ini:/etc/ckan/production.ini
       - ./ckan/adx_who.ini:/etc/ckan/who.ini
       - ./ckan/ckan_supervisor_harvester.conf:/etc/supervisor/conf.d/ckan_harvester.conf
+    entrypoint: ["/wait-for-it.sh", "ckan:5000", "--timeout=0",  "--", "/ckan-entrypoint.sh"]
     command: ["/usr/bin/supervisord"]
 
   cron:
@@ -95,6 +91,8 @@ services:
 
   solr:
     container_name: solr
+    ports:
+      - "8983:8983"
     build:
       context: .
       dockerfile: solr/Dockerfile
@@ -105,4 +103,6 @@ services:
 
   redis:
     container_name: redis
+    ports:
+      - "6379:6379"
     image: redis:latest

@@ -163,6 +163,14 @@ actions['dbsetup'] = subparsers.add_parser(
 )
 actions['dbsetup'].set_defaults(func=util.init_ckan_db)
 
+actions['demodata'] = subparsers.add_parser(
+    'demodata',
+    description='Loads demo example data to local ckan for easier development'
+                'Needs adx dbsetup',
+    help="Load demo example data to CKAN"
+)
+actions['demodata'].set_defaults(func=util.load_demo_data)
+
 # Add the setup command arguments
 actions['testsetup'] = subparsers.add_parser(
     'testsetup',
