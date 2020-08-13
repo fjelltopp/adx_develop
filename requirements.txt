@@ -1,2 +1,2 @@
-# ckanapi==4.3
--e git://github.com/tomeksabala/ckanapi.git#egg=ckanapi
+# ckanapi==4.3 we need to use trunk until a newer release
+-e git://github.com/ckan/ckanapi.git@f3bea5#egg=ckanapi

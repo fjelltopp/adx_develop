@@ -4,11 +4,11 @@ import os
 
 import ckanapi
 
-DEMO_DATA_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..')
-DEMO_USERS = os.path.join(DEMO_DATA_PATH, 'demo_data/users.json')
-DEMO_ORGANIZATIONS = os.path.join(DEMO_DATA_PATH, 'demo_data/organizations.json')
-# TODO: DEMO_DATASETS = os.path.join(DEMO_DATA_PATH, 'demo_data/datasets.json')
-# TODO: DEMO_HARVESTERS = os.path.join(DEMO_DATA_PATH, 'demo_data/harvesters.json')
+DEMO_DATA_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), '../demo_data/')
+DEMO_USERS = os.path.join(DEMO_DATA_PATH, 'users.json')
+DEMO_ORGANIZATIONS = os.path.join(DEMO_DATA_PATH, 'organizations.json')
+# TODO: DEMO_DATASETS = os.path.join(DEMO_DATA_PATH, 'datasets.json')
+# TODO: DEMO_HARVESTERS = os.path.join(DEMO_DATA_PATH, 'harvesters.json')
 
 log = logging.getLogger(__name__)
 
