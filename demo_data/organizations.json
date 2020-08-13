@@ -1,0 +1,48 @@
+{
+  "organizations": [
+    {
+      "users": [
+        {
+          "name": "fjelltopp_member",
+          "capacity": "member"
+        },
+        {
+          "name": "fjelltopp_editor",
+          "capacity": "editor"
+        },
+        {
+          "name": "fjelltopp_admin",
+          "capacity": "admin"
+        }
+      ],
+      "display_name": "Fjelltopp",
+      "description": "Fjelltopp demo organization",
+      "image_url": "http://ckan:5000/fjelltopp.png",
+      "name": "fjelltopp",
+      "state": "active",
+      "title": "Fjelltopp"
+    },
+    {
+      "users": [
+        {
+          "name": "north_pole_member",
+          "capacity": "member"
+        },
+        {
+          "name": "north_pole_editor",
+          "capacity": "editor"
+        },
+        {
+          "name": "north_pole_admin",
+          "capacity": "admin"
+        }
+      ],
+      "display_name": "North Pole",
+      "description": "North Pole demo organization",
+      "image_url": "https://media.gettyimages.com/vectors/north-pole-sign-with-santa-clause-vector-id165913270",
+      "name": "north-pole",
+      "state": "active",
+      "title": "North Pole"
+    }
+  ]
+}

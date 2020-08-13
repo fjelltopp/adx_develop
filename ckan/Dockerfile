@@ -99,5 +99,5 @@ RUN ckan-pip install -r /usr/lib/ckan/file_uploader_ui-requirements.txt
 RUN rm /usr/lib/ckan/*-requirements.txt
 # Configs
 COPY ./adx_develop/ckan/ckan-entrypoint-adx.sh /ckan-entrypoint.sh
+COPY ./adx_develop/ckan/wait-for-it.sh /wait-for-it.sh
 ENTRYPOINT ["/ckan-entrypoint.sh"]
-CMD ["ckan-paster","serve","/etc/ckan/production.ini"]

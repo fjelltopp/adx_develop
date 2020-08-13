@@ -1,0 +1,64 @@
+{
+  "users": [
+    {
+        "email": "andrew@fjelltopp",
+        "about": null,
+        "display_name": "Andrew Atkins",
+        "name": "fjelltopp_member",
+        "password": "fjelltopp",
+        "activity_streams_email_notifications": false,
+        "state": "active",
+        "fullname": "Andrew Atkins"
+    },
+    {
+      "email": "bob@fjelltopp",
+      "about": null,
+      "display_name": "Bob Belgian",
+      "name": "fjelltopp_editor",
+      "password": "fjelltopp",
+      "activity_streams_email_notifications": false,
+      "state": "active",
+      "fullname": "Bob Belgian"
+    },
+    {
+      "email": "charles@fjelltopp",
+      "about": null,
+      "display_name": "Charles Chester",
+      "name": "fjelltopp_admin",
+      "password": "fjelltopp",
+      "activity_streams_email_notifications": false,
+      "state": "active",
+      "fullname": "Charles Chester"
+    },
+    {
+      "email": "anna@fjelltopp",
+      "about": null,
+      "display_name": "Anna Artery",
+      "name": "north_pole_member",
+      "password": "fjelltopp",
+      "activity_streams_email_notifications": false,
+      "state": "active",
+      "fullname": "Anna Artery"
+    },
+    {
+      "email": "beth@fjelltopp",
+      "about": null,
+      "display_name": "Beth Britany",
+      "name": "north_pole_editor",
+      "password": "fjelltopp",
+      "activity_streams_email_notifications": false,
+      "state": "active",
+      "fullname": "Beth Britany"
+    },
+    {
+      "email": "celine@fjelltopp",
+      "about": null,
+      "display_name": "Celine Close",
+      "name": "north_pole_admin",
+      "password": "fjelltopp",
+      "activity_streams_email_notifications": false,
+      "state": "active",
+      "fullname": "Celine Close"
+    }
+  ]
+}

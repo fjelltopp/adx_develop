@@ -53,19 +53,13 @@ Setting up the ADX development environment locally will clone a collection of di
     ```
     adx dbsetup
     ```
-    Which wraps the following steps for you:
-    1. Setting up the db with the required tables for ckan and it's extensions:
-       ```
-       docker exec ckan /usr/local/bin/ckan-paster --plugin=ckan datastore set-permissions -c /etc/ckan/production.ini | docker exec -i db psql -U ckan
-       docker exec ckan /usr/local/bin/ckan-paster --plugin=ckanext-ytp-request initdb -c /etc/ckan/production.ini
-       docker exec -it ckan /usr/local/bin/ckan-paster --plugin=ckanext-harvest harvester initdb -c /etc/ckan/production.ini
-       docker exec -it ckan /usr/local/bin/ckan-paster --plugin=ckanext-validation validation init-db -c /etc/ckan/production.ini
-       ```
-
-    2. Creating an admin user to access the site with:
-       ```
-       docker exec -it ckan /usr/local/bin/ckan-paster --plugin=ckan sysadmin -c /etc/ckan/production.ini add admin
-       ```
+    Which initializes the db tables for extensions and creates the admin user.
+    
+    **Admin user:**
+    ```
+    username: admin
+    password: fjelltopp
+   ```
     The db should persist in a docker volume, so these commands will only need to
     be run again if you delete corresponding docker volume.
 
@@ -73,17 +67,14 @@ Setting up the ADX development environment locally will clone a collection of di
    ```
    adx restart ckan
    ```
+   
+9. [Optional] Adding demo data to CKAN instance with:
+    ```
+   adx demodata
+   ```
 
 9. CKAN should be available at http://localhost:5000
 
-10. To use the Harvester extension in development run:
-    ```
-    adx bash ckan
-    # run harvester fetch and gather consumer as bg tasks
-    /adx_utils/harvester_bg_tasks.sh
-    # then after each run of harvest job you need to run
-    /adx_utils/harvester_run_task.sh
-    ```
 
 ## Running CKAN tests locally
 
