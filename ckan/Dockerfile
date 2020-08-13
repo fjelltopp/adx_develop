@@ -101,4 +101,3 @@ RUN rm /usr/lib/ckan/*-requirements.txt
 COPY ./adx_develop/ckan/ckan-entrypoint-adx.sh /ckan-entrypoint.sh
 COPY ./adx_develop/ckan/wait-for-it.sh /wait-for-it.sh
 ENTRYPOINT ["/ckan-entrypoint.sh"]
-#CMD ["ckan-paster","serve","/etc/ckan/production.ini"]
