@@ -20,6 +20,14 @@ def load_organizations(ckan):
             try:
                 ckan.action.organization_create(**organization)
                 log.info(f"Created organization {organization['name']}")
+                continue
+            except ckanapi.errors.ValidationError as e:
+                pass # fallback to organization update
+            try:
+                log.warning(f"Organization {organization['name']} might already exists. Will try to update.")
+                id = ckan.action.organization_show(id=organization['name'])['id']
+                ckan.action.organization_update(id=id, **organization)
+                log.info(f"Updated organization {organization['name']}")
             except ckanapi.errors.ValidationError as e:
                 log.error(f"Can't create organization {organization['name']}: {e.error_dict}")
 
@@ -31,6 +39,14 @@ def load_users(ckan):
             try:
                 ckan.action.user_create(**user)
                 log.info(f"Created user {user['name']}")
+                continue
+            except ckanapi.errors.ValidationError as e:
+                pass  # fallback to user update
+            try:
+                log.warning(f"User {user['name']} might already exists. Will try to update.")
+                id = ckan.action.user_show(id=user['name'])['id']
+                ckan.action.user_update(id=id, **user)
+                log.info(f"Updated user {user['name']}")
             except ckanapi.errors.ValidationError as e:
                 log.error(f"Can't create user {user['name']}: {e.error_dict}")
 
