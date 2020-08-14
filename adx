@@ -4,6 +4,7 @@ import argparse
 import sys
 import util
 import os
+import logging
 
 parser = argparse.ArgumentParser(
     description='This script provides a variety of tools for managing the'
@@ -81,7 +82,6 @@ actions['bash'] = subparsers.add_parser(
 actions['bash'].set_defaults(func=util.run_docker_compose)
 actions['bash'].add_argument('container', metavar='container', type=str,
                              help='The service name e.g."frontend."')
-
 
 # Add the Google repo command arguments
 actions['sync'] = subparsers.add_parser(
@@ -188,7 +188,25 @@ actions['test'].set_defaults(func=util.run_tests)
 actions['test'].add_argument('extension', metavar='name', type=str,
                              help='The extension name e.g."validation", "ytp-request"')
 
-if os.path.exists((util.ADX_PATH+"/adx_deploy/deploy_master.bash")):
+parser.add_argument(
+    "-log",
+    "--log",
+    default="warning",
+    help=(
+        "Provide logging level. "
+        "Example --log debug', default='warning'"),
+)
+
+levels = {
+    'critical': logging.CRITICAL,
+    'error': logging.ERROR,
+    'warn': logging.WARNING,
+    'warning': logging.WARNING,
+    'info': logging.INFO,
+    'debug': logging.DEBUG
+}
+
+if os.path.exists((util.ADX_PATH + "/adx_deploy/deploy_master.bash")):
     actions['deploy'] = subparsers.add_parser(
         'deploy',
         description='Opens up master/development comparisons of all repos in github.',
@@ -196,8 +214,7 @@ if os.path.exists((util.ADX_PATH+"/adx_deploy/deploy_master.bash")):
     )
     actions['deploy'].set_defaults(func=util.deploy_master)
 
-
-if os.path.exists((util.ADX_PATH+"/adx_deploy/deploy_master.bash")):
+if os.path.exists((util.ADX_PATH + "/adx_deploy/deploy_master.bash")):
     actions['deploy'] = subparsers.add_parser(
         'deploy',
         description='Opens up master/development comparisons of all repos in github.',
@@ -207,10 +224,15 @@ if os.path.exists((util.ADX_PATH+"/adx_deploy/deploy_master.bash")):
 
 
 def main(orig_args):
-    # Parse both args we recognise
     args, extra_args = parser.parse_known_args(orig_args)
+
+    level = levels.get(args.log.lower())
+    if level is None:
+        raise ValueError(
+            f"log level given: {args.log}"
+            f" -- must be one of: {' | '.join(levels.keys())}")
+    logging.basicConfig(level=level)
     if hasattr(args, 'func'):
-        # Parse the args!
         args.func(args, extra_args)
     else:
         parser.print_help()
