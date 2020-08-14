@@ -8,31 +8,46 @@ DEMO_DATA_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), '../de
 DEMO_USERS = os.path.join(DEMO_DATA_PATH, 'users.json')
 DEMO_ORGANIZATIONS = os.path.join(DEMO_DATA_PATH, 'organizations.json')
 # TODO: DEMO_DATASETS = os.path.join(DEMO_DATA_PATH, 'datasets.json')
-# TODO: DEMO_HARVESTERS = os.path.join(DEMO_DATA_PATH, 'harvesters.json')
+DEMO_HARVESTERS = os.path.join(DEMO_DATA_PATH, 'harvesters.json')
 
 log = logging.getLogger(__name__)
 
 
 def load_organizations(ckan):
+    """
+    Helper method to load demo organizations from DEMO_ORGANIZATIONS config json file
+    :param ckan: ckanapi instance
+    :return: a dictionary map of created organization names to their ids
+    """
+    organization_ids_dict = {}
     with open(DEMO_ORGANIZATIONS, 'r') as organizations_file:
         organizations = json.load(organizations_file)['organizations']
         for organization in organizations:
+            org_name = organization['name']
             try:
-                ckan.action.organization_create(**organization)
-                log.info(f"Created organization {organization['name']}")
+                org = ckan.action.organization_create(**organization)
+                log.info(f"Created organization {org_name}")
+                organization_ids_dict[org_name] = org["id"]
                 continue
             except ckanapi.errors.ValidationError as e:
                 pass # fallback to organization update
             try:
-                log.warning(f"Organization {organization['name']} might already exists. Will try to update.")
-                id = ckan.action.organization_show(id=organization['name'])['id']
-                ckan.action.organization_update(id=id, **organization)
-                log.info(f"Updated organization {organization['name']}")
+                log.warning(f"Organization {org_name} might already exists. Will try to update.")
+                org_id = ckan.action.organization_show(id=org_name)['id']
+                ckan.action.organization_update(id=org_id, **organization)
+                organization_ids_dict[org_name] = org_id
+                log.info(f"Updated organization {org_name}")
             except ckanapi.errors.ValidationError as e:
-                log.error(f"Can't create organization {organization['name']}: {e.error_dict}")
+                log.error(f"Can't create organization {org_name}: {e.error_dict}")
+    return organization_ids_dict
 
 
 def load_users(ckan):
+    """
+    Helper method to load demo users from DEMO_USERS config json file
+    :param ckan: ckanapi instance
+    :return: None
+    """
     with open(DEMO_USERS, 'r') as users_file:
         users = json.load(users_file)['users']
         for user in users:
@@ -51,11 +66,41 @@ def load_users(ckan):
                 log.error(f"Can't create user {user['name']}: {e.error_dict}")
 
 
+def load_harvesters(ckan, organizations_ids_dict):
+    """
+    Helper method to load demo users from DEMO_HARVESTERS config json file.
+    field "owner_org" which is owner organization id is required by CKAN. Those ids are generated
+    in this method by reading "owner_org_name" param from json input and with use of `organizations_ids_dict`
+    translated to org_id and passed as `owner_org` field.
+    :param ckan: ckanapi instance
+    :param organizations_ids_dict: a dictionary map of created organization names to their ids
+    """
+    with open(DEMO_HARVESTERS, 'r') as harvesters_file:
+        harvesters = json.load(harvesters_file)['harvesters']
+        for harvester in harvesters:
+            org_name = harvester.pop("owner_org_name")
+            harvester["owner_org"] = organizations_ids_dict[org_name]
+            try:
+                ckan.action.package_create(**harvester)
+                log.info(f"Created harvester {harvester['name']}")
+                continue
+            except ckanapi.errors.ValidationError as e:
+                pass  # fallback to harvester update
+            try:
+                log.warning(f"Harvester {harvester['name']} might already exists. Will try to update.")
+                id = ckan.action.package_show(id=harvester['name'])['id']
+                ckan.action.package_update(id=id, **harvester)
+                log.info(f"Updated harvester {harvester['name']}")
+            except ( ckanapi.errors.ValidationError, ckanapi.errors.NotFound ) as e:
+                log.error(f"Can't create harvester {harvester['name']}: {e!s}")
+
+
 def load_data(adr_url, apikey):
     ckan = ckanapi.RemoteCKAN(adr_url, apikey=apikey)
 
     load_users(ckan)
-    load_organizations(ckan)
+    orgs = load_organizations(ckan)
+    load_harvesters(ckan, organizations_ids_dict=orgs)
 
 
 if __name__ == '__main__':
