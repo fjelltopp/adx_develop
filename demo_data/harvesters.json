@@ -1,0 +1,440 @@
+{
+  "harvesters": [
+    {
+      "private": false,
+      "frequency": "MANUAL",
+      "title": "Demo DHIS2 Source",
+      "area_id_map_url": "",
+      "state": "active",
+      "dhis2_api_version": "",
+      "config": "{\"dhis2_auth_token\": \"87A0E4A47A88AC449EB5C79AB07CFBAA\", \"selected_pivot_tables\": [{\"text\": \"ANC: ANC 1st and 2nd visits at facilities with hierarchy\", \"type\": \"naomi-anc\", \"id\": \"qfMh2IjOxvw\"}, {\"text\": \"ART: ART stage by implementing partner\", \"type\": \"naomi-art\", \"id\": \"bf3TKyiiV19\"}], \"dhis2_url\": \"https://play.dhis2.org/2.30/\", \"column_values\": [{\"id\": \"qfMh2IjOxvw\", \"columns\": [{\"enabled\": true, \"target_column\": \"ancrt_tested\", \"categories\": {\"age-group\": \"15-49\"}, \"id\": \"cYeuwXTCPkU-PT59n8BQbqM\"}, {\"enabled\": true, \"target_column\": \"anc_clients\", \"categories\": {\"age-group\": \"15-49\"}, \"id\": \"fbfJHSPpUQD-PT59n8BQbqM\"}, {\"enabled\": true, \"target_column\": \"ancrt_known_pos\", \"categories\": {\"age-group\": \"15-49\"}, \"id\": \"fbfJHSPpUQD-pq2XI5kz2BY\"}, {\"enabled\": true, \"target_column\": \"ancrt_test_pos\", \"categories\": {\"age-group\": \"15-49\"}, \"id\": \"cYeuwXTCPkU-pq2XI5kz2BY\"}]}, {\"id\": \"bf3TKyiiV19\", \"columns\": [{\"enabled\": true, \"target_column\": \"current_art\", \"categories\": {\"age-group\": \"00-14\", \"sex\": \"male\"}, \"id\": \"FTy5pcJZ3yX-zPpvbvpmkxN\"}, {\"enabled\": true, \"target_column\": \"current_art\", \"categories\": {\"age-group\": \"00-14\", \"sex\": \"male\"}, \"id\": \"eRwOwCpMzyP-TkDhg29x18A\"}, {\"enabled\": true, \"target_column\": \"current_art\", \"categories\": {\"age-group\": \"00-14\", \"sex\": \"male\"}, \"id\": \"eRwOwCpMzyP-qa0VqgYlgtN\"}, {\"enabled\": true, \"target_column\": \"current_art\", \"categories\": {\"age-group\": \"00-14\", \"sex\": \"male\"}, \"id\": \"FTy5pcJZ3yX-rCMUTmcreqP\"}, {\"enabled\": true, \"target_column\": \"current_art\", \"categories\": {\"age-group\": \"00-14\", \"sex\": \"male\"}, \"id\": \"zYkwbCBALhn-zPpvbvpmkxN\"}, {\"enabled\": true, \"target_column\": \"current_art\", \"categories\": {\"age-group\": \"00-14\", \"sex\": \"male\"}, \"id\": \"eRwOwCpMzyP-LbeIlyHEhKr\"}, {\"enabled\": true, \"target_column\": \"current_art\", \"categories\": {\"age-group\": \"00-14\", \"sex\": \"male\"}, \"id\": \"eRwOwCpMzyP-qNCMOhkoQju\"}, {\"enabled\": true, \"target_column\": \"current_art\", \"categories\": {\"age-group\": \"00-14\", \"sex\": \"male\"}, \"id\": \"eRwOwCpMzyP-uX9yDetTdOp\"}, {\"enabled\": true, \"target_column\": \"current_art\", \"categories\": {\"age-group\": \"00-14\", \"sex\": \"male\"}, \"id\": \"FTy5pcJZ3yX-qNCMOhkoQju\"}, {\"enabled\": true, \"target_column\": \"current_art\", \"categories\": {\"age-group\": \"15-99\", \"sex\": \"female\"}, \"id\": \"BOSZApCrBni-GuJESuyOCMW\"}, {\"enabled\": true, \"target_column\": \"current_art\", \"categories\": {\"age-group\": \"00-14\", \"sex\": \"male\"}, \"id\": \"zYkwbCBALhn-qNCMOhkoQju\"}, {\"enabled\": false, \"target_column\": \"current_art\", \"categories\": {\"age-group\": \"00-14\", \"sex\": \"male\"}, \"id\": \"BOSZApCrBni-LbeIlyHEhKr\"}, {\"enabled\": true, \"target_column\": \"current_art\", \"categories\": {\"age-group\": \"15-99\", \"sex\": \"male\"}, \"id\": \"BOSZApCrBni-rCMUTmcreqP\"}, {\"enabled\": true, \"target_column\": \"current_art\", \"categories\": {\"age-group\": \"00-14\", \"sex\": \"male\"}, \"id\": \"dGdeotKpRed-zPpvbvpmkxN\"}, {\"enabled\": true, \"target_column\": \"current_art\", \"categories\": {\"age-group\": \"00-14\", \"sex\": \"male\"}, \"id\": \"dGdeotKpRed-GuJESuyOCMW\"}, {\"enabled\": true, \"target_column\": \"current_art\", \"categories\": {\"age-group\": \"00-14\", \"sex\": \"male\"}, \"id\": \"FTy5pcJZ3yX-TkDhg29x18A\"}, {\"enabled\": true, \"target_column\": \"current_art\", \"categories\": {\"age-group\": \"00-14\", \"sex\": \"male\"}, \"id\": \"dGdeotKpRed-uX9yDetTdOp\"}, {\"enabled\": true, \"target_column\": \"current_art\", \"categories\": {\"age-group\": \"00-14\", \"sex\": \"male\"}, \"id\": \"zYkwbCBALhn-qa0VqgYlgtN\"}, {\"enabled\": true, \"target_column\": \"current_art\", \"categories\": {\"age-group\": \"00-14\", \"sex\": \"male\"}, \"id\": \"zYkwbCBALhn-LbeIlyHEhKr\"}, {\"enabled\": true, \"target_column\": \"current_art\", \"categories\": {\"age-group\": \"00-14\", \"sex\": \"male\"}, \"id\": \"dGdeotKpRed-rCMUTmcreqP\"}, {\"enabled\": true, \"target_column\": \"current_art\", \"categories\": {\"age-group\": \"00-14\", \"sex\": \"male\"}, \"id\": \"dGdeotKpRed-qa0VqgYlgtN\"}, {\"enabled\": true, \"target_column\": \"current_art\", \"categories\": {\"age-group\": \"00-14\", \"sex\": \"male\"}, \"id\": \"eRwOwCpMzyP-GuJESuyOCMW\"}, {\"enabled\": true, \"target_column\": \"current_art\", \"categories\": {\"age-group\": \"00-14\", \"sex\": \"male\"}, \"id\": \"eRwOwCpMzyP-rCMUTmcreqP\"}, {\"enabled\": true, \"target_column\": \"current_art\", \"categories\": {\"age-group\": \"00-14\", \"sex\": \"male\"}, \"id\": \"dGdeotKpRed-TkDhg29x18A\"}, {\"enabled\": true, \"target_column\": \"current_art\", \"categories\": {\"age-group\": \"00-14\", \"sex\": \"male\"}, \"id\": \"BOSZApCrBni-TkDhg29x18A\"}, {\"enabled\": true, \"target_column\": \"current_art\", \"categories\": {\"age-group\": \"00-14\", \"sex\": \"male\"}, \"id\": \"zYkwbCBALhn-rCMUTmcreqP\"}, {\"enabled\": true, \"target_column\": \"current_art\", \"categories\": {\"age-group\": \"00-14\", \"sex\": \"male\"}, \"id\": \"dGdeotKpRed-qNCMOhkoQju\"}, {\"enabled\": true, \"target_column\": \"current_art\", \"categories\": {\"age-group\": \"00-14\", \"sex\": \"male\"}, \"id\": \"BOSZApCrBni-zPpvbvpmkxN\"}, {\"enabled\": true, \"target_column\": \"current_art\", \"categories\": {\"age-group\": \"00-14\", \"sex\": \"male\"}, \"id\": \"zYkwbCBALhn-GuJESuyOCMW\"}, {\"enabled\": true, \"target_column\": \"current_art\", \"categories\": {\"age-group\": \"00-14\", \"sex\": \"male\"}, \"id\": \"BOSZApCrBni-uX9yDetTdOp\"}, {\"enabled\": true, \"target_column\": \"current_art\", \"categories\": {\"age-group\": \"00-14\", \"sex\": \"male\"}, \"id\": \"BOSZApCrBni-qa0VqgYlgtN\"}, {\"enabled\": true, \"target_column\": \"current_art\", \"categories\": {\"age-group\": \"00-14\", \"sex\": \"male\"}, \"id\": \"zYkwbCBALhn-uX9yDetTdOp\"}, {\"enabled\": true, \"target_column\": \"current_art\", \"categories\": {\"age-group\": \"00-14\", \"sex\": \"male\"}, \"id\": \"dGdeotKpRed-LbeIlyHEhKr\"}, {\"enabled\": true, \"target_column\": \"current_art\", \"categories\": {\"age-group\": \"00-14\", \"sex\": \"male\"}, \"id\": \"FTy5pcJZ3yX-uX9yDetTdOp\"}, {\"enabled\": true, \"target_column\": \"current_art\", \"categories\": {\"age-group\": \"00-14\", \"sex\": \"male\"}, \"id\": \"zYkwbCBALhn-TkDhg29x18A\"}, {\"enabled\": true, \"target_column\": \"current_art\", \"categories\": {\"age-group\": \"00-14\", \"sex\": \"both\"}, \"id\": \"BOSZApCrBni-qNCMOhkoQju\"}, {\"enabled\": true, \"target_column\": \"current_art\", \"categories\": {\"age-group\": \"00-14\", \"sex\": \"male\"}, \"id\": \"FTy5pcJZ3yX-LbeIlyHEhKr\"}, {\"enabled\": true, \"target_column\": \"current_art\", \"categories\": {\"age-group\": \"00-14\", \"sex\": \"male\"}, \"id\": \"FTy5pcJZ3yX-GuJESuyOCMW\"}, {\"enabled\": true, \"target_column\": \"current_art\", \"categories\": {\"age-group\": \"00-14\", \"sex\": \"male\"}, \"id\": \"FTy5pcJZ3yX-qa0VqgYlgtN\"}, {\"enabled\": true, \"target_column\": \"current_art\", \"categories\": {\"age-group\": \"00-14\", \"sex\": \"male\"}, \"id\": \"eRwOwCpMzyP-zPpvbvpmkxN\"}]}], \"area_id_map_url\": \"\", \"area_id_map_owner\": null, \"dhis2_api_version\": \"\"}",
+      "resources": [],
+      "selected_pivot_tables": [
+        {
+          "text": "ANC: ANC 1st and 2nd visits at facilities with hierarchy",
+          "type": "naomi-anc",
+          "id": "qfMh2IjOxvw"
+        },
+        {
+          "text": "ART: ART stage by implementing partner",
+          "type": "naomi-art",
+          "id": "bf3TKyiiV19"
+        }
+      ],
+      "dhis2_url": "https://play.dhis2.org/2.30/",
+      "column_values": [
+        {
+          "id": "qfMh2IjOxvw",
+          "columns": [
+            {
+              "enabled": true,
+              "target_column": "ancrt_tested",
+              "categories": {
+                "age-group": "15-49"
+              },
+              "id": "cYeuwXTCPkU-PT59n8BQbqM"
+            },
+            {
+              "enabled": true,
+              "target_column": "anc_clients",
+              "categories": {
+                "age-group": "15-49"
+              },
+              "id": "fbfJHSPpUQD-PT59n8BQbqM"
+            },
+            {
+              "enabled": true,
+              "target_column": "ancrt_known_pos",
+              "categories": {
+                "age-group": "15-49"
+              },
+              "id": "fbfJHSPpUQD-pq2XI5kz2BY"
+            },
+            {
+              "enabled": true,
+              "target_column": "ancrt_test_pos",
+              "categories": {
+                "age-group": "15-49"
+              },
+              "id": "cYeuwXTCPkU-pq2XI5kz2BY"
+            }
+          ]
+        },
+        {
+          "id": "bf3TKyiiV19",
+          "columns": [
+            {
+              "enabled": true,
+              "target_column": "current_art",
+              "categories": {
+                "age-group": "00-14",
+                "sex": "male"
+              },
+              "id": "FTy5pcJZ3yX-zPpvbvpmkxN"
+            },
+            {
+              "enabled": true,
+              "target_column": "current_art",
+              "categories": {
+                "age-group": "00-14",
+                "sex": "male"
+              },
+              "id": "eRwOwCpMzyP-TkDhg29x18A"
+            },
+            {
+              "enabled": true,
+              "target_column": "current_art",
+              "categories": {
+                "age-group": "00-14",
+                "sex": "male"
+              },
+              "id": "eRwOwCpMzyP-qa0VqgYlgtN"
+            },
+            {
+              "enabled": true,
+              "target_column": "current_art",
+              "categories": {
+                "age-group": "00-14",
+                "sex": "male"
+              },
+              "id": "FTy5pcJZ3yX-rCMUTmcreqP"
+            },
+            {
+              "enabled": true,
+              "target_column": "current_art",
+              "categories": {
+                "age-group": "00-14",
+                "sex": "male"
+              },
+              "id": "zYkwbCBALhn-zPpvbvpmkxN"
+            },
+            {
+              "enabled": true,
+              "target_column": "current_art",
+              "categories": {
+                "age-group": "00-14",
+                "sex": "male"
+              },
+              "id": "eRwOwCpMzyP-LbeIlyHEhKr"
+            },
+            {
+              "enabled": true,
+              "target_column": "current_art",
+              "categories": {
+                "age-group": "00-14",
+                "sex": "male"
+              },
+              "id": "eRwOwCpMzyP-qNCMOhkoQju"
+            },
+            {
+              "enabled": true,
+              "target_column": "current_art",
+              "categories": {
+                "age-group": "00-14",
+                "sex": "male"
+              },
+              "id": "eRwOwCpMzyP-uX9yDetTdOp"
+            },
+            {
+              "enabled": true,
+              "target_column": "current_art",
+              "categories": {
+                "age-group": "00-14",
+                "sex": "male"
+              },
+              "id": "FTy5pcJZ3yX-qNCMOhkoQju"
+            },
+            {
+              "enabled": true,
+              "target_column": "current_art",
+              "categories": {
+                "age-group": "15-99",
+                "sex": "female"
+              },
+              "id": "BOSZApCrBni-GuJESuyOCMW"
+            },
+            {
+              "enabled": true,
+              "target_column": "current_art",
+              "categories": {
+                "age-group": "00-14",
+                "sex": "male"
+              },
+              "id": "zYkwbCBALhn-qNCMOhkoQju"
+            },
+            {
+              "enabled": false,
+              "target_column": "current_art",
+              "categories": {
+                "age-group": "00-14",
+                "sex": "male"
+              },
+              "id": "BOSZApCrBni-LbeIlyHEhKr"
+            },
+            {
+              "enabled": true,
+              "target_column": "current_art",
+              "categories": {
+                "age-group": "15-99",
+                "sex": "male"
+              },
+              "id": "BOSZApCrBni-rCMUTmcreqP"
+            },
+            {
+              "enabled": true,
+              "target_column": "current_art",
+              "categories": {
+                "age-group": "00-14",
+                "sex": "male"
+              },
+              "id": "dGdeotKpRed-zPpvbvpmkxN"
+            },
+            {
+              "enabled": true,
+              "target_column": "current_art",
+              "categories": {
+                "age-group": "00-14",
+                "sex": "male"
+              },
+              "id": "dGdeotKpRed-GuJESuyOCMW"
+            },
+            {
+              "enabled": true,
+              "target_column": "current_art",
+              "categories": {
+                "age-group": "00-14",
+                "sex": "male"
+              },
+              "id": "FTy5pcJZ3yX-TkDhg29x18A"
+            },
+            {
+              "enabled": true,
+              "target_column": "current_art",
+              "categories": {
+                "age-group": "00-14",
+                "sex": "male"
+              },
+              "id": "dGdeotKpRed-uX9yDetTdOp"
+            },
+            {
+              "enabled": true,
+              "target_column": "current_art",
+              "categories": {
+                "age-group": "00-14",
+                "sex": "male"
+              },
+              "id": "zYkwbCBALhn-qa0VqgYlgtN"
+            },
+            {
+              "enabled": true,
+              "target_column": "current_art",
+              "categories": {
+                "age-group": "00-14",
+                "sex": "male"
+              },
+              "id": "zYkwbCBALhn-LbeIlyHEhKr"
+            },
+            {
+              "enabled": true,
+              "target_column": "current_art",
+              "categories": {
+                "age-group": "00-14",
+                "sex": "male"
+              },
+              "id": "dGdeotKpRed-rCMUTmcreqP"
+            },
+            {
+              "enabled": true,
+              "target_column": "current_art",
+              "categories": {
+                "age-group": "00-14",
+                "sex": "male"
+              },
+              "id": "dGdeotKpRed-qa0VqgYlgtN"
+            },
+            {
+              "enabled": true,
+              "target_column": "current_art",
+              "categories": {
+                "age-group": "00-14",
+                "sex": "male"
+              },
+              "id": "eRwOwCpMzyP-GuJESuyOCMW"
+            },
+            {
+              "enabled": true,
+              "target_column": "current_art",
+              "categories": {
+                "age-group": "00-14",
+                "sex": "male"
+              },
+              "id": "eRwOwCpMzyP-rCMUTmcreqP"
+            },
+            {
+              "enabled": true,
+              "target_column": "current_art",
+              "categories": {
+                "age-group": "00-14",
+                "sex": "male"
+              },
+              "id": "dGdeotKpRed-TkDhg29x18A"
+            },
+            {
+              "enabled": true,
+              "target_column": "current_art",
+              "categories": {
+                "age-group": "00-14",
+                "sex": "male"
+              },
+              "id": "BOSZApCrBni-TkDhg29x18A"
+            },
+            {
+              "enabled": true,
+              "target_column": "current_art",
+              "categories": {
+                "age-group": "00-14",
+                "sex": "male"
+              },
+              "id": "zYkwbCBALhn-rCMUTmcreqP"
+            },
+            {
+              "enabled": true,
+              "target_column": "current_art",
+              "categories": {
+                "age-group": "00-14",
+                "sex": "male"
+              },
+              "id": "dGdeotKpRed-qNCMOhkoQju"
+            },
+            {
+              "enabled": true,
+              "target_column": "current_art",
+              "categories": {
+                "age-group": "00-14",
+                "sex": "male"
+              },
+              "id": "BOSZApCrBni-zPpvbvpmkxN"
+            },
+            {
+              "enabled": true,
+              "target_column": "current_art",
+              "categories": {
+                "age-group": "00-14",
+                "sex": "male"
+              },
+              "id": "zYkwbCBALhn-GuJESuyOCMW"
+            },
+            {
+              "enabled": true,
+              "target_column": "current_art",
+              "categories": {
+                "age-group": "00-14",
+                "sex": "male"
+              },
+              "id": "BOSZApCrBni-uX9yDetTdOp"
+            },
+            {
+              "enabled": true,
+              "target_column": "current_art",
+              "categories": {
+                "age-group": "00-14",
+                "sex": "male"
+              },
+              "id": "BOSZApCrBni-qa0VqgYlgtN"
+            },
+            {
+              "enabled": true,
+              "target_column": "current_art",
+              "categories": {
+                "age-group": "00-14",
+                "sex": "male"
+              },
+              "id": "zYkwbCBALhn-uX9yDetTdOp"
+            },
+            {
+              "enabled": true,
+              "target_column": "current_art",
+              "categories": {
+                "age-group": "00-14",
+                "sex": "male"
+              },
+              "id": "dGdeotKpRed-LbeIlyHEhKr"
+            },
+            {
+              "enabled": true,
+              "target_column": "current_art",
+              "categories": {
+                "age-group": "00-14",
+                "sex": "male"
+              },
+              "id": "FTy5pcJZ3yX-uX9yDetTdOp"
+            },
+            {
+              "enabled": true,
+              "target_column": "current_art",
+              "categories": {
+                "age-group": "00-14",
+                "sex": "male"
+              },
+              "id": "zYkwbCBALhn-TkDhg29x18A"
+            },
+            {
+              "enabled": true,
+              "target_column": "current_art",
+              "categories": {
+                "age-group": "00-14",
+                "sex": "both"
+              },
+              "id": "BOSZApCrBni-qNCMOhkoQju"
+            },
+            {
+              "enabled": true,
+              "target_column": "current_art",
+              "categories": {
+                "age-group": "00-14",
+                "sex": "male"
+              },
+              "id": "FTy5pcJZ3yX-LbeIlyHEhKr"
+            },
+            {
+              "enabled": true,
+              "target_column": "current_art",
+              "categories": {
+                "age-group": "00-14",
+                "sex": "male"
+              },
+              "id": "FTy5pcJZ3yX-GuJESuyOCMW"
+            },
+            {
+              "enabled": true,
+              "target_column": "current_art",
+              "categories": {
+                "age-group": "00-14",
+                "sex": "male"
+              },
+              "id": "FTy5pcJZ3yX-qa0VqgYlgtN"
+            },
+            {
+              "enabled": true,
+              "target_column": "current_art",
+              "categories": {
+                "age-group": "00-14",
+                "sex": "male"
+              },
+              "id": "eRwOwCpMzyP-zPpvbvpmkxN"
+            }
+          ]
+        }
+      ],
+      "source_type": "dhis2-pivot-tables",
+      "name": "demo-dhis2-source",
+      "dhis2_auth_token": "",
+      "url": "https://play.dhis2.org/2.30/",
+      "type": "harvest",
+      "notes": "Demo harvester getting programmatic data from demo DHIS2.",
+      "owner_org_name": "fjelltopp",
+      "revision_id": "5511f72c-18ad-4de9-8193-ada98e070f48",
+      "area_id_map_owner": null
+    }
+  ]
+}
