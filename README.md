@@ -117,3 +117,9 @@ To run the ckan core tests:
 ```
 docker exec -it ckan ckan-nosetests --ckan --with-pylons=/usr/lib/ckan/venv/src/ckan/test-core.ini ckan ckanext
 ```
+
+### Logs
+To get more log output you can pick custom log level with `-log`, e.g.:
+```
+adx --log info demodata
+```
