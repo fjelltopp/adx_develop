@@ -9,8 +9,7 @@ SUDO = os.environ.get('ADX_SUDO', '')
 compose = ["docker-compose"]
 
 COMPOSE_PATH = os.path.abspath(os.path.dirname(__file__))
-# If you want to fetch containers using https, you should set this env var to
-# https://github.com/meerkat-code/meerkat.git
+
 ADX_MANIFEST_URL = os.environ.get(
     'ADX_MANIFEST_URL',
     'git@github.com:fjelltopp/adx_manifest.git'
@@ -36,7 +35,7 @@ def call_command(args):
             shell=True,
             cwd=COMPOSE_PATH
         )
-        if retcode is not 0:
+        if retcode != 0:
             print(f"Command not successful. Returned {retcode}", file=sys.stderr)
         return retcode
     except OSError as e:
@@ -112,13 +111,13 @@ def init(args, extra):
 
 def setup(args, extra):
     """
-    Initialises the parent directory to be the Meerkat code base folder.
+    Initialises the parent directory to be the AIDS Data Repository code base folder.
     Optionally specify which manifest to use.
     """
     print('Setting up the ADX codebase...')
     print('This will destroy changes, resetting everything to the remote.')
 
-    if raw_input('SURE YOU WANT TO CONTINUE? (y/N) ').lower() in ['y', 'yes']:
+    if input('SURE YOU WANT TO CONTINUE? (y/N) ').lower() in ['y', 'yes']:
         manifest = args.manifest if args.manifest else DEFAULT_MANIFEST
         repo.main(['init', '-u', ADX_MANIFEST_URL, '-m', manifest])
         repo.main(['sync', '--force-sync'])
