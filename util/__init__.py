@@ -104,7 +104,7 @@ def run_repo(args, extra):
 def init(args, extra):
     print("Initializing the ADX codebase...")
     manifest = args.manifest if args.manifest else DEFAULT_MANIFEST
-    repo.main(['init', '-u', MANIFEST_URL, '-m', manifest])
+    repo.main(['init', '-u', ADX_MANIFEST_URL, '-m', manifest])
     print("ADX status:")
     repo.main(['status'])
 
