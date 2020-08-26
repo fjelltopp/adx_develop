@@ -1,5 +1,7 @@
 import os
 import subprocess
+from multiprocessing.context import Process
+
 import sys
 from . import repo
 from time import sleep
@@ -119,13 +121,19 @@ def setup(args, extra):
 
     if input('SURE YOU WANT TO CONTINUE? (y/N) ').lower() in ['y', 'yes']:
         manifest = args.manifest if args.manifest else DEFAULT_MANIFEST
-        repo.main(['init', '-u', ADX_MANIFEST_URL, '-m', manifest])
-        repo.main(['sync', '--force-sync'])
+        repo_main_args = (
+            ['init', '-u', ADX_MANIFEST_URL, '-m', manifest],
+            ['sync', '--force-sync'],
+            ['forall', '-c', 'git', 'checkout', 'master'],
+            ['forall', 'ckan', '-c', 'git', 'checkout', 'refs/tags/ckan-2.8.2'],
+            ['forall', 'ckanext-scheming', '-c', 'git', 'checkout', 'validator'],
+            ['status']
+        )
+        for _args in repo_main_args:
+            p = Process(target=repo.main, args=(_args,))
+            p.start()
+            p.join()
         print('ADX code synced')
-        repo.main(['forall', '-c', 'git', 'checkout', 'master'])
-        repo.main(['forall', 'ckan', '-c', 'git', 'checkout', 'refs/tags/ckan-2.8.2'])
-        repo.main(['forall', 'ckanext-scheming', '-c', 'git', 'checkout', 'validator'])
-        repo.main(['status'])
         print('--SETUP COMPLETE--')
 
 
