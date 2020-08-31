@@ -103,12 +103,18 @@ def run_repo(args, extra):
         repo.main([args.action] + extra)
 
 
+def _run_repo_main(_args):
+    p = Process(target=repo.main, args=(_args,))
+    p.start()
+    p.join()
+
+
 def init(args, extra):
     print("Initializing the ADX codebase...")
     manifest = args.manifest if args.manifest else DEFAULT_MANIFEST
-    repo.main(['init', '-u', ADX_MANIFEST_URL, '-m', manifest])
+    _run_repo_main(['init', '-u', ADX_MANIFEST_URL, '-m', manifest])
     print("ADX status:")
-    repo.main(['status'])
+    _run_repo_main(['status'])
 
 
 def setup(args, extra):
@@ -130,9 +136,7 @@ def setup(args, extra):
             ['status']
         )
         for _args in repo_main_args:
-            p = Process(target=repo.main, args=(_args,))
-            p.start()
-            p.join()
+            _run_repo_main(_args)
         print('ADX code synced')
         print('--SETUP COMPLETE--')
 
