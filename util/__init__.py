@@ -1,5 +1,7 @@
 import os
 import subprocess
+from multiprocessing.context import Process
+
 import sys
 from . import repo
 from time import sleep
@@ -9,8 +11,7 @@ SUDO = os.environ.get('ADX_SUDO', '')
 compose = ["docker-compose"]
 
 COMPOSE_PATH = os.path.abspath(os.path.dirname(__file__))
-# If you want to fetch containers using https, you should set this env var to
-# https://github.com/meerkat-code/meerkat.git
+
 ADX_MANIFEST_URL = os.environ.get(
     'ADX_MANIFEST_URL',
     'git@github.com:fjelltopp/adx_manifest.git'
@@ -36,7 +37,7 @@ def call_command(args):
             shell=True,
             cwd=COMPOSE_PATH
         )
-        if retcode is not 0:
+        if retcode != 0:
             print(f"Command not successful. Returned {retcode}", file=sys.stderr)
         return retcode
     except OSError as e:
@@ -102,31 +103,41 @@ def run_repo(args, extra):
         repo.main([args.action] + extra)
 
 
+def _run_repo_main(_args):
+    p = Process(target=repo.main, args=(_args,))
+    p.start()
+    p.join()
+
+
 def init(args, extra):
     print("Initializing the ADX codebase...")
     manifest = args.manifest if args.manifest else DEFAULT_MANIFEST
-    repo.main(['init', '-u', MANIFEST_URL, '-m', manifest])
+    _run_repo_main(['init', '-u', ADX_MANIFEST_URL, '-m', manifest])
     print("ADX status:")
-    repo.main(['status'])
+    _run_repo_main(['status'])
 
 
 def setup(args, extra):
     """
-    Initialises the parent directory to be the Meerkat code base folder.
+    Initialises the parent directory to be the AIDS Data Repository code base folder.
     Optionally specify which manifest to use.
     """
     print('Setting up the ADX codebase...')
     print('This will destroy changes, resetting everything to the remote.')
 
-    if raw_input('SURE YOU WANT TO CONTINUE? (y/N) ').lower() in ['y', 'yes']:
+    if input('SURE YOU WANT TO CONTINUE? (y/N) ').lower() in ['y', 'yes']:
         manifest = args.manifest if args.manifest else DEFAULT_MANIFEST
-        repo.main(['init', '-u', ADX_MANIFEST_URL, '-m', manifest])
-        repo.main(['sync', '--force-sync'])
+        repo_main_args = (
+            ['init', '-u', ADX_MANIFEST_URL, '-m', manifest],
+            ['sync', '--force-sync'],
+            ['forall', '-c', 'git', 'checkout', 'master'],
+            ['forall', 'ckan', '-c', 'git', 'checkout', 'refs/tags/ckan-2.8.2'],
+            ['forall', 'ckanext-scheming', '-c', 'git', 'checkout', 'validator'],
+            ['status']
+        )
+        for _args in repo_main_args:
+            _run_repo_main(_args)
         print('ADX code synced')
-        repo.main(['forall', '-c', 'git', 'checkout', 'master'])
-        repo.main(['forall', 'ckan', '-c', 'git', 'checkout', 'refs/tags/ckan-2.8.2'])
-        repo.main(['forall', 'ckanext-scheming', '-c', 'git', 'checkout', 'validator'])
-        repo.main(['status'])
         print('--SETUP COMPLETE--')
 
 
