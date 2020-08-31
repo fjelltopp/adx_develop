@@ -7,6 +7,11 @@ Repository storing the development environment for _The AIDS Data Repository_.
 Setting up the ADX development environment locally will clone a collection of different Github repos specified in [this file](https://github.com/fjelltopp/adx_manifest/blob/master/default.xml).  This includes the base [CKAN](https://github.com/ckan/ckan) repository and a variety of of forked CKAN extensions.
 
 
+## Requirements
+Python
+Docker
+Docker-compose
+
 ## Setup
 
 1. Create a directory to store the ADX development environment, then change
@@ -19,6 +24,18 @@ Setting up the ADX development environment locally will clone a collection of di
 2. Clone the `adx_develop` repo from Github into the directory
    ```
    git clone git@github.com:fjelltopp/adx_develop.git
+   ```
+   
+2. Install `ckan_api` requirements using the `requirements.txt` file
+   ```
+   pip install -r ./adx_develop/requirements.txt
+   ```
+   
+2. Add ckan as localhost name to `/etc/hosts`. After the addition the file should look something like
+   ```
+   127.0.0.1       localhost
+   127.0.1.1       somehostname
+   127.0.0.1       ckan
    ```
 
 3. Add a sym link to the dev env script from your $PATH:
