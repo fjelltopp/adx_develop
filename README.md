@@ -17,7 +17,7 @@ Docker-compose
 1. Create a directory to store the ADX development environment, then change
    directory into it e.g.
    ```
-   mkdir ~/fjelltopp/adx
+   mkdir -p ~/fjelltopp/adx
    cd ~/fjelltopp/adx
    ```
 
