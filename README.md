@@ -123,3 +123,36 @@ To get more log output you can pick custom log level with `-log`, e.g.:
 ```
 adx --log info demodata
 ```
+
+# Creating an extension 
+
+SSH into the container:
+```
+adx bash ckan
+```
+
+Create your extension:
+```
+cd /usr/lib/adx
+ckan-paster create --config /etc/ckan/production.ini  -t ckanext ckanext-hello_world
+```
+
+Exit the docker container and run:
+```
+chmod -R 775 ckanext-hello_world
+chown -R 1000:1000 ckanext-hello_world
+```
+
+Test ckan builds:
+```
+adx build ckan
+adx up
+adx logs ckan
+```
+
+Now let's make the extension do something
+- Create an `index.html` file in `ckanext-hello_world/ckanext/hello_world/templates/home`
+- Save `<h1>Hello World!</h1>` to it
+- Run another `adx build ckan; adx up` and your browser should display `Hello World!`
+- Read the [docs](https://docs.ckan.org/en/2.9/theming/templates.html#customizing-ckan-s-templates) for more info
+
