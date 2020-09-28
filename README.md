@@ -143,6 +143,20 @@ chmod -R 775 ckanext-hello_world
 chown -R 1000:1000 ckanext-hello_world
 ```
 
+Update the ckan config file:
+- Open `adx_develop/ckan/adx_config.ini`
+- Find `ckan.plugins` and add `hello_world` to the beginning of the list
+
+Add the entrypoint:
+- Open `adx_develop/ckan/ckan-entrypoint-adx.sh`
+- Towards the bottom, add: `ckan-pip install --no-deps -e /usr/lib/adx/ckanext-hello_world`
+
+Update the `/adx_develop/ckan/Dockerfile` with:
+```
+COPY ./ckanext-hello_world/requirements.txt /usr/lib/ckan/hello_world-requirements.txt
+RUN ckan-pip install -r /usr/lib/ckan/hello_world-requirements.txt
+```
+
 Test ckan builds:
 ```
 adx build ckan
