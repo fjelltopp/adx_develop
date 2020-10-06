@@ -68,8 +68,11 @@ services:
       - ../ckan:/usr/lib/ckan/venv/src/ckan
 
   datapusher:
+    build:
+      context: ../datapusher
     container_name: datapusher
-    image: clementmouchet/datapusher
+    volumes:
+      - ../datapusher:/var/www/datapusher
     ports:
       - "8800:8800"
 
