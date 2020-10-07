@@ -180,7 +180,8 @@ def reset_test_db(args, extra):
                   f' ckan ckan-paster datastore set-permissions -c test-core.ini | docker exec -i db psql -U {PG_USER}'])
     call_command([f'docker exec -e CKAN_SQLALCHEMY_URL="{CKAN_TEST_SQLALCHEMY_URL}"'
                   f' ckan ckan-paster db init -c test-core.ini'])
-
+    call_command([f'docker exec -e CKAN_SQLALCHEMY_URL="{CKAN_TEST_SQLALCHEMY_URL}"'
+              f' ckan ckan-paster --plugin=ckanext-validation validation init-db -c test-core.ini'])
 
 def run_tests(args, extra):
     extension_name = "ckanext-" + args.extension
