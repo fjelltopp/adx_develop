@@ -33,8 +33,8 @@ services:
       - ./ckan/adx_config.ini:/etc/ckan/production.ini
       - ./ckan/adx_who.ini:/etc/ckan/who.ini
       - ./ckan/utils/:/adx_utils
-    command: ["ckan-paster","serve","--reload", "/etc/ckan/production.ini"]
-
+      - ./ckan/ckan-entrypoint-adx.sh:/ckan-entrypoint.sh
+    command: ["ckan","--config","/etc/ckan/production.ini", "run", "--host", "0.0.0.0"]
   supervisor:
     container_name: supervisor
     build:

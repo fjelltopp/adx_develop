@@ -42,7 +42,7 @@ RUN useradd -r -u 900 -m -c "ckan account" -d $CKAN_HOME -s /bin/false ckan
 RUN mkdir -p $CKAN_VENV $CKAN_CONFIG $CKAN_STORAGE_PATH && \
     virtualenv $CKAN_VENV && \
     ln -s $CKAN_VENV/bin/pip /usr/local/bin/ckan-pip &&\
-    ln -s $CKAN_VENV/bin/paster /usr/local/bin/ckan-paster &&\
+    ln -s $CKAN_VENV/bin/ckan /usr/local/bin/ckan &&\
     ln -s $CKAN_VENV/bin/python /usr/local/bin/ckan-python &&\
     ln -s $CKAN_VENV/bin/nosetests-2.7 /usr/local/bin/ckan-nosetests &&\
     echo "alias ckanext='cd /usr/lib/adx/'" >> $HOME/.bashrc &&\
@@ -62,6 +62,7 @@ USER root
 
 # Install dev requirements
 RUN ckan-pip install -r /usr/lib/ckan/venv/src/ckan/dev-requirements.txt &&\
+    ckan-pip install -r /usr/lib/ckan/venv/src/ckan/requirements-py2.txt &&\
     ckan-pip install ckanapi
 
 # Install all extensions with a remote source

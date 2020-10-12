@@ -80,6 +80,6 @@ ckan-pip install --no-deps -e /usr/lib/adx/ckanext-emailasusername
 ckan-pip install -e /usr/lib/adx/ckanext-googleanalytics
 
 set_environment
-ckan-paster --plugin=ckan db init -c "${CKAN_CONFIG}/production.ini"
+ckan  --config "${CKAN_CONFIG}/production.ini" db init
 
 exec "$@"
