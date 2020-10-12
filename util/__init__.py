@@ -1,7 +1,7 @@
 import os
 import subprocess
 from multiprocessing.context import Process
-
+import logging
 import sys
 from . import repo
 from time import sleep
@@ -181,18 +181,31 @@ def reset_test_db(args, extra):
     call_command([f'docker exec -e CKAN_SQLALCHEMY_URL="{CKAN_TEST_SQLALCHEMY_URL}"'
                   f' ckan ckan-paster db init -c test-core.ini'])
     call_command([f'docker exec -e CKAN_SQLALCHEMY_URL="{CKAN_TEST_SQLALCHEMY_URL}"'
-              f' ckan ckan-paster --plugin=ckanext-validation validation init-db -c test-core.ini'])
+                  f' ckan ckan-paster --plugin=ckanext-validation validation init-db -c test-core.ini'])
     call_command([f'docker exec -e CKAN_SQLALCHEMY_URL="{CKAN_TEST_SQLALCHEMY_URL}"'
-              f' ckan ckan-paster --plugin=ckanext-ytp-request initdb -c test-core.ini'])
+                  f' ckan ckan-paster --plugin=ckanext-ytp-request initdb -c test-core.ini'])
+
 
 def run_tests(args, extra):
     extension_name = "ckanext-" + args.extension
     extension_path = "/usr/lib/adx/" + extension_name
     extension_sub_path = "/".join(extension_name.split("-"))
-    call_command([f'docker exec -e CKAN_SQLALCHEMY_URL={CKAN_TEST_SQLALCHEMY_URL} ckan /usr/local/bin/ckan-nosetests --ckan'
-                  f' --with-pylons={extension_path}/test.ini'
-                  f' {extension_path}/{extension_sub_path}/tests --logging-level=WARNING']
-                 + extra)
+    if args.pytest:
+        call_command([
+            f'docker exec -e CKAN_SQLALCHEMY_URL={CKAN_TEST_SQLALCHEMY_URL} '
+            f'ckan /usr/local/bin/ckan-pytest'
+            f' --ckan-ini={extension_path}/test.ini'
+            f' {extension_path}/{extension_sub_path}/tests '
+            f'--log-level=WARNING'
+        ] + extra)
+    else:
+        call_command([
+            f'docker exec -e CKAN_SQLALCHEMY_URL={CKAN_TEST_SQLALCHEMY_URL} '
+            f'ckan /usr/local/bin/ckan-nosetests --ckan'
+            f' --with-pylons={extension_path}/test.ini'
+            f' {extension_path}/{extension_sub_path}/tests '
+            f'--logging-level=WARNING'
+        ] + extra)
 
 
 def deploy_master(args, extra):
