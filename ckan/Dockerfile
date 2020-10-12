@@ -73,8 +73,6 @@ RUN ckan-pip install -e "git+https://github.com/ckan/ckanext-harvest.git@v1.3.0#
     ckan-pip install -r /usr/lib/ckan/venv/src/ckanext-harvest/pip-requirements.txt
 RUN ckan-pip install -e "git+https://github.com/okfn/ckanext-sentry#egg=ckanext-sentry"
 RUN ckan-pip install -e "git+https://github.com/ckan/ckanext-pdfview#egg=ckanext-pdfview"
-RUN ckan-pip install -e "git+https://github.com/fjelltopp/ckanext-googleanalytics.git#egg=ckanext-googleanalytics" && \
-    ckan-pip install -r /usr/lib/ckan/venv/src/ckanext-googleanalytics/requirements.txt
 
 # Install requirements for extensions with a local source
 COPY ./ckanext-scheming/requirements.txt /usr/lib/ckan/scheming-requirements.txt
@@ -95,6 +93,9 @@ RUN ckan-pip install -r /usr/lib/ckan/dhis2-harvester-requriments.txt -r /usr/li
 
 COPY ./ckanext-file_uploader_ui/requirements.txt /usr/lib/ckan/file_uploader_ui-requirements.txt
 RUN ckan-pip install -r /usr/lib/ckan/file_uploader_ui-requirements.txt
+
+COPY ./ckanext-googleanalytics/requirements.txt /usr/lib/ckan/googleanalytics-requriments.txt
+RUN ckan-pip install -r /usr/lib/ckan/googleanalytics-requriments.txt
 
 RUN rm /usr/lib/ckan/*-requirements.txt
 # Configs
