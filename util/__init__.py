@@ -142,14 +142,14 @@ def setup(args, extra):
 
 
 def init_ckan_db(args, extra):
-    call_command(['docker exec -it ckan /usr/local/bin/ckan-paster --plugin=ckan datastore set-permissions -c /etc/ckan/production.ini | docker exec -i db psql -U ckan'])
-    call_command(['docker exec -it ckan /usr/local/bin/ckan-paster --plugin=ckanext-ytp-request initdb -c /etc/ckan/production.ini'])
-    call_command(['docker exec -it ckan /usr/local/bin/ckan-paster --plugin=ckanext-harvest harvester initdb -c /etc/ckan/production.ini'])
-    call_command(['docker exec -it ckan /usr/local/bin/ckan-paster --plugin=ckanext-validation validation init-db -c /etc/ckan/production.ini'])
-    call_command(['docker exec -it ckan /usr/local/bin/ckan-paster --plugin=ckan user -c /etc/ckan/production.ini add admin email=admin@localhost name=admin password=fjelltopp apikey=a4bf5640-e1b2-4141-8c22-f2b96b6df2c3'])
+    call_command(['docker exec -it ckan /usr/local/bin/ckan -c /etc/ckan/production.ini datastore set-permissions | docker exec -i db psql -U ckan'])
+    call_command(['docker exec -it ckan /usr/local/bin/ckan -c /etc/ckan/production.ini ytp-request initdb'])
+    call_command(['docker exec -it ckan /usr/local/bin/ckan -c /etc/ckan/production.ini harvester initdb'])
+    call_command(['docker exec -it ckan /usr/local/bin/ckan -c /etc/ckan/production.ini validation init-db'])
+    call_command(['docker exec -it ckan /usr/local/bin/ckan -c /etc/ckan/production.ini user add admin email=admin@localhost name=admin password=fjelltopp apikey=a4bf5640-e1b2-4141-8c22-f2b96b6df2c3'])
     call_command([f'docker exec db psql -U {PG_USER} -c "UPDATE public.user SET apikey = \'{ADMIN_APIKEY}\' WHERE name = \'admin\';"'])
-    call_command(['docker exec -it ckan /usr/local/bin/ckan-paster --plugin=ckan sysadmin -c /etc/ckan/production.ini add admin'])
-    call_command(['docker exec -it ckan /usr/local/bin/ckan-paster --plugin=ckanext-issues issues init_db -c /etc/ckan/production.ini '])
+    call_command(['docker exec -it ckan /usr/local/bin/ckan -c /etc/ckan/production.ini sysadmin add admin'])
+    call_command(['docker exec -it ckan /usr/local/bin/ckan -c /etc/ckan/production.ini issues init_db'])
 
 
 def load_demo_data(args, extra):
@@ -177,13 +177,13 @@ def reset_test_db(args, extra):
     call_command([f'docker exec db psql -U {PG_USER} -c "CREATE DATABASE ckan_test OWNER ckan_default ENCODING \'utf-8\';"'])
     call_command([f'docker exec db psql -U {PG_USER} -c "CREATE DATABASE datastore_test OWNER ckan_default ENCODING \'utf-8\';"'])
     call_command([f'docker exec -e CKAN_SQLALCHEMY_URL="{CKAN_TEST_SQLALCHEMY_URL}"'
-                  f' ckan ckan-paster datastore set-permissions -c test-core.ini | docker exec -i db psql -U {PG_USER}'])
+                  f' ckan ckan -c test-core.ini datastore set-permissions | docker exec -i db psql -U {PG_USER}'])
     call_command([f'docker exec -e CKAN_SQLALCHEMY_URL="{CKAN_TEST_SQLALCHEMY_URL}"'
-                  f' ckan ckan-paster db init -c test-core.ini'])
+                  f' ckan ckan -c test-core.ini db init'])
     call_command([f'docker exec -e CKAN_SQLALCHEMY_URL="{CKAN_TEST_SQLALCHEMY_URL}"'
-              f' ckan ckan-paster --plugin=ckanext-validation validation init-db -c test-core.ini'])
+              f' ckan ckan -c test-core.ini validation init-db'])
     call_command([f'docker exec -e CKAN_SQLALCHEMY_URL="{CKAN_TEST_SQLALCHEMY_URL}"'
-              f' ckan ckan-paster --plugin=ckanext-ytp-request initdb -c test-core.ini'])
+              f' ckan ckan -c test-core.ini initdb'])
 
 def run_tests(args, extra):
     extension_name = "ckanext-" + args.extension
