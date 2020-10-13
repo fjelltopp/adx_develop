@@ -95,9 +95,6 @@ RUN ckan-pip install -r /usr/lib/ckan/dhis2-harvester-requriments.txt -r /usr/li
 COPY ./ckanext-file_uploader_ui/requirements.txt /usr/lib/ckan/file_uploader_ui-requirements.txt
 RUN ckan-pip install -r /usr/lib/ckan/file_uploader_ui-requirements.txt
 
-COPY ./ckanext-googleanalytics/requirements.txt /usr/lib/ckan/googleanalytics-requriments.txt
-RUN ckan-pip install -r /usr/lib/ckan/googleanalytics-requriments.txt
-
 RUN rm /usr/lib/ckan/*-requirements.txt
 # Configs
 COPY ./adx_develop/ckan/ckan-entrypoint-adx.sh /ckan-entrypoint.sh
