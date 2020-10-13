@@ -77,7 +77,6 @@ ckan-pip install -e /usr/lib/adx/ckanext-geoview
 ckan-pip install -e /usr/lib/adx/ckanext-issues
 ckan-pip install --no-deps -e /usr/lib/adx/ckanext-file_uploader_ui
 ckan-pip install --no-deps -e /usr/lib/adx/ckanext-emailasusername
-ckan-pip install -e /usr/lib/adx/ckanext-googleanalytics
 
 set_environment
 ckan  --config "${CKAN_CONFIG}/production.ini" db init
