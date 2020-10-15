@@ -45,6 +45,7 @@ RUN mkdir -p $CKAN_VENV $CKAN_CONFIG $CKAN_STORAGE_PATH && \
     ln -s $CKAN_VENV/bin/ckan /usr/local/bin/ckan &&\
     ln -s $CKAN_VENV/bin/python /usr/local/bin/ckan-python &&\
     ln -s $CKAN_VENV/bin/nosetests-2.7 /usr/local/bin/ckan-nosetests &&\
+	ln -s $CKAN_VENV/bin/pytest /usr/local/bin/ckan-pytest &&\
     echo "alias ckanext='cd /usr/lib/adx/'" >> $HOME/.bashrc &&\
     echo "alias ckan='cd /usr/lib/ckan/venv/src/ckan'" >> $HOME/.bashrc
 
@@ -77,7 +78,8 @@ RUN ckan-pip install -e "git+https://github.com/ckan/ckanext-pdfview#egg=ckanext
 
 # Install requirements for extensions with a local source
 COPY ./ckanext-scheming/requirements.txt /usr/lib/ckan/scheming-requirements.txt
-RUN ckan-pip install -r /usr/lib/ckan/scheming-requirements.txt
+COPY ./ckanext-scheming/test-requirements.txt /usr/lib/ckan/test-scheming-requirements.txt
+RUN ckan-pip install -r /usr/lib/ckan/scheming-requirements.txt -r /usr/lib/ckan/test-scheming-requirements.txt
 
 COPY ./ckanext-geoview/pip-requirements.txt /usr/lib/ckan/geoview-requirements.txt
 RUN ckan-pip install -r /usr/lib/ckan/geoview-requirements.txt
