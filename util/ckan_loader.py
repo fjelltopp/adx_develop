@@ -115,10 +115,11 @@ def load_datasets(ckan):
                 id = ckan.action.package_show(id=dataset['name'])['id']
                 ckan.action.package_update(id=id, **dataset)
                 log.info(f"Updated dataset {dataset['name']}")
+                file_path = 'datasets/{}'.format(dataset['resource_dir'])
                 ckan.action.resource_create(
                     package_id=id,
                     name=dataset['name'],
-                    upload=open(DEMO_USERS, 'r')
+                    upload=open(os.path.join(DEMO_DATA_PATH, file_path), 'r')
                 )                
             except ckanapi.errors.ValidationError as e:
                 log.error(f"Can't create dataset {dataset['name']}: {e.error_dict}")
