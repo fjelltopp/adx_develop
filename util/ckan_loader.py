@@ -104,6 +104,7 @@ def load_datasets(ckan):
     with open(DEMO_DATASETS, 'r') as datasets_file:
         datasets = json.load(datasets_file)['datasets']
         for dataset in datasets:
+            resource_dir = dataset.pop('resource_dir')
             try:
                 ckan.action.package_create(**dataset)
                 log.info(f"Created dataset {dataset['name']}")
@@ -115,7 +116,7 @@ def load_datasets(ckan):
                 id = ckan.action.package_show(id=dataset['name'])['id']
                 ckan.action.package_update(id=id, **dataset)
                 log.info(f"Updated dataset {dataset['name']}")
-                file_path = 'datasets/{}'.format(dataset['resource_dir'])
+                file_path = 'datasets/{}'.format(resource_dir)
                 ckan.action.resource_create(
                     package_id=id,
                     name=dataset['name'],
