@@ -95,7 +95,7 @@ def load_harvesters(ckan, organizations_ids_dict):
                 log.error(f"Can't create harvester {harvester['name']}: {e!s}")
 
 
-def load_datasets(ckan, organizations_ids_dict):
+def load_datasets(ckan):
     """
     Helper method to load demo datasets from DEMO_DATASETS config json file
     :param ckan: ckanapi instance
@@ -130,7 +130,7 @@ def load_data(adr_url, apikey):
     load_users(ckan)
     orgs = load_organizations(ckan)
     load_harvesters(ckan, organizations_ids_dict=orgs)
-    load_datasets(ckan, organizations_ids_dict=orgs)
+    load_datasets(ckan)
 
 
 if __name__ == '__main__':
