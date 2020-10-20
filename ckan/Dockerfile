@@ -43,6 +43,7 @@ RUN mkdir -p $CKAN_VENV $CKAN_CONFIG $CKAN_STORAGE_PATH && \
     virtualenv $CKAN_VENV && \
     ln -s $CKAN_VENV/bin/pip /usr/local/bin/ckan-pip &&\
     ln -s $CKAN_VENV/bin/ckan /usr/local/bin/ckan &&\
+    ln -s $CKAN_VENV/bin/paster /usr/local/bin/ckan-paster &&\
     ln -s $CKAN_VENV/bin/python /usr/local/bin/ckan-python &&\
     ln -s $CKAN_VENV/bin/nosetests-2.7 /usr/local/bin/ckan-nosetests &&\
 	ln -s $CKAN_VENV/bin/pytest /usr/local/bin/ckan-pytest &&\
