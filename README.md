@@ -28,7 +28,7 @@ Docker-compose
    
 2. Install `ckan_api` requirements using the `requirements.txt` file
    ```
-   pip install -r ./adx_develop/requirements.txt
+   pip3 install --user -r ./adx_develop/requirements.txt
    ```
    
 2. Add ckan as localhost name to `/etc/hosts`. After the addition the file should look something like
