@@ -7,8 +7,8 @@ import ckanapi
 DEMO_DATA_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), '../demo_data/')
 DEMO_USERS = os.path.join(DEMO_DATA_PATH, 'users.json')
 DEMO_ORGANIZATIONS = os.path.join(DEMO_DATA_PATH, 'organizations.json')
-# TODO: DEMO_DATASETS = os.path.join(DEMO_DATA_PATH, 'datasets.json')
 DEMO_HARVESTERS = os.path.join(DEMO_DATA_PATH, 'harvesters.json')
+DEMO_DATASETS = os.path.join(DEMO_DATA_PATH, 'datasets.json')
 
 log = logging.getLogger(__name__)
 
@@ -95,12 +95,45 @@ def load_harvesters(ckan, organizations_ids_dict):
                 log.error(f"Can't create harvester {harvester['name']}: {e!s}")
 
 
+def load_datasets(ckan):
+    """
+    Helper method to load demo datasets from DEMO_DATASETS config json file
+    :param ckan: ckanapi instance
+    :return: None
+    """
+    with open(DEMO_DATASETS, 'r') as datasets_file:
+        datasets = json.load(datasets_file)['datasets']
+        for dataset in datasets:
+            resource_dir = dataset.pop('resource_dir')
+            try:
+                ckan.action.package_create(**dataset)
+                log.info(f"Created dataset {dataset['name']}")
+                continue
+            except ckanapi.errors.ValidationError as e:
+                pass  # fallback to dataset update
+            try:
+                log.warning(f"Dataset {dataset['name']} might already exists. Will try to update.")
+                id = ckan.action.package_show(id=dataset['name'])['id']
+                ckan.action.package_update(id=id, **dataset)
+                log.info(f"Updated dataset {dataset['name']}")
+                file_path = 'datasets/{}'.format(resource_dir)
+                ckan.action.resource_create(
+                    package_id=id,
+                    name=dataset['name'],
+                    upload=open(os.path.join(DEMO_DATA_PATH, file_path), 'r')
+                )                
+            except ckanapi.errors.ValidationError as e:
+                log.error(f"Can't create dataset {dataset['name']}: {e.error_dict}")
+
+
 def load_data(adr_url, apikey):
     ckan = ckanapi.RemoteCKAN(adr_url, apikey=apikey)
 
     load_users(ckan)
     orgs = load_organizations(ckan)
     load_harvesters(ckan, organizations_ids_dict=orgs)
+    load_datasets(ckan)
+    load_datasets(ckan) # quickfix: run twice to upload resources properly
 
 
 if __name__ == '__main__':
