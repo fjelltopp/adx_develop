@@ -85,9 +85,6 @@ RUN ckan-pip install -r /usr/lib/ckan/scheming-requirements.txt -r /usr/lib/ckan
 COPY ./ckanext-geoview/pip-requirements.txt /usr/lib/ckan/geoview-requirements.txt
 RUN ckan-pip install -r /usr/lib/ckan/geoview-requirements.txt
 
-COPY ./ckanext-issues/dev-requirements.txt /usr/lib/ckan/issues-requirements.txt
-RUN ckan-pip install -r /usr/lib/ckan/issues-requirements.txt
-
 COPY ./ckanext-validation/requirements.txt /usr/lib/ckan/validation-requirements.txt
 RUN ckan-pip install -r /usr/lib/ckan/validation-requirements.txt
 
