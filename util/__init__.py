@@ -178,13 +178,13 @@ def reset_test_db(args, extra):
     call_command([f'docker exec db psql -U {PG_USER} -c "CREATE DATABASE ckan_test OWNER ckan_default ENCODING \'utf-8\';"'])
     call_command([f'docker exec db psql -U {PG_USER} -c "CREATE DATABASE datastore_test OWNER ckan_default ENCODING \'utf-8\';"'])
     call_command([f'docker exec -e CKAN_SQLALCHEMY_URL="{CKAN_TEST_SQLALCHEMY_URL}"'
-                  f' ckan ckan -c test-core.ini datastore set-permissions | docker exec -i db psql -U {PG_USER}'])
+                  f' ckan /usr/local/bin/ckan -c test-core.ini datastore set-permissions | docker exec -i db psql -U {PG_USER}'])
     call_command([f'docker exec -e CKAN_SQLALCHEMY_URL="{CKAN_TEST_SQLALCHEMY_URL}"'
-                  f' ckan ckan -c test-core.ini db init'])
+                  f' ckan /usr/local/bin/ckan -c test-core.ini db init'])
     call_command([f'docker exec -e CKAN_SQLALCHEMY_URL="{CKAN_TEST_SQLALCHEMY_URL}"'
-              f' ckan ckan -c test-core.ini validation init-db'])
+                  f' ckan /usr/local/bin/ckan-paster --plugin=ckanext-validation validation init-db -c test-core.ini'])
     call_command([f'docker exec -e CKAN_SQLALCHEMY_URL="{CKAN_TEST_SQLALCHEMY_URL}"'
-              f' ckan ckan -c test-core.ini initdb'])
+                  f' ckan /usr/local/bin/ckan-paster --plugin=ckanext-ytp-request initdb -c test-core.ini'])
 
 
 def run_tests(args, extra):
