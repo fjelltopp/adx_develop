@@ -54,7 +54,8 @@ services:
       - ../ckan:/usr/lib/ckan/venv/src/ckan
       - ./ckan/adx_config.ini:/etc/ckan/production.ini
       - ./ckan/adx_who.ini:/etc/ckan/who.ini
-      - ./ckan/ckan_supervisor_harvester.conf:/etc/supervisor/conf.d/ckan_harvester.conf
+      - ./ckan/ckan_supervisor.conf:/etc/supervisor/conf.d/ckan_supervisor.conf
+      - ./ckan/ckan-entrypoint-adx.sh:/ckan-entrypoint.sh
     entrypoint: ["/wait-for-it.sh", "ckan:5000", "--timeout=0",  "--", "/ckan-entrypoint.sh"]
     command: ["/usr/bin/supervisord"]
 
