@@ -131,7 +131,7 @@ def load_data(adr_url, apikey):
 
     load_users(ckan)
     orgs = load_organizations(ckan)
-    load_harvesters(ckan, organizations_ids_dict=orgs)
+    # load_harvesters(ckan, organizations_ids_dict=orgs)
     load_datasets(ckan)
     load_datasets(ckan) # quickfix: run twice to upload resources properly
 
