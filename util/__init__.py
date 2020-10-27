@@ -142,15 +142,15 @@ def setup(args, extra):
 
 
 def init_ckan_db(args, extra):
-    call_command(['docker exec -it ckan /usr/local/bin/ckan -c /etc/ckan/production.ini db init'])
-    call_command(['docker exec -it ckan /usr/local/bin/ckan-paster --plugin=ckanext-ytp-request initdb -c /etc/ckan/production.ini'])
-    call_command(['docker exec -it ckan /usr/local/bin/ckan-paster --plugin=ckanext-harvest harvester initdb -c /etc/ckan/production.ini'])
-    call_command(['docker exec -it ckan /usr/local/bin/ckan-paster --plugin=ckanext-validation validation init-db -c /etc/ckan/production.ini'])
+    call_command(['docker exec -it ckan /usr/local/bin/ckan -c /etc/ckan/ckan.ini db init'])
+    call_command(['docker exec -it ckan /usr/local/bin/ckan-paster --plugin=ckanext-ytp-request initdb -c /etc/ckan/ckan.ini'])
+    call_command(['docker exec -it ckan /usr/local/bin/ckan-paster --plugin=ckanext-harvest harvester initdb -c /etc/ckan/ckan.ini'])
+    call_command(['docker exec -it ckan /usr/local/bin/ckan-paster --plugin=ckanext-validation validation init-db -c /etc/ckan/ckan.ini'])
 
-    call_command(['docker exec -it ckan /usr/local/bin/ckan -c /etc/ckan/production.ini datastore set-permissions | docker exec -i db psql -U ckan'])
-    call_command(['docker exec -it ckan /usr/local/bin/ckan -c /etc/ckan/production.ini user add admin email=admin@localhost name=admin password=fjelltopp apikey=a4bf5640-e1b2-4141-8c22-f2b96b6df2c3'])
+    call_command(['docker exec -it ckan /usr/local/bin/ckan -c /etc/ckan/ckan.ini datastore set-permissions | docker exec -i db psql -U ckan'])
+    call_command(['docker exec -it ckan /usr/local/bin/ckan -c /etc/ckan/ckan.ini user add admin email=admin@localhost name=admin password=fjelltopp apikey=a4bf5640-e1b2-4141-8c22-f2b96b6df2c3'])
     call_command([f'docker exec db psql -U {PG_USER} -c "UPDATE public.user SET apikey = \'{ADMIN_APIKEY}\' WHERE name = \'admin\';"'])
-    call_command(['docker exec -it ckan /usr/local/bin/ckan -c /etc/ckan/production.ini sysadmin add admin'])
+    call_command(['docker exec -it ckan /usr/local/bin/ckan -c /etc/ckan/ckan.ini sysadmin add admin'])
 
 
 def load_demo_data(args, extra):

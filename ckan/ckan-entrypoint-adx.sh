@@ -11,7 +11,7 @@ set -e
 # URL for datapusher (required unless linked to a container called 'datapusher')
 : ${CKAN_DATAPUSHER_URL:=}
 
-CONFIG="${CKAN_CONFIG}/production.ini"
+CONFIG="${CKAN_CONFIG}/ckan.ini"
 
 abort () {
   echo "$@" >&2
@@ -79,6 +79,6 @@ ckan-pip install --no-deps -e /usr/lib/adx/ckanext-file_uploader_ui
 ckan-pip install --no-deps -e /usr/lib/adx/ckanext-emailasusername
 
 set_environment
-ckan  --config "${CKAN_CONFIG}/production.ini" db init
+ckan  --config "${CKAN_CONFIG}/ckan.ini" db init
 
 exec "$@"
