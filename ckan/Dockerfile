@@ -55,17 +55,14 @@ COPY ckan $CKAN_VENV/src/ckan
 WORKDIR $CKAN_VENV/src/ckan
 
 # Setup CKAN
-RUN ckan-pip install -U pip && \
+RUN ckan-pip install --upgrade pip &&\
     ckan-pip install --upgrade -r $CKAN_VENV/src/ckan/requirement-setuptools.txt && \
-    ckan-pip install --upgrade -r $CKAN_VENV/src/ckan/requirements.txt && \
-    ckan-pip install -e $CKAN_VENV/src/ckan/ && \
+    ckan-pip install -r /usr/lib/ckan/venv/src/ckan/requirements-py2.txt &&\
+    ckan-pip install -r /usr/lib/ckan/venv/src/ckan/dev-requirements.txt &&\
+    ckan-pip install ckanapi
+RUN ckan-pip install -e $CKAN_VENV/src/ckan/ && \
     chown -R ckan:ckan $CKAN_HOME $CKAN_VENV $CKAN_CONFIG $CKAN_STORAGE_PATH
 USER root
-
-# Install dev requirements
-RUN ckan-pip install -r /usr/lib/ckan/venv/src/ckan/dev-requirements.txt &&\
-    ckan-pip install -r /usr/lib/ckan/venv/src/ckan/requirements-py2.txt &&\
-    ckan-pip install ckanapi
 
 # Install all extensions with a remote source
 RUN ckan-pip install -e "git+https://github.com/ckan/ckanext-spatial.git#egg=ckanext-spatial" && \
