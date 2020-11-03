@@ -194,7 +194,7 @@ def run_tests(args, extra):
     if args.pytest:
         call_command([
             f'docker exec -e CKAN_SQLALCHEMY_URL={CKAN_TEST_SQLALCHEMY_URL} '
-            f'ckan /usr/local/bin/ckan-pytest'
+            f'ckan /usr/local/bin/ckan-pytest --disable-warnings'
             f' --ckan-ini={extension_path}/test.ini'
             f' {extension_path}/{extension_sub_path}/tests '
             f'--log-level=WARNING'
