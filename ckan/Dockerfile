@@ -65,11 +65,11 @@ RUN ckan-pip install -e $CKAN_VENV/src/ckan/ && \
 USER root
 
 # Install all extensions with a remote source
-RUN ckan-pip install -e "git+https://github.com/ckan/ckanext-spatial.git#egg=ckanext-spatial" && \
+RUN ckan-pip install -e "git+https://github.com/ckan/ckanext-spatial.git@ce4f03bcd2000f98de1a9534dce92de674eb9806#egg=ckanext-spatial" && \
     ckan-pip install -r /usr/lib/ckan/venv/src/ckanext-spatial/pip-requirements.txt
-RUN ckan-pip install -e "git+https://github.com/EnviDat/ckanext-composite.git#egg=ckanext-composite"
-RUN ckan-pip install -e "git+https://github.com/open-data/ckanext-repeating.git#egg=ckanext-repeating"
-RUN ckan-pip install -e "git+https://github.com/okfn/ckanext-sentry#egg=ckanext-sentry"
+RUN ckan-pip install -e "git+https://github.com/EnviDat/ckanext-composite.git@23a060b03d2432a58cc66968d93a15f5f1654055#egg=ckanext-composite"
+RUN ckan-pip install -e "git+https://github.com/open-data/ckanext-repeating.git@291295557ff74b26784f6271c1a1b4ffdb990f43#egg=ckanext-repeating"
+RUN ckan-pip install -e "git+https://github.com/okfn/ckanext-sentry@d3b1d1cf1f975b3672891012e6c75e176497db8f#egg=ckanext-sentry"
 
 # Install requirements for extensions with a local source
 COPY ./ckanext-scheming/requirements.txt /usr/lib/ckan/scheming-requirements.txt
@@ -81,6 +81,10 @@ RUN ckan-pip install -r /usr/lib/ckan/geoview-requirements.txt
 
 COPY ./ckanext-validation/requirements.txt /usr/lib/ckan/validation-requirements.txt
 RUN ckan-pip install -r /usr/lib/ckan/validation-requirements.txt
+
+COPY ./ckanext-harvest/pip-requirements.txt /usr/lib/ckan/harvest-requirements.txt
+COPY ./ckanext-harvest/dev-requirements.txt /usr/lib/ckan/harvest-dev-requirements.txt
+RUN ckan-pip install -r /usr/lib/ckan/harvest-dev-requirements.txt -r /usr/lib/ckan/harvest-requirements.txt
 
 COPY ./ckanext-dhis2harvester/pip-requirements.txt /usr/lib/ckan/dhis2-harvester-requriments.txt
 COPY ./ckanext-dhis2harvester/dev-requirements.txt /usr/lib/ckan/dhis2-harvester-dev-requriments.txt
