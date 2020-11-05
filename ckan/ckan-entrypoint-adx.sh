@@ -11,7 +11,7 @@ set -e
 # URL for datapusher (required unless linked to a container called 'datapusher')
 : ${CKAN_DATAPUSHER_URL:=}
 
-CONFIG="${CKAN_CONFIG}/production.ini"
+CONFIG="${CKAN_CONFIG}/ckan.ini"
 
 abort () {
   echo "$@" >&2
@@ -74,12 +74,13 @@ ckan-pip install -e /usr/lib/adx/ckanext-ytp-request
 ckan-pip install -e /usr/lib/adx/ckanext-pages
 ckan-pip install -e /usr/lib/adx/ckanext-harvest
 ckan-pip install -e /usr/lib/adx/ckanext-dhis2harvester
+ckan-pip install -e /usr/lib/adx/ckanext-harvest
 ckan-pip install -e /usr/lib/adx/ckanext-geoview
-ckan-pip install -e /usr/lib/adx/ckanext-issues
+ckan-pip install -e /usr/lib/adx/ckanext-pdfview
 ckan-pip install --no-deps -e /usr/lib/adx/ckanext-file_uploader_ui
 ckan-pip install --no-deps -e /usr/lib/adx/ckanext-emailasusername
 
 set_environment
-ckan-paster --plugin=ckan db init -c "${CKAN_CONFIG}/production.ini"
+ckan  --config "${CKAN_CONFIG}/ckan.ini" db init
 
 exec "$@"

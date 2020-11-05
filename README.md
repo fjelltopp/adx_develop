@@ -134,7 +134,7 @@ adx bash ckan
 Create your extension:
 ```
 cd /usr/lib/adx
-ckan-paster create --config /etc/ckan/production.ini  -t ckanext ckanext-hello_world
+ckan generate extension
 ```
 
 Exit the docker container and run:

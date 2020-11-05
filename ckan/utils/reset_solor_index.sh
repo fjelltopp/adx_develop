@@ -1,2 +1,2 @@
 #!/usr/bin/env bash
-ckan-paster --plugin=ckan search-index rebuild --config /etc/ckan/production.ini
+ckan-paster --plugin=ckan search-index rebuild --config /etc/ckan/ckan.ini
