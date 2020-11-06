@@ -93,6 +93,16 @@ Docker-compose
 9. CKAN should be available at http://localhost:5000
 
 
+## Using a fake SMTP server locally
+
+It might be useful to test features which requires sending e-mail. To do so you can setup a fake SMTP server locally:
+```
+python3 -m smtpd -n -c DebuggingServer localhost:25
+```
+Instead of `localhost` you might want to bind to an IP accessible both from your host and from ADR containers.
+
+In Ubunut you can use the IP of docker deamon, e.g. `172.17.0.1`.
+Update your `docker-compose.yml` accordingly.
 ## Running CKAN tests locally
 
 CKAN tests can be run in the development environment, but some setup is required.
