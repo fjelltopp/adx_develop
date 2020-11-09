@@ -95,7 +95,20 @@ RUN ckan-pip install -r /usr/lib/ckan/file_uploader_ui-requirements.txt
 COPY ./ckanext-restricted/requirements.txt /usr/lib/ckan/restricted-requirements.txt
 RUN ckan-pip install -r /usr/lib/ckan/restricted-requirements.txt
 
+COPY ./ckanext-versioning/requirements.txt /usr/lib/ckan/versioning-requirements.txt
+RUN ckan-pip install -r /usr/lib/ckan/versioning-requirements.txt
+
+COPY ./ckanext-blob-storage/requirements.py2.txt /usr/lib/ckan/blob-storage-requirements.txt
+RUN ckan-pip install -r /usr/lib/ckan/blob-storage-requirements.txt
+
+COPY ./ckanext-authz-service/requirements.py2.txt /usr/lib/ckan/authz-service-requirements.txt
+RUN ckan-pip install -r /usr/lib/ckan/authz-service-requirements.txt
+
 RUN rm /usr/lib/ckan/*-requirements.txt
+
+RUN  apt-get -q -y update && apt-get -q -y install curl
+RUN curl -sL https://deb.nodesource.com/setup_14.x | bash - && apt-get install nodejs && npm version
+
 # Configs
 COPY ./adx_develop/ckan/ckan-entrypoint-adx.sh /ckan-entrypoint.sh
 COPY ./adx_develop/ckan/wait-for-it.sh /wait-for-it.sh

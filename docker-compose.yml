@@ -14,6 +14,7 @@ services:
       - db
       - solr
       - redis
+      - giftless
     ports:
       - "0.0.0.0:5000:5000"
     environment:
@@ -35,7 +36,9 @@ services:
       - ./ckan/adx_who.ini:/etc/ckan/who.ini
       - ./ckan/utils/:/adx_utils
       - ./ckan/ckan-entrypoint-adx.sh:/ckan-entrypoint.sh
+      - ./ckan/jwt_public_key.pem:/etc/ckan/jwt_public_key.pem
     command: ["ckan","--config","/etc/ckan/ckan.ini", "run", "--host", "0.0.0.0"]
+
   supervisor:
     container_name: supervisor
     build:
@@ -111,3 +114,12 @@ services:
     ports:
       - "6379:6379"
     image: redis:latest
+
+  giftless:
+    container_name: giftless
+    ports:
+      - "0.0.0.0:6001:6001"
+    build:
+      context: ../giftless
+      args:
+        - PORT=6001
