@@ -26,6 +26,9 @@ services:
       - CKAN_SOLR_URL=http://solr:8983/solr/ckan
       - CKAN_REDIS_URL=redis://redis:6379/1
       - CKAN_DATAPUSHER_URL=http://datapusher:8800/
+      - CKAN_SMTP_SERVER=localhost:25
+      - CKAN_SMTP_STARTTLS=False
+      - CKAN_SMTP_MAIL_FROM=support@fjelltopp_org
       - PYTHONDONTWRITEBYTECODE=1
     volumes:
       - ckan_storage:/var/lib/ckan
