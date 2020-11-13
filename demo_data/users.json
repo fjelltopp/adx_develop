@@ -59,6 +59,36 @@
       "activity_streams_email_notifications": false,
       "state": "active",
       "fullname": "Celine Close"
+    },
+    {
+      "email": "anna2@fjelltopp",
+      "about": null,
+      "display_name": "Anna2 Artery",
+      "name": "south_pole_member",
+      "password": "fjelltopp",
+      "activity_streams_email_notifications": false,
+      "state": "active",
+      "fullname": "Anna2 Artery"
+    },
+    {
+      "email": "beth2@fjelltopp",
+      "about": null,
+      "display_name": "Beth2 Britany",
+      "name": "south_pole_editor",
+      "password": "fjelltopp",
+      "activity_streams_email_notifications": false,
+      "state": "active",
+      "fullname": "Beth2 Britany"
+    },
+    {
+      "email": "celine2@fjelltopp",
+      "about": null,
+      "display_name": "Celine2 Close",
+      "name": "south_pole_admin",
+      "password": "fjelltopp",
+      "activity_streams_email_notifications": false,
+      "state": "active",
+      "fullname": "Celine2 Close"
     }
   ]
 }
