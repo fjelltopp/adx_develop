@@ -39,6 +39,9 @@ services:
       - ./ckan/utils/:/adx_utils
       - ./ckan/ckan-entrypoint-adx.sh:/ckan-entrypoint.sh
     command: ["ckan","--config","/etc/ckan/ckan.ini", "run", "--host", "0.0.0.0"]
+    stdin_open: true
+    tty: true
+
   supervisor:
     container_name: supervisor
     build:
@@ -61,6 +64,8 @@ services:
       - ./ckan/ckan-entrypoint-adx.sh:/ckan-entrypoint.sh
     entrypoint: ["/wait-for-it.sh", "ckan:5000", "--timeout=0",  "--", "/ckan-entrypoint.sh"]
     command: ["/usr/bin/supervisord"]
+    stdin_open: true
+    tty: true
 
   cron:
     container_name: cron
@@ -80,6 +85,8 @@ services:
       - ../datapusher:/var/www/datapusher
     ports:
       - "8800:8800"
+    stdin_open: true
+    tty: true
 
   db:
     container_name: db
