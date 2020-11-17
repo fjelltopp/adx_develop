@@ -89,6 +89,16 @@
       "activity_streams_email_notifications": false,
       "state": "active",
       "fullname": "South Pole Admin"
+    },
+    {
+      "email": "santa_claus@fjelltopp",
+      "about": null,
+      "display_name": "Santa Claus",
+      "name": "santa_claus",
+      "password": "fjelltopp",
+      "activity_streams_email_notifications": false,
+      "state": "active",
+      "fullname": "Santa Claus"
     }
   ]
 }
