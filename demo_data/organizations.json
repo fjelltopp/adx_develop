@@ -35,6 +35,10 @@
         {
           "name": "north_pole_admin",
           "capacity": "admin"
+        },
+        {
+          "name": "santa_claus",
+          "capacity": "admin"
         }
       ],
       "display_name": "North Pole",
@@ -56,6 +60,10 @@
         },
         {
           "name": "south_pole_admin",
+          "capacity": "admin"
+        },
+        {
+          "name": "santa_claus",
           "capacity": "admin"
         }
       ],
