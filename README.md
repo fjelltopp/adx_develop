@@ -25,12 +25,12 @@ Docker-compose
    ```
    git clone git@github.com:fjelltopp/adx_develop.git
    ```
-   
+
 2. Install `ckan_api` requirements using the `requirements.txt` file
    ```
    pip3 install --user -r ./adx_develop/requirements.txt
    ```
-   
+
 2. Add ckan as localhost name to `/etc/hosts`. After the addition the file should look something like
    ```
    127.0.0.1       localhost
@@ -71,7 +71,7 @@ Docker-compose
     adx dbsetup
     ```
     Which initializes the db tables for extensions and creates the admin user.
-    
+
     **Admin user:**
     ```
     username: admin
@@ -84,7 +84,7 @@ Docker-compose
    ```
    adx restart ckan
    ```
-   
+
 9. [Optional] Adding demo data to CKAN instance with:
     ```
    adx demodata
@@ -103,6 +103,7 @@ Instead of `localhost` you might want to bind to an IP accessible both from your
 
 In Ubunut you can use the IP of docker deamon, e.g. `172.17.0.1`.
 Update your `docker-compose.yml` accordingly.
+
 ## Running CKAN tests locally
 
 CKAN tests can be run in the development environment, but some setup is required.
@@ -127,6 +128,27 @@ To run the ckan core tests:
 ```
 docker exec -it ckan ckan-nosetests --ckan --with-pylons=/usr/lib/ckan/venv/src/ckan/test-core.ini ckan ckanext
 ```
+## Debugging with pdb
+
+You can debug the adx using the python debugger (pdb).  To do this set a break
+point as normal with pdb:
+```
+import pdb; pdb.set_trace()
+```
+Start the dev env in detattached mode as normal:
+```
+adx up
+```
+Then when you know your code has hit the breakpoint attach to the container:
+```
+docker attach ckan
+```
+This will open an interactive pdb prompt. When you are finished you can detach
+from the container, without killing it, using the escape sequence:
+\[ctrl-p\]\[ctrl-q\].
+
+See the [pdb docs](https://docs.python.org/3/library/pdb.html) for more on how
+to debug with pdb.
 
 ### Logs
 To get more log output you can pick custom log level with `-log`, e.g.:
@@ -134,7 +156,7 @@ To get more log output you can pick custom log level with `-log`, e.g.:
 adx --log info demodata
 ```
 
-# Creating an extension 
+# Creating an extension
 
 SSH into the container:
 ```
@@ -179,4 +201,3 @@ Now let's make the extension do something
 - Save `<h1>Hello World!</h1>` to it
 - Run another `adx build ckan; adx up` and your browser should display `Hello World!`
 - Read the [docs](https://docs.ckan.org/en/2.9/theming/templates.html#customizing-ckan-s-templates) for more info
-
