@@ -61,34 +61,34 @@
       "fullname": "Celine Close"
     },
     {
-      "email": "anna2@fjelltopp",
+      "email": "south_pole_member@fjelltopp",
       "about": null,
-      "display_name": "Anna2 Artery",
+      "display_name": "South Pole Member",
       "name": "south_pole_member",
       "password": "fjelltopp",
       "activity_streams_email_notifications": false,
       "state": "active",
-      "fullname": "Anna2 Artery"
+      "fullname": "South Pole Member"
     },
     {
-      "email": "beth2@fjelltopp",
+      "email": "south_pole_editor@fjelltopp",
       "about": null,
-      "display_name": "Beth2 Britany",
+      "display_name": "South Pole Editor",
       "name": "south_pole_editor",
       "password": "fjelltopp",
       "activity_streams_email_notifications": false,
       "state": "active",
-      "fullname": "Beth2 Britany"
+      "fullname": "South Pole Editor"
     },
     {
-      "email": "celine2@fjelltopp",
+      "email": "south_pole_admin@fjelltopp",
       "about": null,
-      "display_name": "Celine2 Close",
+      "display_name": "South Pole Admin",
       "name": "south_pole_admin",
       "password": "fjelltopp",
       "activity_streams_email_notifications": false,
       "state": "active",
-      "fullname": "Celine2 Close"
+      "fullname": "South Pole Admin"
     }
   ]
 }
