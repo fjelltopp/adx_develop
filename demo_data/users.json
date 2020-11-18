@@ -59,6 +59,46 @@
       "activity_streams_email_notifications": false,
       "state": "active",
       "fullname": "Celine Close"
+    },
+    {
+      "email": "south_pole_member@fjelltopp",
+      "about": null,
+      "display_name": "South Pole Member",
+      "name": "south_pole_member",
+      "password": "fjelltopp",
+      "activity_streams_email_notifications": false,
+      "state": "active",
+      "fullname": "South Pole Member"
+    },
+    {
+      "email": "south_pole_editor@fjelltopp",
+      "about": null,
+      "display_name": "South Pole Editor",
+      "name": "south_pole_editor",
+      "password": "fjelltopp",
+      "activity_streams_email_notifications": false,
+      "state": "active",
+      "fullname": "South Pole Editor"
+    },
+    {
+      "email": "south_pole_admin@fjelltopp",
+      "about": null,
+      "display_name": "South Pole Admin",
+      "name": "south_pole_admin",
+      "password": "fjelltopp",
+      "activity_streams_email_notifications": false,
+      "state": "active",
+      "fullname": "South Pole Admin"
+    },
+    {
+      "email": "santa_claus@fjelltopp",
+      "about": null,
+      "display_name": "Santa Claus",
+      "name": "santa_claus",
+      "password": "fjelltopp",
+      "activity_streams_email_notifications": false,
+      "state": "active",
+      "fullname": "Santa Claus"
     }
   ]
 }

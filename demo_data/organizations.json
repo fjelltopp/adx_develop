@@ -35,6 +35,10 @@
         {
           "name": "north_pole_admin",
           "capacity": "admin"
+        },
+        {
+          "name": "santa_claus",
+          "capacity": "admin"
         }
       ],
       "display_name": "North Pole",
@@ -43,6 +47,32 @@
       "name": "north-pole",
       "state": "active",
       "title": "North Pole"
+    },
+    {
+      "users": [
+        {
+          "name": "south_pole_member",
+          "capacity": "member"
+        },
+        {
+          "name": "south_pole_editor",
+          "capacity": "editor"
+        },
+        {
+          "name": "south_pole_admin",
+          "capacity": "admin"
+        },
+        {
+          "name": "santa_claus",
+          "capacity": "admin"
+        }
+      ],
+      "display_name": "South Pole",
+      "description": "South Pole demo organization",
+      "image_url": "https://media.gettyimages.com/vectors/south-pole-sign-with-santa-clause-vector-id165913270",
+      "name": "south-pole",
+      "state": "active",
+      "title": "South Pole"
     }
   ]
 }
