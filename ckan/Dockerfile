@@ -31,7 +31,7 @@ ENV CKAN_HOME /usr/lib/ckan
 ENV CKAN_VENV $CKAN_HOME/venv
 ENV CKAN_CONFIG /etc/ckan
 ENV CKAN_STORAGE_PATH=/var/lib/ckan
-
+ENV CKAN_METASTORE $CKAN_STORAGE_PATH/metastore
 # Build-time variables specified by docker-compose.yml / .env
 ARG CKAN_SITE_URL
 
@@ -39,7 +39,7 @@ ARG CKAN_SITE_URL
 RUN useradd -r -u 900 -m -c "ckan account" -d $CKAN_HOME -s /bin/false ckan
 
 # Setup virtual environment for CKAN
-RUN mkdir -p $CKAN_VENV $CKAN_CONFIG $CKAN_STORAGE_PATH && \
+RUN mkdir -p $CKAN_VENV $CKAN_CONFIG $CKAN_STORAGE_PATH $CKAN_METASTORE && \
     virtualenv $CKAN_VENV && \
     ln -s $CKAN_VENV/bin/pip /usr/local/bin/ckan-pip &&\
     ln -s $CKAN_VENV/bin/ckan /usr/local/bin/ckan &&\
@@ -61,7 +61,7 @@ RUN ckan-pip install --upgrade pip &&\
     ckan-pip install -r /usr/lib/ckan/venv/src/ckan/dev-requirements.txt &&\
     ckan-pip install ckanapi
 RUN ckan-pip install -e $CKAN_VENV/src/ckan/ && \
-    chown -R ckan:ckan $CKAN_HOME $CKAN_VENV $CKAN_CONFIG $CKAN_STORAGE_PATH
+    chown -R ckan:ckan $CKAN_HOME $CKAN_VENV $CKAN_CONFIG $CKAN_STORAGE_PATH $CKAN_METASTORE
 USER root
 
 # Install all extensions with a remote source
