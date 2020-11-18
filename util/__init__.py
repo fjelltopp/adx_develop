@@ -142,6 +142,7 @@ def setup(args, extra):
 
 
 def init_ckan_db(args, extra):
+    call_command(["docker exec -it ckan /wait-for-it.sh ckan:5000 --timeout=0 -- echo 'CKAN ready'"])
     call_command(['docker exec -it ckan /usr/local/bin/ckan -c /etc/ckan/ckan.ini db init'])
     call_command(['docker exec -it ckan /usr/local/bin/ckan-paster --plugin=ckanext-ytp-request initdb -c /etc/ckan/ckan.ini'])
     call_command(['docker exec -it ckan /usr/local/bin/ckan-paster --plugin=ckanext-harvest harvester initdb -c /etc/ckan/ckan.ini'])
@@ -154,6 +155,7 @@ def init_ckan_db(args, extra):
 
 
 def load_demo_data(args, extra):
+    call_command(["docker exec -it ckan /wait-for-it.sh ckan:5000 --timeout=0 -- echo 'CKAN ready'"])
     import util.ckan_loader as loader
     loader.load_data("http://ckan:5000", ADMIN_APIKEY)
 
