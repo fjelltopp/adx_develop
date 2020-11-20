@@ -130,8 +130,8 @@ def setup(args, extra):
         repo_main_args = (
             ['init', '-u', ADX_MANIFEST_URL, '-m', manifest],
             ['sync', '--force-sync'],
-            ['forall', '-c', 'git', 'checkout', 'master'],
-            ['forall', 'ckan', '-c', 'git', 'checkout', 'refs/tags/ckan-2.8.2'],
+            ['forall', '-c', 'git', 'checkout', 'development'],
+            ['forall', 'ckan', '-c', 'git', 'checkout', 'refs/tags/ckan-2.9.1'],
             ['forall', 'ckanext-scheming', '-c', 'git', 'checkout', 'validator'],
             ['status']
         )
