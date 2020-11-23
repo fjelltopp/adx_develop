@@ -132,7 +132,6 @@ def setup(args, extra):
             ['sync', '--force-sync'],
             ['forall', '-c', 'git', 'checkout', 'development'],
             ['forall', 'ckan', '-c', 'git', 'checkout', 'refs/tags/ckan-2.9.1'],
-            ['forall', 'ckanext-scheming', '-c', 'git', 'checkout', 'validator'],
             ['status']
         )
         for _args in repo_main_args:
