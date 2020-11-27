@@ -144,6 +144,7 @@ def init_ckan_db(args, extra):
     call_command(["docker exec -it ckan /wait-for-it.sh ckan:5000 --timeout=0 -- echo 'CKAN ready'"])
     call_command(['docker exec -it ckan /usr/local/bin/ckan -c /etc/ckan/ckan.ini db init'])
     call_command(['docker exec -it ckan /usr/local/bin/ckan-paster --plugin=ckanext-ytp-request initdb -c /etc/ckan/ckan.ini'])
+    call_command(['docker exec -it ckan /usr/local/bin/ckan-paster --plugin=ckanext-unaids initdb -c /etc/ckan/ckan.ini'])
     call_command(['docker exec -it ckan /usr/local/bin/ckan-paster --plugin=ckanext-harvest harvester initdb -c /etc/ckan/ckan.ini'])
     call_command(['docker exec -it ckan /usr/local/bin/ckan-paster --plugin=ckanext-validation validation init-db -c /etc/ckan/ckan.ini'])
 
@@ -186,6 +187,8 @@ def reset_test_db(args, extra):
                   f' ckan /usr/local/bin/ckan-paster --plugin=ckanext-validation validation init-db -c test-core.ini'])
     call_command([f'docker exec -e CKAN_SQLALCHEMY_URL="{CKAN_TEST_SQLALCHEMY_URL}"'
                   f' ckan /usr/local/bin/ckan-paster --plugin=ckanext-ytp-request initdb -c test-core.ini'])
+    call_command([f'docker exec -e CKAN_SQLALCHEMY_URL="{CKAN_TEST_SQLALCHEMY_URL}"'
+                  f' ckan /usr/local/bin/ckan-paster --plugin=ckanext-unaids initdb -c test-core.ini'])
 
 
 def run_tests(args, extra):
