@@ -201,3 +201,20 @@ Now let's make the extension do something
 - Save `<h1>Hello World!</h1>` to it
 - Run another `adx build ckan; adx up` and your browser should display `Hello World!`
 - Read the [docs](https://docs.ckan.org/en/2.9/theming/templates.html#customizing-ckan-s-templates) for more info
+
+# Setting up production deployments
+1. Configure `ADX_PATH` env in your `.bashrc`, e.g.
+    ```
+    export ADX_PATH=$HOME/fjelltopp/adr
+    ```
+2. Clone the following additional repos into your `ADX_PATH`:
+    ```
+    git clone git@github.com:fjelltopp/adx_deploy.git
+    git clone git@github.com:fjelltopp/adx_manifest.git
+    ```
+3. Now you should be able to use the following command to draft PRs for prod deployment
+
+    Note: This only works with google chrome.
+    ```
+    adx deploy
+    ```
