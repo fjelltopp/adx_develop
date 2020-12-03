@@ -100,7 +100,7 @@ The command can be used to reset your code base once everything you want to keep
 
 ```
 adx forall -c git checkout development
-adx forall -c git pull --rebase
+adx forall -c git pull --rebase --preserve-merges
 ```
 
 Occasionally new repo's might be added to the code base, so once you have a clean codebase run the following command to check for and pull new repos.
