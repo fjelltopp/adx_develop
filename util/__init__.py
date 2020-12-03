@@ -192,22 +192,13 @@ def run_tests(args, extra):
     extension_name = "ckanext-" + args.extension
     extension_path = "/usr/lib/adx/" + extension_name
     extension_sub_path = "/".join(extension_name.split("-"))
-    if args.pytest:
-        call_command([
-            f'docker exec -e CKAN_SQLALCHEMY_URL={CKAN_TEST_SQLALCHEMY_URL} '
-            f'ckan /usr/local/bin/ckan-pytest --disable-warnings'
-            f' --ckan-ini={extension_path}/test.ini'
-            f' {extension_path}/{extension_sub_path}/tests '
-            f'--log-level=WARNING'
-        ] + extra)
-    else:
-        call_command([
-            f'docker exec -e CKAN_SQLALCHEMY_URL={CKAN_TEST_SQLALCHEMY_URL} '
-            f'ckan /usr/local/bin/ckan-nosetests --ckan'
-            f' --with-pylons={extension_path}/test.ini'
-            f' {extension_path}/{extension_sub_path}/tests '
-            f'--logging-level=WARNING'
-        ] + extra)
+    call_command([
+        f'docker exec -e CKAN_SQLALCHEMY_URL={CKAN_TEST_SQLALCHEMY_URL} '
+        f'ckan /usr/local/bin/ckan-pytest --disable-warnings'
+        f' --ckan-ini={extension_path}/test.ini'
+        f' {extension_path}/{extension_sub_path}/tests '
+        f'--log-level=WARNING'
+    ] + extra)
 
 
 def deploy_master(args, extra):
