@@ -93,6 +93,21 @@ Docker-compose
 9. CKAN should be available at http://localhost:5000
 
 
+## Resetting the code base
+
+The adx script comes with a convienience command forall that enables you to quickly replicate commands across multiple repos.
+The command can be used to reset your code base once everything you want to keep is committed and ideally pushed.
+
+```
+adx forall -c git checkout development
+adx forall -c git pull --rebase --preserve-merges
+```
+
+Occasionally new repo's might be added to the code base, so once you have a clean codebase run the following command to check for and pull new repos.
+```
+adx sync
+```
+
 ## Using a fake SMTP server locally
 
 It might be useful to test features which requires sending e-mail. To do so you can setup a fake SMTP server locally:
