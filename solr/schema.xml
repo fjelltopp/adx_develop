@@ -152,6 +152,9 @@ schema. In this case the version should be set to the next CKAN version number.
 
     <field name="_version_" type="string" indexed="true" stored="true"/>
 
+    <!--    Harvester configuration-->
+    <field name="config" type="text" indexed="false"  stored="false"/>
+
     <dynamicField name="*_date" type="date" indexed="true" stored="true" multiValued="false"/>
 
     <dynamicField name="extras_*" type="text" indexed="true" stored="true" multiValued="false"/>
