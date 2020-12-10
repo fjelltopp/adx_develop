@@ -3,16 +3,16 @@
     {
       "users": [
         {
-          "name": "fjelltopp_member",
-          "capacity": "member"
+          "name": "fjelltopp_admin",
+          "capacity": "admin"
         },
         {
           "name": "fjelltopp_editor",
           "capacity": "editor"
         },
         {
-          "name": "fjelltopp_admin",
-          "capacity": "admin"
+          "name": "fjelltopp_member",
+          "capacity": "member"
         }
       ],
       "display_name": "Fjelltopp",
@@ -25,54 +25,46 @@
     {
       "users": [
         {
-          "name": "north_pole_member",
-          "capacity": "member"
+          "name": "north_pole_admin",
+          "capacity": "admin"
         },
         {
           "name": "north_pole_editor",
           "capacity": "editor"
         },
         {
-          "name": "north_pole_admin",
-          "capacity": "admin"
-        },
-        {
-          "name": "santa_claus",
-          "capacity": "admin"
+          "name": "north_pole_member",
+          "capacity": "member"
         }
       ],
       "display_name": "North Pole",
       "description": "North Pole demo organization",
-      "image_url": "https://media.gettyimages.com/vectors/north-pole-sign-with-santa-clause-vector-id165913270",
-      "name": "north-pole",
+      "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/13/Emoji_u1f385.svg/1024px-Emoji_u1f385.svg.png",
+      "name": "north_pole",
       "state": "active",
       "title": "North Pole"
     },
     {
       "users": [
         {
-          "name": "south_pole_member",
-          "capacity": "member"
+          "name": "cote_admin",
+          "capacity": "admin"
         },
         {
-          "name": "south_pole_editor",
+          "name": "cote_editor",
           "capacity": "editor"
         },
         {
-          "name": "south_pole_admin",
-          "capacity": "admin"
-        },
-        {
-          "name": "santa_claus",
-          "capacity": "admin"
+          "name": "cote_member",
+          "capacity": "member"
         }
       ],
-      "display_name": "South Pole",
-      "description": "South Pole demo organization",
-      "image_url": "https://media.gettyimages.com/vectors/south-pole-sign-with-santa-clause-vector-id165913270",
-      "name": "south-pole",
+      "display_name": "Côte d'Ivoire",
+      "description": "Côte d'Ivoire demo organization",
+      "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fe/Flag_of_C%C3%B4te_d%27Ivoire.svg/1280px-Flag_of_C%C3%B4te_d%27Ivoire.svg.png",
+      "name": "cote",
       "state": "active",
-      "title": "South Pole"
+      "title": "Côte d'Ivoire"
     }
   ]
 }
