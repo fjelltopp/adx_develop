@@ -56,6 +56,20 @@
       "information_url": "",
       "excerpt": "Demo user data for testing with",
       "notes": "Demo user data for testing with"
+    },
+    {
+      "type": "inputs-unaids-estimates",
+      "title": "Côte d'Ivoire Inputs to UNAIDS Estimates 2021 [TEST DATA]",
+      "owner_org": "cote",
+      "name": "cote-d-ivoire-inputs-unaids-estimates-2021",
+      "geo-location": "Côte d'Ivoire",
+      "tag_string": "UNAIDS Inputs, ANC, ART, SVY",
+      "maintainer": "Admin",
+      "license": "cc-by-igo",
+      "year": "2021",
+      "type_name": "Inputs to UNAIDS Estimates",
+      "notes": "This is test data generated automatically for the development servers.  It is intended for the purposes of testing interoperability with Naomi model.",
+      "maintainer_email": "fjelltopp_admin@fjelltopp.org"
     }
   ]
 }
