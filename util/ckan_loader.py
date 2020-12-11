@@ -9,6 +9,7 @@ DEMO_USERS = os.path.join(DEMO_DATA_PATH, 'users.json')
 DEMO_ORGANIZATIONS = os.path.join(DEMO_DATA_PATH, 'organizations.json')
 DEMO_HARVESTERS = os.path.join(DEMO_DATA_PATH, 'harvesters.json')
 DEMO_DATASETS = os.path.join(DEMO_DATA_PATH, 'datasets.json')
+DEMO_RESOURCES = os.path.join(DEMO_DATA_PATH, 'resources.json')
 
 log = logging.getLogger(__name__)
 
@@ -30,7 +31,7 @@ def load_organizations(ckan):
                 organization_ids_dict[org_name] = org["id"]
                 continue
             except ckanapi.errors.ValidationError as e:
-                pass # fallback to organization update
+                pass  # fallback to organization update
             try:
                 log.warning(f"Organization {org_name} might already exists. Will try to update.")
                 org_id = ckan.action.organization_show(id=org_name)['id']
@@ -91,7 +92,7 @@ def load_harvesters(ckan, organizations_ids_dict):
                 id = ckan.action.package_show(id=harvester['name'])['id']
                 ckan.action.package_update(id=id, **harvester)
                 log.info(f"Updated harvester {harvester['name']}")
-            except ( ckanapi.errors.ValidationError, ckanapi.errors.NotFound ) as e:
+            except (ckanapi.errors.ValidationError, ckanapi.errors.NotFound) as e:
                 log.error(f"Can't create harvester {harvester['name']}: {e!s}")
 
 
@@ -104,7 +105,6 @@ def load_datasets(ckan):
     with open(DEMO_DATASETS, 'r') as datasets_file:
         datasets = json.load(datasets_file)['datasets']
         for dataset in datasets:
-            resource_dir = dataset.pop('resource_dir')
             try:
                 ckan.action.package_create(**dataset)
                 log.info(f"Created dataset {dataset['name']}")
@@ -116,14 +116,27 @@ def load_datasets(ckan):
                 id = ckan.action.package_show(id=dataset['name'])['id']
                 ckan.action.package_update(id=id, **dataset)
                 log.info(f"Updated dataset {dataset['name']}")
-                file_path = 'datasets/{}'.format(resource_dir)
-                ckan.action.resource_create(
-                    package_id=id,
-                    name=dataset['name'],
-                    upload=open(os.path.join(DEMO_DATA_PATH, file_path), 'r')
-                )                
             except ckanapi.errors.ValidationError as e:
                 log.error(f"Can't create dataset {dataset['name']}: {e.error_dict}")
+
+
+def load_resources(ckan):
+    """
+    Helper method to load demo resources
+    :param ckan: ckanapi instance
+    :return: None
+    """
+    with open(DEMO_RESOURCES, 'r') as resources_file:
+        dataset_resources = json.load(resources_file)
+    for dataset_id, resources in dataset_resources.items():
+        for resource_path, resource_dict in resources.items():
+            resource_dict['package_id'] = dataset_id
+            with open(os.path.join(DEMO_DATA_PATH, resource_path), 'rb') as res_file:
+                ckan.call_action(
+                    'resource_create',
+                    resource_dict,
+                    files={'upload': res_file}
+                )
 
 
 def load_data(adr_url, apikey):
@@ -133,7 +146,7 @@ def load_data(adr_url, apikey):
     orgs = load_organizations(ckan)
     load_harvesters(ckan, organizations_ids_dict=orgs)
     load_datasets(ckan)
-    load_datasets(ckan) # quickfix: run twice to upload resources properly
+    load_resources(ckan)
 
 
 if __name__ == '__main__':
