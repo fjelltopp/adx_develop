@@ -8,8 +8,8 @@ services:
   ckan:
     container_name: ckan
     build:
-      context: ../
-      dockerfile: adx_develop/ckan/Dockerfile
+      context: ./
+      dockerfile: ckan/Dockerfile
     links:
       - db
       - solr
@@ -45,8 +45,8 @@ services:
   supervisor:
     container_name: supervisor
     build:
-      context: ../
-      dockerfile: adx_develop/ckan/Dockerfile
+      context: ./
+      dockerfile: ckan/Dockerfile
     depends_on:
       - ckan
     environment:
@@ -79,7 +79,7 @@ services:
 
   datapusher:
     build:
-      context: ../datapusher
+      context: ./datapusher
     container_name: datapusher
     volumes:
       - ../datapusher:/var/www/datapusher
@@ -93,7 +93,7 @@ services:
     ports:
       - "5432:5432"
     build:
-      context: ../ckan/
+      context: ./ckan/
       dockerfile: contrib/docker/postgresql/Dockerfile
       args:
         - DS_RO_PASS=datastore
