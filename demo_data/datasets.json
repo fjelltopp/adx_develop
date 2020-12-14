@@ -1,11 +1,10 @@
 {
   "datasets": [
     {
-      "resource_dir": "naughty-list.json",
-      "name": "naughty-list",
-      "title": "2020 Santa Claus Naughty List",
+      "name": "north-pole-christmas-lists",
+      "title": "2021 Santa Claus Lists",
       "private": false,
-      "owner_org": "north-pole",
+      "owner_org": "north_pole",
       "dataset_category": "Document",
       "is_retired": "false",
       "pipeline_stage": "Published",
@@ -16,32 +15,12 @@
       "published_date": "2019-01-01",
       "approved_date": "2019-01-01",
       "information_url": "",
-      "excerpt": "List of users who are on Santa's 2020 Naughty List",
-      "notes": "List of users who are on Santa's 2020 Naughty List"
+      "excerpt": "List of users who have been naughty and nice this year",
+      "notes": "List of users who have been naughty and nice this year"
     },
     {
-      "resource_dir": "nice-list.json",
-      "name": "nice-list",
-      "title": "2020 Santa Claus Nice List",
-      "private": false,
-      "owner_org": "north-pole",
-      "dataset_category": "Document",
-      "is_retired": "false",
-      "pipeline_stage": "Published",
-      "refresh_rate": "Daily",
-      "require_legal": "false",
-      "require_privacy": "false",
-      "owner_type": "Official",
-      "published_date": "2019-01-01",
-      "approved_date": "2019-01-01",
-      "information_url": "",
-      "excerpt": "List of users who are on Santa's 2020 Nice List",
-      "notes": "List of users who are on Santa's 2020 Nice List"
-    },
-    {
-      "resource_dir": "users.csv",
-      "name": "user-log-data",
-      "title": "User Log Data",
+      "name": "fjelltopp-demo-data",
+      "title": "Random Test CSV",
       "private": false,
       "owner_org": "fjelltopp",
       "dataset_category": "Document",
@@ -54,8 +33,22 @@
       "published_date": "2019-01-01",
       "approved_date": "2019-01-01",
       "information_url": "",
-      "excerpt": "User data from Fjelltopp database",
-      "notes": "User data from Fjelltopp database"
+      "excerpt": "Demo user data for testing with",
+      "notes": "Demo user data for testing with"
+    },
+    {
+      "type": "inputs-unaids-estimates",
+      "title": "Côte d'Ivoire Inputs to UNAIDS Estimates 2021 [TEST DATA]",
+      "owner_org": "cote",
+      "name": "cote-d-ivoire-inputs-unaids-estimates-2021",
+      "geo-location": "Côte d'Ivoire",
+      "tag_string": "UNAIDS Inputs, ANC, ART, SVY",
+      "maintainer": "Admin",
+      "license": "cc-by-igo",
+      "year": "2021",
+      "type_name": "Inputs to UNAIDS Estimates",
+      "notes": "This is test data generated automatically for the development servers.  It is intended for the purposes of testing interoperability with Naomi model.",
+      "maintainer_email": "fjelltopp_admin@fjelltopp.org"
     }
   ]
 }
