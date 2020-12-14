@@ -1,4 +1,26 @@
 {
+	"north-pole-naughty-lists": {
+		"files/naughty_list.json": {
+			"name": "2021 Naughty List",
+			"restricted_allowed_users": "",
+			"restricted_allowed_orgs": "",
+			"url": "upload"
+		},
+		"files/nice_list.json": {
+			"name": "2021 Nice List",
+			"restricted_allowed_users": "",
+			"restricted_allowed_orgs": "",
+			"url": "upload"
+		}
+	},
+	"fjelltopp-demo-data": {
+		"files/demo.csv": {
+			"name": "Demo Data",
+			"restricted_allowed_users": "",
+			"restricted_allowed_orgs": "unaids",
+			"url": "upload"
+		}
+	},
 	"cote-d-ivoire-inputs-unaids-estimates-2021": {
 		"files/estimates_inputs_demo_data/spectrum.PJNZ": {
 			"resource_type": "inputs-unaids-spectrum-file",
