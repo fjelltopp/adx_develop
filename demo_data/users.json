@@ -1,104 +1,94 @@
 {
   "users": [
     {
-        "email": "andrew@fjelltopp",
-        "about": null,
-        "display_name": "Andrew Atkins",
-        "name": "fjelltopp_member",
-        "password": "fjelltopp",
-        "activity_streams_email_notifications": false,
-        "state": "active",
-        "fullname": "Andrew Atkins"
-    },
-    {
-      "email": "bob@fjelltopp",
+      "email": "fjelltopp_admin@fjelltopp.org",
       "about": null,
-      "display_name": "Bob Belgian",
-      "name": "fjelltopp_editor",
-      "password": "fjelltopp",
-      "activity_streams_email_notifications": false,
-      "state": "active",
-      "fullname": "Bob Belgian"
-    },
-    {
-      "email": "charles@fjelltopp",
-      "about": null,
-      "display_name": "Charles Chester",
+      "display_name": "Fjelltopp Admin",
       "name": "fjelltopp_admin",
       "password": "fjelltopp",
       "activity_streams_email_notifications": false,
       "state": "active",
-      "fullname": "Charles Chester"
+      "fullname": "Fjelltopp Admin"
     },
     {
-      "email": "anna@fjelltopp",
+      "email": "fjelltopp_editor@fjelltopp.org",
       "about": null,
-      "display_name": "Anna Artery",
-      "name": "north_pole_member",
+      "display_name": "Fjelltopp Editor",
+      "name": "fjelltopp_editor",
       "password": "fjelltopp",
       "activity_streams_email_notifications": false,
       "state": "active",
-      "fullname": "Anna Artery"
+      "fullname": "Fjelltopp Editor"
     },
     {
-      "email": "beth@fjelltopp",
+      "email": "fjelltopp_member@fjelltopp.org",
       "about": null,
-      "display_name": "Beth Britany",
-      "name": "north_pole_editor",
+      "display_name": "Fjelltopp Member",
+      "name": "fjelltopp_member",
       "password": "fjelltopp",
       "activity_streams_email_notifications": false,
       "state": "active",
-      "fullname": "Beth Britany"
+      "fullname": "Fjelltopp Member"
     },
     {
-      "email": "celine@fjelltopp",
+      "email": "north_pole_admin@northpole.org",
       "about": null,
-      "display_name": "Celine Close",
+      "display_name": "North Pole Admin",
       "name": "north_pole_admin",
       "password": "fjelltopp",
       "activity_streams_email_notifications": false,
       "state": "active",
-      "fullname": "Celine Close"
+      "fullname": "North Pole Admin"
     },
     {
-      "email": "south_pole_member@fjelltopp",
+      "email": "north_pole_editor@northpole.org",
       "about": null,
-      "display_name": "South Pole Member",
-      "name": "south_pole_member",
+      "display_name": "North Pole Editor",
+      "name": "north_pole_editor",
       "password": "fjelltopp",
       "activity_streams_email_notifications": false,
       "state": "active",
-      "fullname": "South Pole Member"
+      "fullname": "North Pole Editor"
     },
     {
-      "email": "south_pole_editor@fjelltopp",
+      "email": "north_pole_member@northpole.org",
       "about": null,
-      "display_name": "South Pole Editor",
-      "name": "south_pole_editor",
+      "display_name": "North Pole Member",
+      "name": "north_pole_member",
       "password": "fjelltopp",
       "activity_streams_email_notifications": false,
       "state": "active",
-      "fullname": "South Pole Editor"
+      "fullname": "North Pole Member"
     },
     {
-      "email": "south_pole_admin@fjelltopp",
+      "email": "cote_admin@cote.org",
       "about": null,
-      "display_name": "South Pole Admin",
-      "name": "south_pole_admin",
+      "display_name": "Cote Admin",
+      "name": "cote_admin",
       "password": "fjelltopp",
       "activity_streams_email_notifications": false,
       "state": "active",
-      "fullname": "South Pole Admin"
+      "fullname": "Cote Admin"
     },
     {
-      "email": "santa_claus@fjelltopp",
+      "email": "cote_editor@cote.org",
       "about": null,
-      "display_name": "Santa Claus",
-      "name": "santa_claus",
+      "display_name": "Cote Editor",
+      "name": "cote_editor",
       "password": "fjelltopp",
       "activity_streams_email_notifications": false,
       "state": "active",
-      "fullname": "Santa Claus"
+      "fullname": "Cote Editor"
+    },
+    {
+      "email": "cote_member@cote.org",
+      "about": null,
+      "display_name": "Cote Member",
+      "name": "cote_member",
+      "password": "fjelltopp",
+      "activity_streams_email_notifications": false,
+      "state": "active",
+      "fullname": "Cote Member"
     }
   ]
 }
