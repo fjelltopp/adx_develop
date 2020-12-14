@@ -1,7 +1,7 @@
 {
   "datasets": [
     {
-      "name": "north-pole-naughty-lists",
+      "name": "north-pole-christmas-lists",
       "title": "2021 Santa Claus Lists",
       "private": false,
       "owner_org": "north_pole",
