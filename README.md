@@ -92,7 +92,7 @@ Docker-compose
 
 9. CKAN should be available at http://localhost:5000
 
-### Setting up local ckan dev venv
+### [OPTIONAL] Setting up local ckan dev venv
 1. For Ubuntu you'll need to satisfy psycopg2:
 ```
 sudo apt-get install libpq-dev
