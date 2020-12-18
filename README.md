@@ -92,6 +92,19 @@ Docker-compose
 
 9. CKAN should be available at http://localhost:5000
 
+### [OPTIONAL] Setting up local ckan dev venv
+1. For Ubuntu you'll need to satisfy psycopg2:
+```
+sudo apt-get install libpq-dev
+```
+2. Then install python2 and pip2 locally.
+3. Activate your adr venv 
+4. Then you can run
+```
+adx_develop/util/install_requirements.sh
+```
+
+
 
 ## Resetting the code base
 
