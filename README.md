@@ -97,13 +97,37 @@ Docker-compose
 ```
 sudo apt-get install libpq-dev
 ```
-2. Then install python2 and pip2 locally.
-3. Activate your adr venv 
-4. Then you can run
+
+2. Check that you have python2 installed and take note of the installation path as it will be used later
+```
+which python2
+```
+
+3. Install pip2 using the helper script from PyPa
+```
+curl https://bootstrap.pypa.io/get-pip.py --output get-pip.py
+sudo python2 get-pip.py
+```
+
+3. Install virtualenv for python2
+```
+pip2 install virtualenv
+```
+
+3. Create a virtual environment for adr
+```
+virtualenv -p <INSERT YOUR PYTHON2 PATH HERE> venv_adr
+```
+
+4. Activate your adr venv 
+```
+source ./venv_adr/bin/activate
+```
+
+5. Then you can run
 ```
 adx_develop/util/install_requirements.sh
 ```
-
 
 
 ## Resetting the code base
