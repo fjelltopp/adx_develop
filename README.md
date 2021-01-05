@@ -95,7 +95,7 @@ Docker-compose
 ### [OPTIONAL] Setting up local ckan dev venv
 1. For Ubuntu you'll need to satisfy psycopg2:
 ```
-sudo apt-get install libpq-dev
+sudo apt-get install libpq-dev build-essential
 ```
 
 2. Check that you have python2 installed and take note of the installation path as it will be used later
