@@ -178,6 +178,32 @@ from the container, without killing it, using the escape sequence:
 See the [pdb docs](https://docs.python.org/3/library/pdb.html) for more on how
 to debug with pdb.
 
+## Configuring flak8 to run locally with PyCharm
+```
+How to manually setup flake8 as PyCharm external tool
+
+File / Settings / Tools / External Tools / Add
+Name: Flake8
+Program: $PyInterpreterDirectory$/python
+Parameters: -m flake8 --show-source --statistics --max-line-length=127 $FilePath$
+Working directory: $ProjectFileDir$
+
+Output Filters / Add
+Name: Filter 1
+Regular expression to match output:
+$FILE_PATH$\:$LINE$\:$COLUMN$\:.*
+
+Output Filters / Add
+Name: Filter 2
+Regular expression to match output:
+$FILE_PATH$\:$LINE$\:.*
+
+To check source with flake8:
+Tools / External Tools / Flake8
+
+Can be used with single files as well as with directories, recursively.
+```
+
 ### Logs
 To get more log output you can pick custom log level with `-log`, e.g.:
 ```
