@@ -127,8 +127,5 @@ services:
     container_name: giftless
     ports:
       - "6001:6001"
-    build:
-      context: ../giftless
-    volumes:
-      - ../giftless:/app
+    image: datopian/giftless
     command: ["--http", "0.0.0.0:6001", "-M", "-T", "--threads", "2", "-p", "2", "--manage-script-name", "--callable", "app"]
