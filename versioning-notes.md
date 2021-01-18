@@ -4,21 +4,6 @@ Versioning notes:
 Quick workaround for chrome only (didn’t find any for firefox)
 
     google-chrome --disable-web-security --user-data-dir=~/tmp/chrome
-    
-
-1. Setup up giftless auth to let all read/write:
-```
-### giftless/config.py
-
-default_config = {
-    "TRANSFER_ADAPTERS": figcan.Extensible(default_transfer_config),
-    "TESTING": False,
-    "DEBUG": False,
-    "AUTH_PROVIDERS": [
-        'giftless.auth.allow_anon:read_write'
-    ],
-```
-
 
 Things to have a look at:
 1. To modify datapub: Init git submodules of ckanext-blog-storage to use the React UI for resource upload
@@ -42,4 +27,3 @@ Even if it works only with named revisions it's still a big win for ADR
 - [x] Does ckanext-versioning create new revisions on each resource upload? Do we need the user to create a revision each time they upload file?
 YEST IT DOES!
 - [ ] fileuploader-ui does it work with ckanext-versioning?
-
