@@ -38,6 +38,7 @@ services:
       - ./ckan/adx_who.ini:/etc/ckan/who.ini
       - ./ckan/utils/:/adx_utils
       - ./ckan/ckan-entrypoint-adx.sh:/ckan-entrypoint.sh
+      - ./ckan/jwt_public_key.pem:/etc/ckan/jwt_public_key.pem
     command: ["ckan","--config","/etc/ckan/ckan.ini", "run", "--host", "0.0.0.0", "--threaded"]
     stdin_open: true
     tty: true
@@ -121,3 +122,13 @@ services:
     ports:
       - "6379:6379"
     image: redis:latest
+
+  giftless:
+    container_name: giftless
+    ports:
+      - "6001:6001"
+    build:
+      context: ../giftless
+    volumes:
+      - ../giftless:/app
+    command: ["--http", "0.0.0.0:6001", "-M", "-T", "--threads", "2", "-p", "2", "--manage-script-name", "--callable", "app"]

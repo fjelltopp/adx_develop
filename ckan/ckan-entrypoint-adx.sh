@@ -79,6 +79,9 @@ ckan-pip install -e /usr/lib/adx/ckanext-geoview
 ckan-pip install -e /usr/lib/adx/ckanext-pdfview
 ckan-pip install --no-deps -e /usr/lib/adx/ckanext-file_uploader_ui
 ckan-pip install --no-deps -e /usr/lib/adx/ckanext-emailasusername
+ckan-pip install --no-deps -e /usr/lib/adx/ckanext-versioning
+ckan-pip install --no-deps -e /usr/lib/adx/ckanext-blob-storage
+ckan-pip install --no-deps -e /usr/lib/adx/ckanext-authz-service
 
 set_environment
 ckan  --config "${CKAN_CONFIG}/ckan.ini" db init

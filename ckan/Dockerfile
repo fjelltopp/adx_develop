@@ -31,7 +31,7 @@ ENV CKAN_HOME /usr/lib/ckan
 ENV CKAN_VENV $CKAN_HOME/venv
 ENV CKAN_CONFIG /etc/ckan
 ENV CKAN_STORAGE_PATH=/var/lib/ckan
-
+ENV CKAN_METASTORE $CKAN_STORAGE_PATH/metastore
 # Build-time variables specified by docker-compose.yml / .env
 ARG CKAN_SITE_URL
 
@@ -39,7 +39,7 @@ ARG CKAN_SITE_URL
 RUN useradd -r -u 900 -m -c "ckan account" -d $CKAN_HOME -s /bin/false ckan
 
 # Setup virtual environment for CKAN
-RUN mkdir -p $CKAN_VENV $CKAN_CONFIG $CKAN_STORAGE_PATH && \
+RUN mkdir -p $CKAN_VENV $CKAN_CONFIG $CKAN_STORAGE_PATH $CKAN_METASTORE && \
     virtualenv $CKAN_VENV && \
     ln -s $CKAN_VENV/bin/pip /usr/local/bin/ckan-pip &&\
     ln -s $CKAN_VENV/bin/ckan /usr/local/bin/ckan &&\
@@ -61,7 +61,7 @@ RUN ckan-pip install --upgrade pip &&\
     ckan-pip install -r /usr/lib/ckan/venv/src/ckan/dev-requirements.txt &&\
     ckan-pip install ckanapi
 RUN ckan-pip install -e $CKAN_VENV/src/ckan/ && \
-    chown -R ckan:ckan $CKAN_HOME $CKAN_VENV $CKAN_CONFIG $CKAN_STORAGE_PATH
+    chown -R ckan:ckan $CKAN_HOME $CKAN_VENV $CKAN_CONFIG $CKAN_STORAGE_PATH $CKAN_METASTORE
 USER root
 
 # Install all extensions with a remote source
@@ -99,7 +99,20 @@ RUN ckan-pip install -r /usr/lib/ckan/file_uploader_ui-requirements.txt
 COPY ./ckanext-restricted/requirements.txt /usr/lib/ckan/restricted-requirements.txt
 RUN ckan-pip install -r /usr/lib/ckan/restricted-requirements.txt
 
+COPY ./ckanext-versioning/requirements.txt /usr/lib/ckan/versioning-requirements.txt
+RUN ckan-pip install -r /usr/lib/ckan/versioning-requirements.txt
+
+COPY ./ckanext-blob-storage/requirements.py2.txt /usr/lib/ckan/blob-storage-requirements.txt
+RUN ckan-pip install -r /usr/lib/ckan/blob-storage-requirements.txt
+
+COPY ./ckanext-authz-service/requirements.py2.txt /usr/lib/ckan/authz-service-requirements.txt
+RUN ckan-pip install -r /usr/lib/ckan/authz-service-requirements.txt
+
 RUN rm /usr/lib/ckan/*-requirements.txt
+
+RUN  apt-get -q -y update && apt-get -q -y install curl
+RUN curl -sL https://deb.nodesource.com/setup_14.x | bash - && apt-get install nodejs && npm version
+
 # Configs
 COPY ./adx_develop/ckan/ckan-entrypoint-adx.sh /ckan-entrypoint.sh
 COPY ./adx_develop/ckan/wait-for-it.sh /wait-for-it.sh
