@@ -64,12 +64,10 @@ fi
 
 ckan-pip install -e $CKAN_VENV/src/ckan/
 
-# Reinstall extensions with local source, now container has the latest code.
-# No need to install deps since they have already been installed during build
-ckan-pip install --no-deps -e /usr/lib/adx/ckanext-unaids
+ckan-pip install -e /usr/lib/adx/ckanext-unaids
 ckan-pip install -e /usr/lib/adx/ckanext-restricted
-ckan-pip install --no-deps -e /usr/lib/adx/ckanext-scheming
-ckan-pip install --no-deps -e /usr/lib/adx/ckanext-validation
+ckan-pip install -e /usr/lib/adx/ckanext-scheming
+ckan-pip install -e /usr/lib/adx/ckanext-validation
 ckan-pip install -e /usr/lib/adx/ckanext-ytp-request
 ckan-pip install -e /usr/lib/adx/ckanext-pages
 ckan-pip install -e /usr/lib/adx/ckanext-harvest
@@ -77,8 +75,8 @@ ckan-pip install -e /usr/lib/adx/ckanext-dhis2harvester
 ckan-pip install -e /usr/lib/adx/ckanext-harvest
 ckan-pip install -e /usr/lib/adx/ckanext-geoview
 ckan-pip install -e /usr/lib/adx/ckanext-pdfview
-ckan-pip install --no-deps -e /usr/lib/adx/ckanext-file_uploader_ui
-ckan-pip install --no-deps -e /usr/lib/adx/ckanext-emailasusername
+ckan-pip install -e /usr/lib/adx/ckanext-file_uploader_ui
+ckan-pip install -e /usr/lib/adx/ckanext-emailasusername
 
 set_environment
 ckan  --config "${CKAN_CONFIG}/ckan.ini" db init
