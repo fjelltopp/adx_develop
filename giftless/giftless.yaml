@@ -1,0 +1,7 @@
+TRANSFER_ADAPTERS:
+  basic:
+    factory: giftless.transfer.basic_streaming:factory
+    options:
+      storage_class: giftless.storage.local_storage:LocalStorage
+AUTH_PROVIDERS:
+  - giftless.auth.allow_anon:read_write
