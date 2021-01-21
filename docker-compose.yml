@@ -145,4 +145,3 @@ services:
     depends_on:
       - ckan
       - giftless
-    hostname: nginx
