@@ -5,6 +5,7 @@ volumes:
   pg_data:
 
 services:
+
   ckan:
     container_name: ckan
     build:
@@ -133,3 +134,14 @@ services:
     volumes:
       - ./giftless/giftless.yaml:/app/giftless.yaml
     command: ["--http", "0.0.0.0:6001", "-M", "-T", "--threads", "2", "-p", "2", "--manage-script-name", "--callable", "app"]
+
+  nginx:
+    container_name: nginx
+    image: nginx
+    ports:
+      - "80:80"
+    volumes:
+      - "./nginx/nginx.conf:/etc/nginx/nginx.conf"
+    depends_on:
+      - ckan
+      - giftless
