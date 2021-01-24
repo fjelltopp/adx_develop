@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+pnsppusr/bin/env bash
 
 echo "Docker cleanup"
 docker-compose down --rmi all -v --remove-orphans
@@ -34,6 +34,23 @@ echo "Run ckan core tests"
 docker exec -it ckan ckan-nosetests --ckan --with-pylons=/usr/lib/ckan/venv/src/ckan/test-core.ini ckan ckanext
 echo "Running ./adx test restricted"
 adx test restricted
+echo "Running dhis2harvester tests"
+adx test dhis2harvester
+echo "Running emailasusername tests"
+adx test emailasusername
+echo "Running file_uploader_ui tests"
+adx test file_uploader_ui
+echo "Running pages tests"
+adx test pages
+echo "Running pdfview tests"
+adx test pdfview
+echo "Running scheming tests"
+adx test scheming
+echo "Running validation tests"
+adx test validation
+echo "Running ytp-request tests"
+adx test ytp-request
+
 
 #echo "Cleanup"
 #rm -f "$(dirname "${PWD}")"/datapusher
