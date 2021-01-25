@@ -26,8 +26,6 @@ adx testsetup
 
 # Run tests with set -e - exit on error
 set -e
-echo "Run ckan core tests"
-docker exec -it ckan ckan-nosetests --ckan --with-pylons=/usr/lib/ckan/venv/src/ckan/test-core.ini ckan ckanext
 echo "Running ./adx test restricted"
 adx test restricted
 echo "Running dhis2harvester tests"
@@ -45,7 +43,7 @@ adx test scheming
 echo "Running validation tests"
 adx test validation
 echo "Running ytp-request tests"
-adx test ytp-requesta
+adx test ytp-request
 echo "Running unaids tests"
 adx test unaids
 
