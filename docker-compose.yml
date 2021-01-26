@@ -145,3 +145,8 @@ services:
     depends_on:
       - ckan
       - giftless
+    hostname: adr
+    networks:
+      default:
+        aliases:
+          - adr
