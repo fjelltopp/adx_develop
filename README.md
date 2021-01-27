@@ -123,15 +123,12 @@ adx sync
 
 ## Using a fake SMTP server locally
 
-Update your docker-compose.yaml
-```
-CKAN_SMTP_SERVER=172.17.0.1:25
-```
-
 Run the fake SMTP server locally:
 ```
 sudo python3 -m smtpd -n -c DebuggingServer 172.17.0.1:25
 ```
+
+The ip address `172.17.0.1` is the default and may need to be changed depending on what your docker daemon ip address is. You can check it by running `$ ip address | grep docker` and updating the `docker-compose.yaml` by setting `CKAN_SMTP_SERVER=172.17.0.1:25` and then running the above command with the new ip address.
 
 ## Running CKAN tests locally
 
