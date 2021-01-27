@@ -1,5 +1,5 @@
 # See CKAN docs on installation from Docker Compose on usage
-FROM python:3-stretch
+FROM python:3.8
 MAINTAINER Open Knowledge
 
 ## Install required system packages
@@ -65,7 +65,7 @@ USER root
 
 # Install all extensions with a remote source
 RUN ckan-pip install -e "git+https://github.com/smellman/ckanext-spatial.git@dev-py3#egg=ckanext-spatial" && \
-    ckan-pip install -r /usr/lib/ckan/venv/src/ckanext-spatial/pip-requirements.txt
+    ckan-pip install -r /usr/lib/ckan/venv/src/ckanext-spatial/pip3-requirements.txt
 RUN ckan-pip install -e "git+https://github.com/EnviDat/ckanext-composite.git@e7c01d2bd33a7b4a5a7de26cc831f6e0cce87a21#egg=ckanext-composite"
 RUN ckan-pip install -e "git+https://github.com/open-data/ckanext-repeating.git@291295557ff74b26784f6271c1a1b4ffdb990f43#egg=ckanext-repeating"
 RUN ckan-pip install -e "git+https://github.com/okfn/ckanext-sentry@d3b1d1cf1f975b3672891012e6c75e176497db8f#egg=ckanext-sentry"
