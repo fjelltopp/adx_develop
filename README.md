@@ -123,14 +123,12 @@ adx sync
 
 ## Using a fake SMTP server locally
 
-It might be useful to test features which requires sending e-mail. To do so you can setup a fake SMTP server locally:
+Run the fake SMTP server locally:
 ```
-python3 -m smtpd -n -c DebuggingServer localhost:25
+sudo python3 -m smtpd -n -c DebuggingServer 172.17.0.1:25
 ```
-Instead of `localhost` you might want to bind to an IP accessible both from your host and from ADR containers.
 
-In Ubunut you can use the IP of docker deamon, e.g. `172.17.0.1`.
-Update your `docker-compose.yml` accordingly.
+The ip address `172.17.0.1` is the default and may need to be changed depending on what your docker daemon ip address is. You can check it by running `$ ip address | grep docker` and updating `CKAN_SMTP_SERVER=172.17.0.1:25` in the `docker-compose.yaml` file and then running the above command with the appropriate ip address. The port can also be set to something else however the default should work.
 
 ## Running CKAN tests locally
 
