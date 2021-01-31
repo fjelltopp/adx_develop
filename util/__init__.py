@@ -202,6 +202,7 @@ def run_tests(args, extra):
         f' {extension_path}/{extension_sub_path}/tests '
         f'--log-level=WARNING'
     ] + extra)
+    print("Test finished with exit code: " + retcode)
     if retcode != 0:
         print(f"Tests not successful. Returned {retcode}", file=sys.stderr)
         sys.exit(retcode)
