@@ -50,3 +50,5 @@ for test in ${tests}
   do run_adx_test "${test}"
 done
 
+echo "Docker cleanup"
+docker-compose down --rmi all -v --remove-orphans
