@@ -36,7 +36,12 @@ error(){
 
 run_adx_test(){
   echo "Running tests for CKAN ${1}"
-  adx test "${1}" || error "${1}"
+  adx test "${1}"
+  retVal=$?
+  echo "Exit code: ${retVal}"
+  if [ ${retVal} -ne 0 ]; then
+    error "${1}"
+  fi
 }
 
 tests="restricted dhis2harvester emailasusername file_uploader_ui pages pdfview scheming validation ytp-request unaids"
