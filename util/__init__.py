@@ -214,4 +214,4 @@ def deploy_master(args, extra):
             ADX_PATH,
             ADX_PATH
         )
-    )
+    ])
