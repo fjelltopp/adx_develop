@@ -195,13 +195,17 @@ def run_tests(args, extra):
     extension_name = "ckanext-" + args.extension
     extension_path = "/usr/lib/adx/" + extension_name
     extension_sub_path = "/".join(extension_name.split("-"))
-    call_command([
+    retcode = call_command([
         f'docker exec -e CKAN_SQLALCHEMY_URL={CKAN_TEST_SQLALCHEMY_URL} '
         f'ckan /usr/local/bin/ckan-pytest --disable-warnings'
         f' --ckan-ini={extension_path}/test.ini'
         f' {extension_path}/{extension_sub_path}/tests '
         f'--log-level=WARNING'
     ] + extra)
+    print("Test finished with exit code: " retcode)
+    if retcode != 0:
+        print(f"Tests not successful. Returned {retcode}", file=sys.stderr)
+        sys.exit(retcode)
 
 
 def deploy_master(args, extra):

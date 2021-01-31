@@ -26,24 +26,29 @@ adx testsetup
 
 # Run tests with set -e - exit on error
 set -e
-echo "Running ./adx test restricted"
-adx test restricted
-echo "Running dhis2harvester tests"
-adx test dhis2harvester
-echo "Running emailasusername tests"
-adx test emailasusername
-echo "Running file_uploader_ui tests"
-adx test file_uploader_ui
-echo "Running pages tests"
-adx test pages
-echo "Running pdfview tests"
-adx test pdfview
-echo "Running scheming tests"
-adx test scheming
-echo "Running validation tests"
-adx test validation
-echo "Running ytp-request tests"
-adx test ytp-request
-echo "Running unaids tests"
-adx test unaids
 
+
+error(){
+  echo "CKAN ${1} test did fail, check logs"
+  return 1
+}
+
+
+run_adx_test(){
+  echo "Running tests for CKAN ${1}"
+  adx test "${1}"
+  retVal=$?
+  echo "Exit code: ${retVal}"
+  if [ ${retVal} -ne 0 ]; then
+    error "${1}"
+  fi
+}
+
+tests="restricted dhis2harvester emailasusername file_uploader_ui pages pdfview scheming validation ytp-request unaids"
+
+for test in ${tests}
+  do run_adx_test "${test}"
+done
+
+echo "Docker cleanup"
+docker-compose down --rmi all -v --remove-orphans
