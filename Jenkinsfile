@@ -1,5 +1,8 @@
 pipeline {
   agent any
+  triggers {
+        cron('H 23 * * 1-5')
+    }
   stages {
     stage('ADX tests') {
       steps {
