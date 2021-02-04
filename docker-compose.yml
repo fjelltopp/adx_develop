@@ -134,8 +134,10 @@ services:
     image: datopian/giftless
     environment:
       - GIFTLESS_CONFIG_FILE=/app/giftless.yaml
+      - GIFTLESS_DEBUG=1
     volumes:
       - ./giftless/giftless.yaml:/app/giftless.yaml
+      - ./ckan/jwt_public_key.pem:/app/jwt_public_key.pem
     command: ["--http", "0.0.0.0:6001", "-M", "-T", "--threads", "2", "-p", "2", "--manage-script-name", "--callable", "app"]
 
   nginx:

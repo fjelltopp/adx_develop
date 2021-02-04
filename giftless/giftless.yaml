@@ -4,7 +4,10 @@ TRANSFER_ADAPTERS:
     options:
       storage_class: giftless.storage.local_storage:LocalStorage
 AUTH_PROVIDERS:
-  - giftless.auth.allow_anon:read_write
+  - factory: giftless.auth.jwt:factory
+    options:
+      algorithm: RS256
+      public_key_file: /app/jwt_public_key.pem
 MIDDLEWARE:
   - class: werkzeug.middleware.proxy_fix:ProxyFix
     kwargs:
