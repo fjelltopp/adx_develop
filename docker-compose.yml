@@ -2,6 +2,7 @@ version: "3"
 
 volumes:
   ckan_storage:
+  giftless_storage:
   pg_data:
   solr_core:
 
@@ -138,6 +139,7 @@ services:
     volumes:
       - ./giftless/giftless.yaml:/app/giftless.yaml
       - ./ckan/jwt_public_key.pem:/app/jwt_public_key.pem
+      - giftless_storage:/lfs-storage
     command: ["--http", "0.0.0.0:6001", "-M", "-T", "--threads", "2", "-p", "2", "--manage-script-name", "--callable", "app", "--honour-stdin"]
     stdin_open: true
     tty: true
