@@ -202,10 +202,11 @@ def run_tests(args, extra):
         f' {extension_path}/{extension_sub_path}/tests '
         f'--log-level=WARNING'
     ] + extra)
-    print("Test finished with exit code: " + str(retcode))
     if retcode != 0:
         print("Tests not successful. Returned: " + str(retcode))
         sys.exit(retcode)
+    else:
+      print("Test finished with exit code: " + str(retcode))
 
 
 def deploy_master(args, extra):
