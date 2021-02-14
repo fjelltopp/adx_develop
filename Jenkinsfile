@@ -34,7 +34,9 @@ pipeline {
       steps {
         script {
           for (test in extensions) {
-            echo test
+            stage(test) {
+              sh """cd adx_develop && ./ci_test.sh ${test}"""
+            }
           }
         }
       }
