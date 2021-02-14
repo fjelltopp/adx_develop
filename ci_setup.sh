@@ -10,7 +10,7 @@ cd ../
 export PATH=$WORKSPACE/adx_develop/:$PATH
 # Setup environment
 yes | adx setup
-git checkout ${GIT_BRANCH}
+git checkout "${GIT_BRANCH}"
 echo "running ./adx build"
 adx build
 echo "running ./adx up"
