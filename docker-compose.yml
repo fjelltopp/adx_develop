@@ -91,6 +91,7 @@ services:
       - "8800:8800"
     stdin_open: true
     tty: true
+    command: /usr/local/bin/uwsgi --ini-paste deployment/datapusher-uwsgi.ini --honour-stdin
 
   db:
     container_name: db
