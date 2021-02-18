@@ -7,7 +7,7 @@ AUTH_PROVIDERS:
   - factory: giftless.auth.jwt:factory
     options:
       algorithm: RS256
-      public_key_file: /app/jwt_public_key.pem
+      public_key_file: /jwt_public_key.pem
 MIDDLEWARE:
   - class: werkzeug.middleware.proxy_fix:ProxyFix
     kwargs:

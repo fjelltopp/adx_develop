@@ -135,12 +135,13 @@ services:
       - "6001:6001"
     image: datopian/giftless
     environment:
-      - GIFTLESS_CONFIG_FILE=/app/giftless.yaml
+      - GIFTLESS_CONFIG_FILE=/giftless.yaml
       - GIFTLESS_DEBUG=1
     volumes:
-      - ./giftless/giftless.yaml:/app/giftless.yaml
-      - ./ckan/jwt_public_key.pem:/app/jwt_public_key.pem
+      - ./giftless/giftless.yaml:/giftless.yaml
+      - ./ckan/jwt_public_key.pem:/jwt_public_key.pem
       - giftless_storage:/lfs-storage
+      - ../giftless:/app
     command: ["--http", "0.0.0.0:6001", "-M", "-T", "--threads", "2", "-p", "2", "--manage-script-name", "--callable", "app", "--honour-stdin"]
     stdin_open: true
     tty: true
