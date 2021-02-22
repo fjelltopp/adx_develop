@@ -111,9 +111,6 @@ RUN rm /usr/lib/ckan/*-requirements.txt
 RUN  apt-get -q -y update && apt-get -q -y install curl
 RUN curl -sL https://deb.nodesource.com/setup_14.x | bash - && apt-get install nodejs && npm version
 
-COPY ./ckanext-blob-storage/package.json /usr/lib/ckan/blob-storage-package.json
-RUN npm install --prefix /usr/lib/ckan/blob-storage-package.json
-
 # Configs
 COPY ./adx_develop/ckan/ckan-entrypoint-adx.sh /ckan-entrypoint.sh
 COPY ./adx_develop/ckan/wait-for-it.sh /wait-for-it.sh
