@@ -3,6 +3,7 @@ version: "3"
 volumes:
   ckan_storage:
   pg_data:
+  smtp4dev-data:
 
 services:
   ckan:
@@ -26,9 +27,11 @@ services:
       - CKAN_SOLR_URL=http://solr:8983/solr/ckan
       - CKAN_REDIS_URL=redis://redis:6379/1
       - CKAN_DATAPUSHER_URL=http://datapusher:8800/
-      - CKAN_SMTP_SERVER=localhost:25
+      - CKAN_SMTP_SERVER=smtp:25
       - CKAN_SMTP_STARTTLS=False
       - CKAN_SMTP_MAIL_FROM=support@fjelltopp_org
+      - CKAN_EMAIL_TO=support@fjelltopp.org
+      - CKAN_ERROR_EMAIL_FROM=support@fjelltopp_org
       - PYTHONDONTWRITEBYTECODE=1
     volumes:
       - ckan_storage:/var/lib/ckan
@@ -121,3 +124,31 @@ services:
     ports:
       - "6379:6379"
     image: redis:latest
+ 
+  smtp:
+    container_name: smtp
+    image: rnwood/smtp4dev:v3
+    restart: always
+    ports:
+      # Change the number before : to the port the web interface should be accessible on
+      - "5555:80"
+      # Change the number before : to the port the SMTP server should be accessible on
+      - "25:25"
+      # Change the number before : to the port the IMAP server should be accessible on
+      - "143:143"
+    volumes:
+      # This is where smtp4dev stores the database..
+        - smtp4dev-data:/smtp4dev
+    environment:
+      #Specifies the server hostname. Used in auto-generated TLS certificate if enabled.
+      - ServerOptions__HostName=smtp
+      #Specifies the number of messages to keep
+      - ServerOptions__NumberOfMessagesToKeep=100
+      #Specifies the number of sessions to keep
+      #- ServerOptions__NumberOfSessionsToKeep=100
+      #Specifies the TLS mode to use. None=Off. StartTls=On demand if client supports STARTTLS. ImplicitTls=TLS as soon as connection is established.
+      - ServerOptions__TlsMode=None
+      #Specifies the TLS certificate to use if TLS is enabled/requested. Specify "" to use an auto-generated self-signed certificate (then see console output on first startup)
+      - ServerOptions__TlsCertificate=""
+      #Sets the name of the SMTP server that will be used to relay messages or "" if messages should not be relayed
+      - RelayOptions__SmtpServer=""
