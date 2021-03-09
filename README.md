@@ -121,14 +121,9 @@ Occasionally new repo's might be added to the code base, so once you have a clea
 adx sync
 ```
 
-## Using a fake SMTP server locally
+## Using a fake SMTP server
 
-Run the fake SMTP server locally:
-```
-sudo python3 -m smtpd -n -c DebuggingServer 172.17.0.1:25
-```
-
-The ip address `172.17.0.1` is the default and may need to be changed depending on what your docker daemon ip address is. You can check it by running `$ ip address | grep docker` and updating `CKAN_SMTP_SERVER=172.17.0.1:25` in the `docker-compose.yaml` file and then running the above command with the appropriate ip address. The port can also be set to something else however the default should work.
+We're using https://github.com/rnwood/smtp4dev to "fake" an SMTP service, it's deployed as part of docker compose - smtp container. It catches all the emails sent to it, accepts any credentials. Emails can be viewed via a web console available at port 5555, so if your local environment uses "adr" as a host name you can access at http://adr:5555/
 
 ## Running CKAN tests locally
 
