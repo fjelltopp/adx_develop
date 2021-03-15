@@ -2,7 +2,9 @@ version: "3"
 
 volumes:
   ckan_storage:
+  giftless_storage:
   pg_data:
+  solr_core:
 
 services:
 
@@ -89,6 +91,7 @@ services:
       - "8800:8800"
     stdin_open: true
     tty: true
+    command: /usr/local/bin/uwsgi --ini-paste deployment/datapusher-uwsgi.ini --honour-stdin
 
   db:
     container_name: db
@@ -115,6 +118,8 @@ services:
       dockerfile: solr/Dockerfile
       args:
         - BUILD_CONTEXT=.
+    volumes:
+      - solr_core:/opt/solr/server/solr/ckan
     environment:
       - SOLR_LOG_LEVEL=WARN
 
@@ -130,10 +135,16 @@ services:
       - "6001:6001"
     image: datopian/giftless
     environment:
-      - GIFTLESS_CONFIG_FILE=/app/giftless.yaml
+      - GIFTLESS_CONFIG_FILE=/giftless.yaml
+      - GIFTLESS_DEBUG=1
     volumes:
-      - ./giftless/giftless.yaml:/app/giftless.yaml
-    command: ["--http", "0.0.0.0:6001", "-M", "-T", "--threads", "2", "-p", "2", "--manage-script-name", "--callable", "app"]
+      - ./giftless/giftless.yaml:/giftless.yaml
+      - ./ckan/jwt_public_key.pem:/jwt_public_key.pem
+      - giftless_storage:/lfs-storage
+      - ../giftless:/app
+    command: ["--http", "0.0.0.0:6001", "-M", "-T", "--threads", "2", "-p", "2", "--manage-script-name", "--callable", "app", "--honour-stdin"]
+    stdin_open: true
+    tty: true
 
   nginx:
     container_name: nginx
