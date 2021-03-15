@@ -133,10 +133,14 @@ services:
     container_name: giftless
     ports:
       - "6001:6001"
-    image: datopian/giftless
+    build:
+      context: ../giftless/
+      dockerfile: Dockerfile
     environment:
       - GIFTLESS_CONFIG_FILE=/giftless.yaml
       - GIFTLESS_DEBUG=1
+      - AWS_ACCESS_KEY_ID=${GIFTLESS_AWS_ACCESS_KEY_ID}
+      - AWS_SECRET_ACCESS_KEY=${GIFTLESS_AWS_SECRET_ACCESS_KEY}
     volumes:
       - ./giftless/giftless.yaml:/giftless.yaml
       - ./ckan/jwt_public_key.pem:/jwt_public_key.pem
