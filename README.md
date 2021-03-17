@@ -31,11 +31,10 @@ Docker-compose
    pip3 install --user -r ./adx_develop/requirements.txt
    ```
 
-2. Add ckan as localhost name to `/etc/hosts`. After the addition the file should look something like
+2. Add dev-adr as localhost name to `/etc/hosts`. After the addition the file should look something like
    ```
    127.0.0.1       localhost
-   127.0.1.1       somehostname
-   127.0.0.1       ckan
+   127.0.0.1       dev-adr
    ```
 
 3. Add a sym link to the dev env script from your $PATH:
@@ -45,7 +44,13 @@ Docker-compose
    This shorthand sript can now be used from anywhere in your file system to
    issue a command to the adx development environment. Run `adx -h` for more
    information.
-
+   
+3. Environment variables configuration:
+   Clone the template `dev.env` file to `.env` where you can tweak the configuration:
+   ```
+   cp adx_develop/dev.env adx_develop/.env
+   ```
+   
 4. Setup the ADX code base.
    ```
    adx setup
@@ -104,7 +109,20 @@ sudo apt-get install libpq-dev
 adx_develop/util/install_requirements.sh
 ```
 
+## Docker images for feature branches
 
+New feature which require changes to docker images can create problems
+when switching from feature-branch work back to development (to work
+on important bug fixes, reviewing PRs etc.)
+
+In `.env` you can change the value of:
+```bash
+IMAGE_TAG=development
+```
+to a custom value representing your feature branch, e.g. `'versioning'`
+to be able to quickly switch between different ADR versions. That way
+after switching to a different git branch you won't have to rebuild all
+of the images.
 
 ## Resetting the code base
 
@@ -112,18 +130,14 @@ The adx script comes with a convienience command forall that enables you to quic
 The command can be used to reset your code base once everything you want to keep is committed and ideally pushed.
 
 ```
+adx sync
 adx forall -c git checkout development
 adx forall -c git pull --rebase --preserve-merges
 ```
 
-Occasionally new repo's might be added to the code base, so once you have a clean codebase run the following command to check for and pull new repos.
-```
-adx sync
-```
-
 ## Using a fake SMTP server
 
-We're using https://github.com/rnwood/smtp4dev to "fake" an SMTP service, it's deployed as part of docker compose - smtp container. It catches all the emails sent to it, accepts any credentials. Emails can be viewed via a web console available at port 5555, so if your local environment uses "adr" as a host name you can access at http://adr:5555/
+We're using https://github.com/rnwood/smtp4dev to "fake" an SMTP service, it's deployed as part of docker compose - smtp container. It catches all the emails sent to it, accepts any credentials. Emails can be viewed via a web console available at port 5555, so if your local environment uses "adr" as a host name you can access at http://dev-adr:5555/
 
 ## Running CKAN tests locally
 
