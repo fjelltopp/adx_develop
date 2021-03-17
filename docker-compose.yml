@@ -162,7 +162,7 @@ services:
 
   nginx:
     container_name: nginx
-    image: nginx:${IMAGE_TAG}
+    image: nginx
     ports:
       - "80:80"
     volumes:
