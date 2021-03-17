@@ -79,6 +79,7 @@ services:
     environment:
       # Set the ADX_SYSADMIN_API_KEY env var on the host to auto send emails
       - SECRET_ENVS={"ADX_SYSADMIN_API_KEY":"${ADX_SYSADMIN_API_KEY}"}
+      - CKAN_SITE_URL
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - ../ckan:/usr/lib/ckan/venv/src/ckan
