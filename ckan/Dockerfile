@@ -100,6 +100,9 @@ RUN ckan-pip install -r /usr/lib/ckan/file_uploader_ui-requirements.txt
 COPY ./ckanext-restricted/requirements.txt /usr/lib/ckan/restricted-requirements.txt
 RUN ckan-pip install -r /usr/lib/ckan/restricted-requirements.txt
 
+COPY ./ckanext-versions/requirements.txt /usr/lib/ckan/versions-requirements.txt
+RUN ckan-pip install -r /usr/lib/ckan/versions-requirements.txt
+
 COPY ./ckanext-blob-storage/requirements.py2.txt /usr/lib/ckan/blob-storage-requirements.txt
 RUN ckan-pip install -r /usr/lib/ckan/blob-storage-requirements.txt
 

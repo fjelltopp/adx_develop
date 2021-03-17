@@ -10,6 +10,7 @@ services:
 
   ckan:
     container_name: ckan
+    image: adr.ckan:${IMAGE_TAG}
     build:
       context: ../
       dockerfile: adx_develop/ckan/Dockerfile
@@ -48,6 +49,7 @@ services:
 
   supervisor:
     container_name: supervisor
+    image: adr.supervisor:${IMAGE_TAG}
     build:
       context: ../
       dockerfile: adx_develop/ckan/Dockerfile
@@ -73,6 +75,7 @@ services:
 
   cron:
     container_name: cron
+    image: adr.cron:${IMAGE_TAG}
     build: cron
     environment:
       # Set the ADX_SYSADMIN_API_KEY env var on the host to auto send emails
@@ -82,9 +85,10 @@ services:
       - ../ckan:/usr/lib/ckan/venv/src/ckan
 
   datapusher:
+    container_name: datapusher
+    image: adr.datapusher:${IMAGE_TAG}
     build:
       context: ../datapusher
-    container_name: datapusher
     volumes:
       - ../datapusher:/var/www/datapusher
     ports:
@@ -97,6 +101,7 @@ services:
     container_name: db
     ports:
       - "5432:5432"
+    image: adr.db:${IMAGE_TAG}
     build:
       context: ../ckan/
       dockerfile: contrib/docker/postgresql/Dockerfile
@@ -113,6 +118,7 @@ services:
     container_name: solr
     ports:
       - "8983:8983"
+    image: adr.solr:${IMAGE_TAG}
     build:
       context: .
       dockerfile: solr/Dockerfile
@@ -133,6 +139,7 @@ services:
     container_name: giftless
     ports:
       - "6001:6001"
+    image: adr.giftless:${IMAGE_TAG}
     build:
       context: ../giftless/
       dockerfile: Dockerfile
@@ -152,7 +159,7 @@ services:
 
   nginx:
     container_name: nginx
-    image: nginx
+    image: nginx:${IMAGE_TAG}
     ports:
       - "80:80"
     volumes:

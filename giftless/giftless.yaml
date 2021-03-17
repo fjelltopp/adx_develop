@@ -2,7 +2,10 @@ TRANSFER_ADAPTERS:
   basic:
     factory: giftless.transfer.basic_streaming:factory
     options:
-      storage_class: giftless.storage.local_storage:LocalStorage
+      storage_class: giftless.storage.aws_s3:AwsS3Storage
+      storage_options:
+        bucket_name: local-ckan
+        path_prefix: prefix_test
 AUTH_PROVIDERS:
   - factory: giftless.auth.jwt:factory
     options:
