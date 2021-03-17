@@ -135,16 +135,8 @@ adx forall -c git checkout development
 adx forall -c git pull --rebase --preserve-merges
 ```
 
-## Using a fake SMTP server locally
-
-It might be useful to test features which requires sending e-mail. To do so you can setup a fake SMTP server locally:
-```
-python3 -m smtpd -n -c DebuggingServer localhost:25
-```
-Instead of `localhost` you might want to bind to an IP accessible both from your host and from ADR containers.
-
-In Ubunutu you can use the IP of docker daemon, e.g. `172.17.0.1`.
-Update your `docker-compose.yml` accordingly.
+## Using a fake SMTP server
+We're using https://github.com/rnwood/smtp4dev to "fake" an SMTP service, it's deployed as part of docker compose - smtp container. It catches all the emails sent to it, accepts any credentials. Emails can be viewed via a web console available at port 5555, so if your local environment uses "adr" as a host name you can access at http://adr:5555/
 
 ## Running CKAN tests locally
 
