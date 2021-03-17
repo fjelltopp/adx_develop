@@ -1,7 +1,6 @@
 import os
 import subprocess
 from multiprocessing.context import Process
-import logging
 import sys
 from . import repo
 from time import sleep
@@ -27,7 +26,8 @@ ADX_PATH = os.path.expanduser(os.environ.get(
 PG_USER = os.environ.get('PG_USER', 'ckan')
 CKAN_TEST_SQLALCHEMY_URL = os.environ.get("CKAN_TEST_SQLALCHEMY_URL", "postgresql://ckan_default:pass@db/ckan_test")
 ADMIN_APIKEY = os.environ.get("ADMIN_APIKEY", "6011357f-a7f8-4367-a47d-8c2ab8059520")
-
+CKAN_SITE_URL = os.environ.get("CKAN_SITE_URL", "http://dev-adr:5000")
+CKAN_HOST_PORT = CKAN_SITE_URL.lstrip('http://')
 
 def call_command(args):
     """
@@ -144,7 +144,7 @@ def setup(args, extra):
 
 
 def init_ckan_db(args, extra):
-    call_command(["docker exec -it ckan /wait-for-it.sh ckan:5000 --timeout=0 -- echo 'CKAN ready'"])
+    call_command([f"docker exec -it ckan /wait-for-it.sh {CKAN_HOST_PORT} --timeout=0 -- echo 'CKAN ready'"])
     call_command(['docker exec -it ckan /usr/local/bin/ckan -c /etc/ckan/ckan.ini db init'])
     call_command(['docker exec -it ckan /usr/local/bin/ckan-paster --plugin=ckanext-ytp-request initdb -c /etc/ckan/ckan.ini'])
     call_command(['docker exec -it ckan /usr/local/bin/ckan-paster --plugin=ckanext-unaids initdb -c /etc/ckan/ckan.ini'])
@@ -159,9 +159,9 @@ def init_ckan_db(args, extra):
 
 
 def load_demo_data(args, extra):
-    call_command(["docker exec -it ckan /wait-for-it.sh ckan:5000 --timeout=0 -- echo 'CKAN ready'"])
+    call_command([f"docker exec -it ckan /wait-for-it.sh {CKAN_HOST_PORT} --timeout=0 -- echo 'CKAN ready'"])
     import util.ckan_loader as loader
-    loader.load_data("http://ckan:5000", ADMIN_APIKEY)
+    loader.load_data(f"{CKAN_SITE_URL}", ADMIN_APIKEY)
 
 
 def reset_test_db(args, extra):

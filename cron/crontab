@@ -21,4 +21,4 @@
 #
 # m h  dom mon dow   command
 
-*/5 * * * * curl -rl -X POST -H "Authorization: $ADX_SYSADMIN_API_KEY" ckan:5000/api/action/send_email_notifications
+*/5 * * * * curl -rl -X POST -H "Authorization: $ADX_SYSADMIN_API_KEY" ${CKAN_SITE_URL}/api/action/send_email_notifications
