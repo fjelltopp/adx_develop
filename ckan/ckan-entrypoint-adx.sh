@@ -82,8 +82,9 @@ ckan-pip install --no-deps -e /usr/lib/adx/ckanext-emailasusername
 ckan-pip install --no-deps -e /usr/lib/adx/ckanext-versions
 ckan-pip install --no-deps -e /usr/lib/adx/ckanext-blob-storage
 
-# build js components
+# build js components & allow editing
 yarn --cwd /usr/lib/adx/ckanext-unaids/ckanext/unaids/react/ build
+chmod -R 777 /usr/lib/adx/ckanext-unaids/ckanext/unaids/assets/react_components
 
 set_environment
 ckan  --config "${CKAN_CONFIG}/ckan.ini" db init
