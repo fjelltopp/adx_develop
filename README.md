@@ -95,7 +95,7 @@ Docker-compose
    adx demodata
    ```
 
-9. CKAN should be available at http://ckan
+9. CKAN should be available at http://dev-adr/
 
 ### [OPTIONAL] Setting up local ckan dev venv
 1. For Ubuntu you'll need to satisfy psycopg2:
@@ -136,7 +136,8 @@ adx forall -c git pull --rebase --preserve-merges
 ```
 
 ## Using a fake SMTP server
-We're using https://github.com/rnwood/smtp4dev to "fake" an SMTP service, it's deployed as part of docker compose - smtp container. It catches all the emails sent to it, accepts any credentials. Emails can be viewed via a web console available at port 5555, so if your local environment uses "adr" as a host name you can access at http://adr:5555/
+
+We're using https://github.com/rnwood/smtp4dev to "fake" an SMTP service, it's deployed as part of docker compose - smtp container. It catches all the emails sent to it, accepts any credentials. Emails can be viewed via a web console available at port 5555, so if your local environment uses "adr" as a host name you can access at http://dev-adr:5555/
 
 ## Running CKAN tests locally
 
