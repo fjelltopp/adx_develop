@@ -82,6 +82,7 @@ ckan-pip install --no-deps -e /usr/lib/adx/ckanext-emailasusername
 #ckan-pip install --no-deps -e /usr/lib/adx/ckanext-versions
 
 # build js components & allow editing
+yarn --cwd /usr/lib/adx/ckanext-unaids/ckanext/unaids/react/
 yarn --cwd /usr/lib/adx/ckanext-unaids/ckanext/unaids/react/ build
 chmod -R 777 /usr/lib/adx/ckanext-unaids/ckanext/unaids/assets/build
 
