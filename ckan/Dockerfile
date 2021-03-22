@@ -71,8 +71,8 @@ RUN ckan-pip install "git+https://github.com/EnviDat/ckanext-composite.git@23a06
 RUN ckan-pip install "git+https://github.com/open-data/ckanext-repeating.git@291295557ff74b26784f6271c1a1b4ffdb990f43#egg=ckanext-repeating"
 RUN ckan-pip install "git+https://github.com/okfn/ckanext-sentry@d3b1d1cf1f975b3672891012e6c75e176497db8f#egg=ckanext-sentry"
 RUN ckan-pip install "git+https://github.com/datopian/ckanext-authz-service@v0.1.4#egg=ckanext-authz-service"
-RUN ckan-pip install "git+https://github.com/datopian/ckanext-blob-storage@v0.6.0#egg=ckanext-external-storage"
-RUN ckan-pip install -r /usr/lib/ckan/venv/src/ckanext-external-storage/requirements.py2.txt
+RUN ckan-pip install "git+https://github.com/datopian/ckanext-blob-storage@v0.6.0#egg=ckanext-external-storage" && \
+    ckan-pip install -r "https://raw.githubusercontent.com/datopian/ckanext-blob-storage/v0.6.0/requirements.py2.txt"
 
 # Install requirements for extensions with a local source
 COPY ./ckanext-scheming/requirements.txt /usr/lib/ckan/scheming-requirements.txt
