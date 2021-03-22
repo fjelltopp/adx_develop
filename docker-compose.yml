@@ -174,7 +174,7 @@ services:
     networks:
       default:
         aliases:
-          - ${ADR_HOST}
+          - ${ADR_HOSTNAME}
 
   smtp:
     container_name: smtp
