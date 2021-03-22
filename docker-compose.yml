@@ -171,7 +171,7 @@ services:
     depends_on:
       - ckan
       - giftless
-    hostname: adr
+    hostname: ${ADR_HOSTNAME}
     networks:
       default:
         aliases:
