@@ -171,11 +171,10 @@ services:
     depends_on:
       - ckan
       - giftless
-    hostname: ${ADR_HOSTNAME}
     networks:
       default:
         aliases:
-          - adr
+          - ${ADR_HOST}
 
   smtp:
     container_name: smtp
@@ -185,7 +184,7 @@ services:
       # Change the number before : to the port the web interface should be accessible on
       - "5555:80"
       # Change the number before : to the port the SMTP server should be accessible on
-      - "25:25"
+      - "5025:25"
       # Change the number before : to the port the IMAP server should be accessible on
       - "143:143"
     volumes:
