@@ -17,7 +17,7 @@
       ],
       "display_name": "Fjelltopp",
       "description": "Fjelltopp demo organization",
-      "image_url": "http://ckan:5000/fjelltopp.png",
+      "image_url": "http://dev-adr/fjelltopp.png",
       "name": "fjelltopp",
       "state": "active",
       "title": "Fjelltopp"
