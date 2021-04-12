@@ -96,9 +96,6 @@ RUN ckan-pip install -r /usr/lib/ckan/dhis2-harvester-requriments.txt -r /usr/li
 COPY ./ckanext-harvest/pip-requirements.txt /usr/lib/ckan/harvest-requriments.txt
 RUN ckan-pip install -r /usr/lib/ckan/harvest-requriments.txt
 
-COPY ./ckanext-file_uploader_ui/requirements.txt /usr/lib/ckan/file_uploader_ui-requirements.txt
-RUN ckan-pip install -r /usr/lib/ckan/file_uploader_ui-requirements.txt
-
 COPY ./ckanext-restricted/requirements.txt /usr/lib/ckan/restricted-requirements.txt
 RUN ckan-pip install -r /usr/lib/ckan/restricted-requirements.txt
 
