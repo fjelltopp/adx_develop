@@ -7,7 +7,7 @@ def extensions = [
   "pdfview",
   "scheming",
   "validation",
-  "ytp_request",
+  "ytp-request",
   "unaids"
 ]
 
