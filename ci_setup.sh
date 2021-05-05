@@ -9,7 +9,7 @@ cd ../
 # add adx script to PATH
 export PATH=$WORKSPACE/adx_develop/:$PATH
 # prepare environment
-cp $"WORKSPACE"/adx_develop/dev.env $"WORKSPACE"/adx_develop/.env
+cp "$WORKSPACE"/adx_develop/dev.env "$WORKSPACE"/adx_develop/.env
 # Setup environment
 yes | adx setup
 git checkout "${GIT_BRANCH}"
