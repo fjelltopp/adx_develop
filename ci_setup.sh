@@ -13,6 +13,8 @@ cp "$WORKSPACE"/adx_develop/dev.env "$WORKSPACE"/adx_develop/.env
 # Setup environment
 yes | adx setup
 git checkout "${GIT_BRANCH}"
+cd "$WORKSPACE"/adx_develop/ && git checkout "${GIT_BRANCH}"
+cd $WORKSPACE"
 echo "running ./adx build"
 adx build
 echo "running ./adx up"
