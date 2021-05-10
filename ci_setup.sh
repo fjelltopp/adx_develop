@@ -6,9 +6,9 @@ docker-compose down --rmi all -v --remove-orphans
 
 if [ -v "$CHANGE_ID" ]
 then
-  BRANCH="origin/pr/$CHANGE_ID"
-else 
   BRANCH="$GIT_BRANCH"
+else 
+  BRANCH="origin/pr/$CHANGE_ID"
 fi
 
 echo "Preparing environment"
