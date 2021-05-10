@@ -26,7 +26,7 @@ pipeline {
           echo 'Get ECR login'
           sh """aws ecr get-login-password --region eu-west-1 | docker login --username AWS --password-stdin 254010146609.dkr.ecr.eu-west-1.amazonaws.com"""
           echo 'Starting ADX setup'
-          sh """cd adx_develop && git checkout ${GIT_BRANCH} && ./ci_setup.sh"""
+          sh """cd adx_develop && ( git checkout ${GIT_BRANCH} || git checkout origin/pr/${CHANGE_ID} ) && ./ci_setup.sh"""
         }
       }
     }
