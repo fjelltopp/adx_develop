@@ -77,8 +77,13 @@ ckan-pip install -e /usr/lib/adx/ckanext-dhis2harvester
 ckan-pip install -e /usr/lib/adx/ckanext-harvest
 ckan-pip install -e /usr/lib/adx/ckanext-geoview
 ckan-pip install -e /usr/lib/adx/ckanext-pdfview
-ckan-pip install --no-deps -e /usr/lib/adx/ckanext-file_uploader_ui
 ckan-pip install --no-deps -e /usr/lib/adx/ckanext-emailasusername
+ckan-pip install --no-deps -e /usr/lib/adx/ckanext-blob-storage
+
+# build js components & allow editing
+yarn --cwd /usr/lib/adx/ckanext-unaids/ckanext/unaids/react/
+yarn --cwd /usr/lib/adx/ckanext-unaids/ckanext/unaids/react/ build
+chmod -R 777 /usr/lib/adx/ckanext-unaids/ckanext/unaids/assets/build
 
 set_environment
 ckan  --config "${CKAN_CONFIG}/ckan.ini" db init

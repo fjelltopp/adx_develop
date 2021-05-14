@@ -2,10 +2,13 @@ version: "3"
 
 volumes:
   ckan_storage:
+  giftless_storage:
   pg_data:
+  solr_core:
   smtp4dev-data:
 
 services:
+
   ckan:
     container_name: ckan
     image: adr.ckan:${IMAGE_TAG}
@@ -42,6 +45,7 @@ services:
       - ./ckan/adx_who.ini:/etc/ckan/who.ini
       - ./ckan/utils/:/adx_utils
       - ./ckan/ckan-entrypoint-adx.sh:/ckan-entrypoint.sh
+      - ./ckan/jwt_public_key.pem:/etc/ckan/jwt_public_key.pem
     command: ["ckan","--config","/etc/ckan/ckan.ini", "run", "--host", "0.0.0.0", "--threaded"]
     stdin_open: true
     tty: true
@@ -95,6 +99,7 @@ services:
       - "8800:8800"
     stdin_open: true
     tty: true
+    command: /usr/local/bin/uwsgi --ini-paste deployment/datapusher-uwsgi.ini --honour-stdin
 
   db:
     container_name: db
@@ -123,6 +128,8 @@ services:
       dockerfile: solr/Dockerfile
       args:
         - BUILD_CONTEXT=.
+    volumes:
+      - solr_core:/opt/solr/server/solr/ckan
     environment:
       - SOLR_LOG_LEVEL=WARN
 
@@ -132,6 +139,44 @@ services:
       - "6379:6379"
     image: redis:latest
 
+  giftless:
+    container_name: giftless
+    ports:
+      - "6001:6001"
+    image: adr.giftless:${IMAGE_TAG}
+    build:
+      context: ../giftless/
+      dockerfile: Dockerfile
+    environment:
+      - GIFTLESS_CONFIG_FILE=/giftless.yaml
+      - GIFTLESS_DEBUG=1
+      - AWS_ACCESS_KEY_ID=${GIFTLESS_AWS_ACCESS_KEY_ID}
+      - AWS_SECRET_ACCESS_KEY=${GIFTLESS_AWS_SECRET_ACCESS_KEY}
+    volumes:
+      - ./giftless/giftless.yaml:/giftless.yaml
+      - ./ckan/jwt_public_key.pem:/jwt_public_key.pem
+      - giftless_storage:/lfs-storage
+      - ../giftless:/app
+    command: ["--http", "0.0.0.0:6001", "-M", "-T", "--threads", "2", "-p", "2", "--manage-script-name", "--callable", "app", "--honour-stdin"]
+    stdin_open: true
+    tty: true
+
+  nginx:
+    container_name: nginx
+    image: nginx
+    ports:
+      - "80:80"
+    volumes:
+      - "./nginx/nginx.conf:/etc/nginx/nginx.conf"
+    depends_on:
+      - ckan
+      - giftless
+    hostname: ${ADR_HOSTNAME}
+    networks:
+      default:
+        aliases:
+          - ${ADR_HOSTNAME}
+
   smtp:
     container_name: smtp
     image: rnwood/smtp4dev:v3
@@ -140,7 +185,7 @@ services:
       # Change the number before : to the port the web interface should be accessible on
       - "5555:80"
       # Change the number before : to the port the SMTP server should be accessible on
-      - "25:25"
+      - "5025:25"
       # Change the number before : to the port the IMAP server should be accessible on
       - "143:143"
     volumes:

@@ -1,0 +1,16 @@
+TRANSFER_ADAPTERS:
+  basic:
+    factory: giftless.transfer.basic_streaming:factory
+    options:
+      storage_class: giftless.storage.local_storage:LocalStorage
+AUTH_PROVIDERS:
+  - factory: giftless.auth.jwt:factory
+    options:
+      algorithm: RS256
+      public_key_file: /jwt_public_key.pem
+MIDDLEWARE:
+  - class: werkzeug.middleware.proxy_fix:ProxyFix
+    kwargs:
+      x_host: 1
+      x_port: 1
+      x_prefix: 1
