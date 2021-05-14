@@ -22,5 +22,4 @@ pip install -r ${DIR}/../../ckanext-harvest/dev-requirements.txt
 pip install -r ${DIR}/../../ckanext-dhis2harvester/pip-requirements.txt
 pip install -r ${DIR}/../../ckanext-dhis2harvester/dev-requirements.txt
 pip install -r ${DIR}/../../ckanext-harvest/pip-requirements.txt
-pip install -r ${DIR}/../../ckanext-file_uploader_ui/requirements.txt
 pip install -r ${DIR}/../../ckanext-restricted/requirements.txt

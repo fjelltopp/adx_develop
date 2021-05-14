@@ -47,8 +47,8 @@ RUN mkdir -p $CKAN_VENV $CKAN_CONFIG $CKAN_STORAGE_PATH && \
     ln -s $CKAN_VENV/bin/python /usr/local/bin/ckan-python &&\
     ln -s $CKAN_VENV/bin/nosetests-2.7 /usr/local/bin/ckan-nosetests &&\
 	ln -s $CKAN_VENV/bin/pytest /usr/local/bin/ckan-pytest &&\
-    echo "alias ckanext='cd /usr/lib/adx/'" >> $HOME/.bashrc &&\
-    echo "alias ckan='cd /usr/lib/ckan/venv/src/ckan'" >> $HOME/.bashrc
+    echo "alias cdckanext='cd /usr/lib/adx/'" >> $HOME/.bashrc &&\
+    echo "alias cdckan='cd /usr/lib/ckan/venv/src/ckan'" >> $HOME/.bashrc
 
 COPY ckan $CKAN_VENV/src/ckan
 
@@ -66,10 +66,13 @@ USER root
 
 # Install all extensions with a remote source
 RUN ckan-pip install -e "git+https://github.com/ckan/ckanext-spatial.git@ce4f03bcd2000f98de1a9534dce92de674eb9806#egg=ckanext-spatial" && \
-    ckan-pip install -r /usr/lib/ckan/venv/src/ckanext-spatial/pip-requirements.txt
+    ckan-pip install -r "https://raw.githubusercontent.com/ckan/ckanext-spatial/ce4f03bcd2000f98de1a9534dce92de674eb9806/pip-requirements.txt"
 RUN ckan-pip install -e "git+https://github.com/EnviDat/ckanext-composite.git@23a060b03d2432a58cc66968d93a15f5f1654055#egg=ckanext-composite"
 RUN ckan-pip install -e "git+https://github.com/open-data/ckanext-repeating.git@291295557ff74b26784f6271c1a1b4ffdb990f43#egg=ckanext-repeating"
 RUN ckan-pip install -e "git+https://github.com/okfn/ckanext-sentry@d3b1d1cf1f975b3672891012e6c75e176497db8f#egg=ckanext-sentry"
+RUN ckan-pip install -e "git+https://github.com/datopian/ckanext-authz-service@v0.1.4#egg=ckanext-authz-service"
+RUN ckan-pip install -e "git+https://github.com/datopian/ckanext-blob-storage@v0.6.0#egg=ckanext-external-storage" && \
+    ckan-pip install -r "https://raw.githubusercontent.com/datopian/ckanext-blob-storage/v0.6.0/requirements.py2.txt"
 
 # Install requirements for extensions with a local source
 COPY ./ckanext-scheming/requirements.txt /usr/lib/ckan/scheming-requirements.txt
@@ -93,13 +96,18 @@ RUN ckan-pip install -r /usr/lib/ckan/dhis2-harvester-requriments.txt -r /usr/li
 COPY ./ckanext-harvest/pip-requirements.txt /usr/lib/ckan/harvest-requriments.txt
 RUN ckan-pip install -r /usr/lib/ckan/harvest-requriments.txt
 
-COPY ./ckanext-file_uploader_ui/requirements.txt /usr/lib/ckan/file_uploader_ui-requirements.txt
-RUN ckan-pip install -r /usr/lib/ckan/file_uploader_ui-requirements.txt
-
 COPY ./ckanext-restricted/requirements.txt /usr/lib/ckan/restricted-requirements.txt
 RUN ckan-pip install -r /usr/lib/ckan/restricted-requirements.txt
 
+COPY ./ckanext-unaids/requirements.txt /usr/lib/ckan/unaids-requirements.txt
+RUN ckan-pip install -r /usr/lib/ckan/unaids-requirements.txt
+
 RUN rm /usr/lib/ckan/*-requirements.txt
+
+RUN  apt-get -q -y update && apt-get -q -y install curl
+RUN curl -sL https://deb.nodesource.com/setup_14.x | bash - && apt-get install nodejs && npm version
+RUN npm install --global yarn
+
 # Configs
 COPY ./adx_develop/ckan/ckan-entrypoint-adx.sh /ckan-entrypoint.sh
 COPY ./adx_develop/ckan/wait-for-it.sh /wait-for-it.sh

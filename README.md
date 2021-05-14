@@ -95,7 +95,7 @@ Docker-compose
    adx demodata
    ```
 
-9. CKAN should be available at http://localhost:5000
+9. CKAN should be available at http://dev-adr/
 
 ### [OPTIONAL] Setting up local ckan dev venv
 1. For Ubuntu you'll need to satisfy psycopg2:
@@ -103,7 +103,7 @@ Docker-compose
 sudo apt-get install libpq-dev
 ```
 2. Then install python2 and pip2 locally.
-3. Activate your adr venv 
+3. Activate your adr venv
 4. Then you can run
 ```
 adx_develop/util/install_requirements.sh
@@ -163,27 +163,28 @@ To run the ckan core tests:
 ```
 docker exec -it ckan ckan-nosetests --ckan --with-pylons=/usr/lib/ckan/venv/src/ckan/test-core.ini ckan ckanext
 ```
-## Debugging with pdb
+## Debugging with ipdb
 
-You can debug the adx using the python debugger (pdb).  To do this set a break
-point as normal with pdb:
+You can debug the adx using the python debugger (pdb), or the improved interactive
+python debugger (ipdb).  To do this set a break point as normal anywhere in
+the code:
 ```
-import pdb; pdb.set_trace()
+import ipdb; ipdb.set_trace()
 ```
-Start the dev env in detattached mode as normal:
+Start the dev env in detached mode as normal:
 ```
 adx up
 ```
-Then when you know your code has hit the breakpoint attach to the container:
+Then attach to ckan container:
 ```
 docker attach ckan
 ```
-This will open an interactive pdb prompt. When you are finished you can detach
-from the container, without killing it, using the escape sequence:
-\[ctrl-p\]\[ctrl-q\].
+When your code hits the breakpoint it will open an interactive ipdb prompt.
+When you are finished you can detach from the container, without killing it,
+using the escape sequence: \[ctrl-p\]\[ctrl-q\].
 
-See the [pdb docs](https://docs.python.org/3/library/pdb.html) for more on how
-to debug with pdb.
+See the [pdb docs](https://docs.python.org/3/library/pdb.html) and the [ipdb
+github](https://github.com/gotcha/ipdb) for more on how to debug with pdb/ipdb.
 
 ## Configuring flak8 to run locally with PyCharm
 ```
