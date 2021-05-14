@@ -2,7 +2,6 @@ def extensions = [
   "restricted",
   "dhis2harvester",
   "emailasusername",
-  "file_uploader_ui",
   "pages",
   "pdfview",
   "scheming",
