@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # Run tests with set -e - exit on error
-set -e
+# set -e
 
 # add adx script to PATH
 export PATH=$WORKSPACE/adx_develop/:$PATH
