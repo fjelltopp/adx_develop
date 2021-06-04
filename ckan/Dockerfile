@@ -71,7 +71,8 @@ RUN ckan-pip install -e "git+https://github.com/EnviDat/ckanext-composite.git@23
 RUN ckan-pip install -e "git+https://github.com/open-data/ckanext-repeating.git@291295557ff74b26784f6271c1a1b4ffdb990f43#egg=ckanext-repeating"
 RUN ckan-pip install -e "git+https://github.com/okfn/ckanext-sentry@d3b1d1cf1f975b3672891012e6c75e176497db8f#egg=ckanext-sentry"
 # using unreleased version with a fix for https://github.com/datopian/ckanext-authz-service/issues/24
-RUN ckan-pip install -e "git+https://github.com/datopian/ckanext-authz-service@bd4c80f55a714c1117a0e130d07463e383c494c7#egg=ckanext-authz-service"
+RUN ckan-pip install -e "git+https://github.com/datopian/ckanext-authz-service@bd4c80f55a714c1117a0e130d07463e383c494c7#egg=ckanext-authz-service" && \
+    ckan-pip install -r "https://raw.githubusercontent.com/datopian/ckanext-authz-service@bd4c80f55a714c1117a0e130d07463e383c494c7/requirements.py2.txt"
 # using fjelltopp fork untill https://github.com/datopian/ckanext-blob-storage/pull/59 is merged
 #RUN ckan-pip install -e "git+https://github.com/datopian/ckanext-blob-storage@v0.6.0#egg=ckanext-external-storage" && \
 #    ckan-pip install -r "https://raw.githubusercontent.com/datopian/ckanext-blob-storage/v0.6.0/requirements.py2.txt"
@@ -106,9 +107,6 @@ RUN ckan-pip install -r /usr/lib/ckan/unaids-requirements.txt
 
 COPY ./ckanext-blob-storage/requirements.py2.txt /usr/lib/ckan/blob-storage-requirements.txt
 RUN ckan-pip install -r /usr/lib/ckan/blob-storage-requirements.txt
-
-COPY ./ckanext-authz-service/requirements.py2.txt /usr/lib/ckan/authz-service-requirements.txt
-RUN ckan-pip install -r /usr/lib/ckan/authz-service-requirements.txt
 
 RUN rm /usr/lib/ckan/*-requirements.txt
 
