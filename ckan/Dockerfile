@@ -108,6 +108,10 @@ RUN ckan-pip install -r /usr/lib/ckan/unaids-requirements.txt
 COPY ./ckanext-blob-storage/requirements.py2.txt /usr/lib/ckan/blob-storage-requirements.txt
 RUN ckan-pip install -r /usr/lib/ckan/blob-storage-requirements.txt
 
+COPY ./ckanext-versions/requirements.txt /usr/lib/ckan/versions-requirements.txt
+RUN ckan-pip install -r /usr/lib/ckan/versions-requirements.txt
+
+
 RUN rm /usr/lib/ckan/*-requirements.txt
 
 RUN  apt-get -q -y update && apt-get -q -y install curl

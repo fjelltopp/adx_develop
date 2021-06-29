@@ -12,6 +12,10 @@ services:
   ckan:
     container_name: ckan
     image: adr.ckan:${IMAGE_TAG}
+    deploy:
+      resources:
+        limits:
+          memory: 6G
     build:
       context: ../
       dockerfile: adx_develop/ckan/Dockerfile
