@@ -3,6 +3,7 @@
 # Remove all containers and volumes
 echo "Docker cleanup"
 docker-compose down --rmi all -v --remove-orphans
+sudo docker volume prune -f
 
 if [ -v "$CHANGE_ID" ]
 then
@@ -26,12 +27,8 @@ echo "running ./adx build"
 adx build
 echo "running ./adx up"
 adx up
-echo "tunning ./adx/dbsetup"
-adx dbsetup
-echo "running ./adx restart ckan"
-adx restart ckan
-echo "Show docker-compose containers"
-docker-compose ps
 echo "Running ./adx testsetup"
 adx testsetup
+echo "Show docker-compose containers"
+adx dc ps
 
