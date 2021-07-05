@@ -7,7 +7,10 @@
 export PATH=$WORKSPACE/adx_develop/:$PATH
 
 error(){
-  echo "CKAN ${1} test did fail, check logs"
+  echo "CKAN ${1} test did fail, check logs, docker output below:"
+  echo "*** CKAN container logs start ***"
+  sudo docker logs ckan
+  echo "*** CKAN container logs end ***"
   return 1
 }
 
