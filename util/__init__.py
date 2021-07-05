@@ -146,10 +146,9 @@ def init_ckan_db(args, extra):
     call_command([f"docker exec -it ckan /wait-for-it.sh localhost:5000 --timeout=0 -- echo 'CKAN ready'"])
     call_command(['docker exec -it ckan /usr/local/bin/ckan -c /etc/ckan/ckan.ini db init'])
     call_command(['docker exec -it ckan /usr/local/bin/ckan-paster --plugin=ckanext-ytp-request initdb -c /etc/ckan/ckan.ini'])
-    call_command(['docker exec -it ckan /usr/local/bin/ckan-paster --plugin=ckanext-unaids initdb -c /etc/ckan/ckan.ini'])
+    call_command(['docker exec -it ckan /usr/local/bin/ckan -c /etc/ckan/ckan.ini unaids initdb'])
     call_command(['docker exec -it ckan /usr/local/bin/ckan-paster --plugin=ckanext-harvest harvester initdb -c /etc/ckan/ckan.ini'])
     call_command(['docker exec -it ckan /usr/local/bin/ckan-paster --plugin=ckanext-validation validation init-db -c /etc/ckan/ckan.ini'])
-
     call_command(['docker exec -it ckan /usr/local/bin/ckan -c /etc/ckan/ckan.ini datastore set-permissions | docker exec -i db psql -U ckan'])
     call_command(['docker exec -it ckan /usr/local/bin/ckan -c /etc/ckan/ckan.ini versions initdb'])
     call_command(['docker exec -it ckan /usr/local/bin/ckan -c /etc/ckan/ckan.ini user add admin email=admin@localhost name=admin fullname=Admin password=fjelltopp apikey=a4bf5640-e1b2-4141-8c22-f2b96b6df2c3'])
@@ -186,12 +185,6 @@ def reset_test_db(args, extra):
                   f' ckan /usr/local/bin/ckan -c test-core.ini datastore set-permissions | docker exec -i db psql -U {PG_USER}'])
     call_command([f'docker exec -e CKAN_SQLALCHEMY_URL="{CKAN_TEST_SQLALCHEMY_URL}"'
                   f' ckan /usr/local/bin/ckan -c test-core.ini db init'])
-    call_command([f'docker exec -e CKAN_SQLALCHEMY_URL="{CKAN_TEST_SQLALCHEMY_URL}"'
-                  f' ckan /usr/local/bin/ckan-paster --plugin=ckanext-validation validation init-db -c test-core.ini'])
-    call_command([f'docker exec -e CKAN_SQLALCHEMY_URL="{CKAN_TEST_SQLALCHEMY_URL}"'
-                  f' ckan /usr/local/bin/ckan-paster --plugin=ckanext-ytp-request initdb -c test-core.ini'])
-    call_command([f'docker exec -e CKAN_SQLALCHEMY_URL="{CKAN_TEST_SQLALCHEMY_URL}"'
-                  f' ckan /usr/local/bin/ckan-paster --plugin=ckanext-unaids initdb -c test-core.ini'])
 
 
 def run_tests(args, extra):
