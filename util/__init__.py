@@ -165,6 +165,8 @@ def load_demo_data(args, extra):
 def reset_test_db(args, extra):
     call_command([f"docker exec ckan /wait-for-it.sh localhost:5000 --timeout=0 -- echo 'CKAN ready'"])
     call_command(['docker restart db'])
+    call_command(['docker restart ckan'])
+    call_command([f"docker exec ckan /wait-for-it.sh localhost:5000 --timeout=0 -- echo 'CKAN ready'"])
     retries = 5
 
     while retries > 0:
