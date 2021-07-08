@@ -133,7 +133,7 @@ def setup(args, extra):
             ['init', '-u', ADX_MANIFEST_URL, '-m', manifest],
             ['sync', '--force-sync'],
             ['forall', '-c', 'git', 'checkout', 'development'],
-            ['forall', 'ckan', '-c', 'git', 'checkout', 'refs/tags/ckan-2.9.1'],
+            ['forall', 'ckan', '-c', 'git', 'checkout', 'refs/tags/ckan-2.9.3'],
             ['status']
         )
         for _args in repo_main_args:
