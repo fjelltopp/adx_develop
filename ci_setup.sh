@@ -1,5 +1,13 @@
 #!/usr/bin/env bash
 
+error(){
+  echo "CKAN setup did fail, check logs, docker output below:"
+  echo "*** CKAN container logs start ***"
+  sudo docker logs ckan
+  echo "*** CKAN container logs end ***"
+  exit 1
+}
+
 # Remove all containers and volumes
 echo "Docker cleanup"
 docker-compose down --rmi all -v --remove-orphans
@@ -24,11 +32,11 @@ git fetch origin +refs/pull/*/merge:refs/remotes/origin/pr/* && git checkout "${
 cd "$WORKSPACE"/adx_develop/ && git fetch origin +refs/pull/*/merge:refs/remotes/origin/pr/* && git checkout "${BRANCH}" 
 cd "$WORKSPACE" || exit
 echo "running ./adx build"
-adx build
+adx build || error
 echo "running ./adx up"
-adx up
+adx up || error
 echo "Running ./adx testsetup"
-adx testsetup
+adx testsetup || error
 echo "Show docker-compose containers"
 adx dc ps
 
