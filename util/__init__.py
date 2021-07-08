@@ -165,8 +165,6 @@ def load_demo_data(args, extra):
 def reset_test_db(args, extra):
     call_command([f"docker exec ckan /wait-for-it.sh localhost:5000 --timeout=0 -- echo 'CKAN ready'"])
     call_command(['docker restart db'])
-    call_command(['docker restart ckan'])
-    call_command([f"docker exec ckan /wait-for-it.sh localhost:5000 --timeout=0 -- echo 'CKAN ready'"])
     retries = 5
 
     while retries > 0:
@@ -177,6 +175,9 @@ def reset_test_db(args, extra):
             break
         retries = retries - 1
         sleep(1)
+
+    call_command(['docker restart ckan'])
+    call_command([f"docker exec ckan /wait-for-it.sh localhost:5000 --timeout=0 -- echo 'CKAN ready'"])
 
     call_command([f'docker exec db psql -U {PG_USER} -c "CREATE USER ckan_default WITH PASSWORD \'pass\'"'])
     call_command([f'docker exec db psql -U {PG_USER} -c "CREATE USER datastore_default WITH PASSWORD \'pass\'"'])
