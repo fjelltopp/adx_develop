@@ -233,3 +233,14 @@ services:
       - ../navigator_frontend:/var/www/navigator_frontend
     stdin_open: true
     tty: true
+
+  navigator_ui:
+    container_name: navigator_ui
+    ports:
+      - "3000:3000"
+    image: adr.navigator_ui:${IMAGE_TAG}
+    build:
+      context: ../navigator_ui
+      dockerfile: Dockerfile
+    stdin_open: true
+    tty: true
