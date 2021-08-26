@@ -224,13 +224,11 @@ services:
   navigator_frontend:
     container_name: navigator_frontend
     ports:
-      - "5003:5003"
+      - "5002:5002"
     image: adr.navigator_frontend:${IMAGE_TAG}
     build:
       context: ../navigator_frontend
       dockerfile: Dockerfile
-    environment:
-      - CKAN_URL=http://dev-adr
     volumes:
       - ../navigator_frontend:/var/www/navigator_frontend
     stdin_open: true
