@@ -31,10 +31,10 @@ Docker-compose
    pip3 install --user -r ./adx_develop/requirements.txt
    ```
 
-2. Add dev-adr as localhost name to `/etc/hosts`. After the addition the file should look something like
+2. Add adr.local as localhost name to `/etc/hosts`. After the addition the file should look something like
    ```
    127.0.0.1       localhost
-   127.0.0.1       dev-adr
+   127.0.0.1       adr.local
    ```
 
 3. Add a sym link to the dev env script from your $PATH:
@@ -95,7 +95,7 @@ Docker-compose
    adx demodata
    ```
 
-9. CKAN should be available at http://dev-adr/
+9. CKAN should be available at http://adr.local/
 
 ### [OPTIONAL] Setting up local ckan dev venv
 1. For Ubuntu you'll need to satisfy psycopg2:
@@ -137,7 +137,7 @@ adx forall -c git pull --rebase --preserve-merges
 
 ## Using a fake SMTP server
 
-We're using https://github.com/rnwood/smtp4dev to "fake" an SMTP service, it's deployed as part of docker compose - smtp container. It catches all the emails sent to it, accepts any credentials. Emails can be viewed via a web console available at port 5555, so if your local environment uses "adr" as a host name you can access at http://dev-adr:5555/
+We're using https://github.com/rnwood/smtp4dev to "fake" an SMTP service, it's deployed as part of docker compose - smtp container. It catches all the emails sent to it, accepts any credentials. Emails can be viewed via a web console available at port 5555, so if your local environment uses "adr" as a host name you can access at http://adr.local:5555/
 
 ## Running CKAN tests locally
 

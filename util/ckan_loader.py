@@ -150,4 +150,4 @@ def load_data(adr_url, apikey):
 
 
 if __name__ == '__main__':
-    load_data('http://dev-adr', "6011357f-a7f8-4367-a47d-8c2ab8059520")
+    load_data('http://adr.local', "6011357f-a7f8-4367-a47d-8c2ab8059520")
