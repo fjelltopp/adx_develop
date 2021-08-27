@@ -136,6 +136,13 @@ services:
     environment:
       - SOLR_LOG_LEVEL=WARN
 
+  redis-insight:
+    image: redislabs/redisinsight
+    ports:
+      - "8001:8001"
+    depends_on:
+      - redis
+
   redis:
     container_name: redis
     ports:
@@ -221,16 +228,16 @@ services:
     stdin_open: true
     tty: true
 
-  navigator_frontend:
-    container_name: navigator_frontend
+  navigator_api:
+    container_name: navigator_api
     ports:
-      - "5002:5002"
-    image: adr.navigator_frontend:${IMAGE_TAG}
+      - "5003:5003"
+    image: adr.navigator_api:${IMAGE_TAG}
     build:
-      context: ../navigator_frontend
+      context: ../navigator_api
       dockerfile: Dockerfile
     volumes:
-      - ../navigator_frontend:/var/www/navigator_frontend
+      - ../navigator_api:/var/www/navigator_api
     stdin_open: true
     tty: true
 
