@@ -26,7 +26,7 @@ ADX_PATH = os.path.expanduser(os.environ.get(
 PG_USER = os.environ.get('PG_USER', 'ckan')
 CKAN_TEST_SQLALCHEMY_URL = os.environ.get("CKAN_TEST_SQLALCHEMY_URL", "postgresql://ckan_default:pass@db/ckan_test")
 ADMIN_APIKEY = os.environ.get("ADMIN_APIKEY", "6011357f-a7f8-4367-a47d-8c2ab8059520")
-CKAN_SITE_URL = os.environ.get("CKAN_SITE_URL", "http://dev-adr")
+CKAN_SITE_URL = os.environ.get("CKAN_SITE_URL", "http://adr.local")
 
 def call_command(args):
     """
