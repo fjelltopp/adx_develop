@@ -223,6 +223,8 @@ services:
     build:
       context: ../navigator_engine
       dockerfile: Dockerfile
+    environment:
+      - CKAN_URL:http://adr.local
     volumes:
       - ../navigator_engine:/var/www/navigator_engine
     stdin_open: true
