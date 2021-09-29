@@ -28,6 +28,7 @@ CKAN_TEST_SQLALCHEMY_URL = os.environ.get("CKAN_TEST_SQLALCHEMY_URL", "postgresq
 ADMIN_APIKEY = os.environ.get("ADMIN_APIKEY", "6011357f-a7f8-4367-a47d-8c2ab8059520")
 CKAN_SITE_URL = os.environ.get("CKAN_SITE_URL", "http://adr.local")
 
+
 def call_command(args):
     """
     Run a shell command with proper error logging.
@@ -194,17 +195,17 @@ def run_tests(args, extra):
     # for cases like ckanext-ytp-requests repository which uses ytp_requests test directory internally
     extension_sub_path = extension_sub_path.replace("-", "_")
     retcode = call_command([
-        f'docker exec -it  -e CKAN_SQLALCHEMY_URL={CKAN_TEST_SQLALCHEMY_URL} '
-        f'ckan /usr/local/bin/ckan-pytest -s --disable-warnings '
+        f'docker exec {args.interaction} -e CKAN_SQLALCHEMY_URL={CKAN_TEST_SQLALCHEMY_URL} '
+        f'ckan /usr/local/bin/ckan-pytest --capture=no --disable-warnings '
         f'--ckan-ini={extension_path}/test.ini '
-        f'{extension_path}/{extension_sub_path}/tests/{args.tests} '
-        f'--log-level=WARNING'
+        f'{extension_path}/{extension_sub_path}/tests '
+        f'--log-level=WARNING '
     ] + extra)
     if retcode != 0:
         print("Tests not successful. Returned: " + str(retcode))
         sys.exit(retcode)
     else:
-      print("Test finished with exit code: " + str(retcode))
+        print("Test finished with exit code: " + str(retcode))
 
 
 def deploy_master(args, extra):
