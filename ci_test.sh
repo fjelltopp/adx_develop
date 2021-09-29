@@ -17,7 +17,7 @@ error(){
 
 run_adx_test(){
   echo "Running tests for CKAN ${1}"
-  adx test "${1}"
+  adx test "${1}" --no-interaction
   retVal=$?
   echo "Exit code: ${retVal}"
   if [ ${retVal} -ne 0 ]; then
