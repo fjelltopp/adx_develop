@@ -187,6 +187,13 @@ actions['test'] = subparsers.add_parser(
 actions['test'].set_defaults(func=util.run_tests)
 actions['test'].add_argument('extension', metavar='name', type=str,
                              help='The extension name e.g."validation", "ytp-request"')
+actions['test'].add_argument(
+    '--no-interaction', action='store_const',
+    help='Removes the -it flag from the docker exec command',
+    dest="interaction",
+    default="-it",
+    const=""
+)
 
 parser.add_argument(
     "-log",
