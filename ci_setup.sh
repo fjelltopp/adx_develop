@@ -31,4 +31,5 @@ echo "Running ./adx testsetup"
 adx testsetup
 echo "Show docker-compose containers"
 adx dc ps
-
+echo "Waiting for CKAN container"
+./ckan/wait-for-it.sh localhost:5000 -t 600
