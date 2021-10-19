@@ -1,13 +1,13 @@
 def extensions = [
   "restricted",
   "dhis2harvester",
-  "emailasusername",
   "pages",
   "pdfview",
   "scheming",
   "validation",
   "ytp-request",
-  "unaids"
+  "unaids",
+  "emailasusername"
 ]
 
 pipeline {
@@ -43,7 +43,7 @@ pipeline {
     }
 
   }
-  post { 
+  post {
       always {
           sh """cd $WORKSPACE/adx_develop &&docker-compose down --rmi all -v --remove-orphans"""
           cleanWs()
@@ -58,4 +58,3 @@ pipeline {
 
   }
 }
-
