@@ -90,4 +90,6 @@ set_environment
 ckan  --config "${CKAN_CONFIG}/ckan.ini" db init
 ckan  --config "${CKAN_CONFIG}/ckan.ini" versions initdb
 
+echo "CKAN bootstrapping finished, environment ready"
+
 exec "$@"

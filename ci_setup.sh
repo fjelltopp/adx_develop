@@ -32,3 +32,15 @@ adx testsetup
 echo "Show docker-compose containers"
 adx dc ps
 
+echo "Waiting for CKAN container"
+counter=0
+while ! docker logs ckan |grep 'CKAN bootstrapping finished, environment ready'; 
+  do
+    ((counter=counter+1))
+    if [ $counter -ge 30 ]; then
+      echo "This is taking too long, break!"
+      exit 1
+    fi
+    echo "Bootstraping not finished, pass $counter"
+    sleep 10
+  done
