@@ -39,6 +39,9 @@ while ! docker logs ckan |grep 'CKAN bootstrapping finished, environment ready';
     ((counter=counter+1))
     if [ $counter -ge 30 ]; then
       echo "This is taking too long, break!"
+      echo "Some logs first:"
+      docker logs ckan
+      adx dc ps
       exit 1
     fi
     echo "Bootstraping not finished, pass $counter"
