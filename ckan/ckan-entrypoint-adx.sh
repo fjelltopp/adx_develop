@@ -89,6 +89,7 @@ chmod -R 777 /usr/lib/adx/ckanext-unaids/ckanext/unaids/assets/build
 set_environment
 ckan  --config "${CKAN_CONFIG}/ckan.ini" db init
 ckan  --config "${CKAN_CONFIG}/ckan.ini" versions initdb
+ckan  --config "${CKAN_CONFIG}/ckan.ini" validation init-db
 
 echo "CKAN bootstrapping finished, environment ready"
 
