@@ -16,6 +16,8 @@ echo "Preparing environment"
 cd ../
 # add adx script to PATH
 export PATH=$WORKSPACE/adx_develop/:$PATH
+# disable db restart during test setup
+export SKIP_DB_RESTART=True
 # prepare environment
 cp "$WORKSPACE"/adx_develop/dev.env "$WORKSPACE"/adx_develop/.env
 # Setup environment
@@ -40,7 +42,11 @@ while ! docker logs ckan |grep 'CKAN bootstrapping finished, environment ready';
     if [ $counter -ge 30 ]; then
       echo "This is taking too long, break!"
       echo "Some logs first:"
+      echo "CKAN container logs:"
       docker logs ckan
+      echo "DB container logs:"
+      docker logs db
+      echo "List of containers:"
       adx dc ps
       exit 1
     fi
