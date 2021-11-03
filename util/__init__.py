@@ -27,6 +27,7 @@ PG_USER = os.environ.get('PG_USER', 'ckan')
 CKAN_TEST_SQLALCHEMY_URL = os.environ.get("CKAN_TEST_SQLALCHEMY_URL", "postgresql://ckan_default:pass@db/ckan_test")
 ADMIN_APIKEY = os.environ.get("ADMIN_APIKEY", "6011357f-a7f8-4367-a47d-8c2ab8059520")
 CKAN_SITE_URL = os.environ.get("CKAN_SITE_URL", "http://adr.local")
+SKIP_DB_RESTART = (os.environ.get("SKIP_DB_RESTART", False) == 'True')
 
 
 def call_command(args):
@@ -82,7 +83,7 @@ def run_docker_compose(args, extra_args):
     elif args.action == 'exec':
         call_command(sudo_dc + ["exec"] + extra_args)
     elif args.action == 'logs':
-            call_command(sudo_dc + ["logs", "-f", "--tail 500"] + extra_args)
+        call_command(sudo_dc + ["logs", "-f", "--tail 500"] + extra_args)
     elif args.action == 'bash':
         call_command(sudo_dc + ["exec", args.container, "bash"])
     else:
@@ -164,7 +165,11 @@ def load_demo_data(args, extra):
 
 
 def reset_test_db(args, extra):
-    call_command(['docker restart db'])
+    if not SKIP_DB_RESTART:
+        print('SKIP_DB_RESTART not set, restarting the db: ')
+        call_command(['docker restart db'])
+    else:
+        print('SKIP_DB_RESTART set to True, skipping db restart. ')
     retries = 5
 
     while retries > 0:
