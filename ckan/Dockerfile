@@ -76,8 +76,6 @@ RUN ckan-pip install -e "git+https://github.com/datopian/ckanext-authz-service@b
 # using fjelltopp fork untill https://github.com/datopian/ckanext-blob-storage/pull/59 is merged
 #RUN ckan-pip install -e "git+https://github.com/datopian/ckanext-blob-storage@v0.6.0#egg=ckanext-external-storage" && \
 #    ckan-pip install -r "https://raw.githubusercontent.com/datopian/ckanext-blob-storage/v0.6.0/requirements.py2.txt"
-RUN ckan-pip install -e "git+https://github.com/datopian/ckanext-auth.git@0701df5bd2f78dfd3852011db392c1b8c946eb42#egg=ckanext-auth" && \
-    ckan-pip install -r "https://raw.githubusercontent.com/datopian/ckanext-auth/0701df5bd2f78dfd3852011db392c1b8c946eb42/requirements.txt"
 
 # Install requirements for extensions with a local source
 COPY ./ckanext-scheming/requirements.txt /usr/lib/ckan/scheming-requirements.txt

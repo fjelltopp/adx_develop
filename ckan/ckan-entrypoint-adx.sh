@@ -80,6 +80,7 @@ ckan-pip install -e /usr/lib/adx/ckanext-pdfview
 ckan-pip install --no-deps -e /usr/lib/adx/ckanext-emailasusername
 ckan-pip install --no-deps -e /usr/lib/adx/ckanext-blob-storage
 ckan-pip install -e /usr/lib/adx/ckanext-versions
+ckan-pip install -e /usr/lib/adx/ckanext-auth
 
 # build js components & allow editing
 echo "Starting yarn build"
