@@ -60,18 +60,24 @@ Docker-compose
    the branch out. It uses a script by Google called "repo" to do this. Repo
    may require a name and an email.
 
-5. Build and run the docker images as docker containers.
+5. Ensure you have a Fjelltopp AWS account created for you, then login to Fjelltopp's private container repositories using:
+   ```
+   aws sso login
+   aws ecr get-login-password --region eu-west-1 | docker login --username AWS --password-stdin 254010146609.dkr.ecr.eu-west-1.amazonaws.com
+   ```
+
+6. Build and run the docker images as docker containers.
    ```
    adx up
    ```
 
-6. You can view the start up logs of the ckan container using the command:
+7. You can view the start up logs of the ckan container using the command:
    ```
    adx logs ckan
    ```
    You should watch the logs and wait until all the ckan extensions have been properly installed before continuing.
 
-7. Do the initial CKAN configuration with:
+8. Do the initial CKAN configuration with:
     ```
     adx dbsetup
     ```
@@ -85,17 +91,17 @@ Docker-compose
     The db should persist in a docker volume, so these commands will only need to
     be run again if you delete corresponding docker volume.
 
-8. Then restart the ckan container:
+9. Then restart the ckan container:
    ```
    adx restart ckan
    ```
 
-9. [Optional] Adding demo data to CKAN instance with:
+10. [Optional] Adding demo data to CKAN instance with:
     ```
    adx demodata
    ```
 
-9. CKAN should be available at http://adr.local/
+11. CKAN should be available at http://adr.local/
 
 ### [OPTIONAL] Setting up local ckan dev venv
 1. For Ubuntu you'll need to satisfy psycopg2:
