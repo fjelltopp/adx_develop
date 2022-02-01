@@ -37,6 +37,7 @@ read_manifest_xml () {
 
 process_extension () {
     if [[ $name == ckanext-* ]]; then
+        name=ckanext-$extension
         echo $name
         cd /usr/lib/adx/$name
         python setup.py extract_messages
@@ -55,7 +56,6 @@ process_extension () {
 process_all_extensions () {
     for extension in ${EXTENSIONS[*]}
     do
-        name=ckanext-$extension
         process_extension
     done
     cd /usr/lib/adx/adx_develop/translations
@@ -78,12 +78,27 @@ report_work_done () {
     echo ""
 }
 
-main () {
-    source /usr/lib/ckan/venv/bin/activate
+compile_catalogs () {
+
+    for extension in ${EXTENSIONS[*]}
+    do
+        name=ckanext-$extension
+        echo $name
+        cd /usr/lib/adx/$name
+        for lang in ${LANGUAGES[*]}
+        do
+            python setup.py compile_catalog --locale $lang 
+        done
+    done
+    cd /usr/lib/adx/adx_develop/translations
+}
+
+update_catalogs () {
     create_directory_structure
     process_all_extensions
     report_work_done
     deactivate
 }
 
-main
+source /usr/lib/ckan/venv/bin/activate
+update_catalogs
