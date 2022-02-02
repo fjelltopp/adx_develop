@@ -218,11 +218,55 @@ Tools / External Tools / Flake8
 Can be used with single files as well as with directories, recursively.
 ```
 
-### Logs
+## Logs
 To get more log output you can pick custom log level with `-log`, e.g.:
 ```
 adx --log info demodata
 ```
+
+## Translations
+
+This repo includes a utility script to help translate all extension repos quickly and easily. It should be used as follows:
+
+1. Check that the list of extensions to be translated, and the list of languages they should be translated into, is complete in at the top of the translate.bash script.  The script should be located at: `adx_develop/translations/translate.bash`.
+
+2. Ensure you have latest development branch checked out everywhere. You can use `adx forall` to create translation branches in all neseccary repos quickly E.g.:
+   ```
+   adx forall ckanext-unaids ckanext-restricted ckanext-scheming ckanext-validation ckanext-ytp-request ckanext-emailasusername ckanext-pages ckanext-dhis2harvester ckanext-harvest ckanext-blob-storage ckanext-versions -c git checkout -b ADX-789-translations 
+   ```
+
+3. Update all the message catalogs and copy the resulting .po files into a single directory using the command: 
+   ```
+   adx bash ckan
+   /usr/lib/adx/adx_develop/translations/translate.bash update_catalogs
+   ```
+
+4. Select all the language folders in `/adx_develop/translations/` containing po files and zip them up to send to the translator.  You probably want to use `adx forall` (similar to step 2) at this point to commit and push the updated message catalogs to github. 
+
+5. Once you have the translated po files back from the translator, ensure you copy them back to the `/adx_develop/translations/` folder exactly as you found them at the end of step 3. 
+
+6. Run the following command to copy all files back to their original location.
+   ```
+   adx bash ckan
+   /usr/lib/adx/adx_develop/translations/translate.bash copy_translations
+   ```
+
+7. Check that the files have been properly copied across.
+   ```
+   adx status
+   ```
+
+8. Compile all translations with the following command:
+   ```
+   adx bash ckan
+   /usr/lib/adx/adx_develop/translations/translate.bash compile_catalogs
+   ```
+   Check no error messages appear in the logs.
+
+9. Review the site in the local dev env to check formatting.
+
+10. Use an `adx forall` command to commit and push all updated translations to github quickly.  You'll then need to manually open PRs for each repo.  
+
 
 # Creating an extension
 
@@ -286,3 +330,4 @@ Now let's make the extension do something
     ```
     adx deploy
     ```
+
