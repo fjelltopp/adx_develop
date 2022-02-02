@@ -2,7 +2,7 @@
 #
 # This script includes three tools to help with bulk translation operations:
 # - One tool updates all translation .po files for every extension in the ADR project and copies
-#   the resulting files into this scripts folder so that they can be shared with UNAIDS
+#   the resulting files into a single folder `adx_develop/build/translations` for sharing with UNAIDS
 # - A further tool then copies files from this folder back to their original location
 # - A final tool then runs compile_catalog for every language and every extension
 #
@@ -16,15 +16,15 @@
 #    ```
 #    adx bash ckan
 #
-#    bash /usr/lib/adx/adx_develop/translations/translate.sh update_catalogs
+#    bash /usr/lib/adx/adx_develop/translate.sh update_catalogs
 #
-#    # Translate files that have been copied to this scripts parent directory
+#    # Translate files that have been copied to `adx_develop/build/translations`
 #
-#    bash /usr/lib/adx/adx_develop/translations/translate.sh copy_translations
+#    bash /usr/lib/adx/adx_develop/translate.sh copy_translations
 #
 #    # Check that files have been correctly copied back to their original position
 #
-#    bash /usr/lib/adx/adx_develop/translations/translate.sh compile_translations
+#    bash /usr/lib/adx/adx_develop/translate.sh compile_translations
 #    ```
 
 set -e # exit when any command fails
@@ -72,7 +72,7 @@ process_extension () {
                 python setup.py init_catalog --locale $lang
             fi
             python setup.py update_catalog --locale $lang
-            cp /usr/lib/adx/$name/ckanext/**/i18n/$lang/LC_MESSAGES/*.po /usr/lib/adx/adx_develop/translations/$lang/
+            cp /usr/lib/adx/$name/ckanext/**/i18n/$lang/LC_MESSAGES/*.po /usr/lib/adx/adx_develop/build/translations/$lang/
         done
     fi
 }
@@ -82,15 +82,15 @@ process_all_extensions () {
     do
         process_extension
     done
-    cd /usr/lib/adx/adx_develop/translations
+    cd /usr/lib/adx/adx_develop/build/translations
 }
 
 create_directory_structure () {
     for lang in ${LANGUAGES[*]}
     do
-        mkdir -p /usr/lib/adx/adx_develop/translations/$lang/
+        mkdir -p /usr/lib/adx/adx_develop/build/translations/$lang/
     done
-    rm -f /usr/lib/adx/adx_develop/translations/**/*.po
+    rm -f /usr/lib/adx/adx_develop/build/translations/**/*.po
 }
 
 report_work_done () {
@@ -109,7 +109,7 @@ copy_translations () {
         do
             folder_name=${extension//[-]/_}
             name=ckanext-$extension 
-            cp /usr/lib/adx/adx_develop/translations/$lang/$name.po /usr/lib/adx/$name/ckanext/$folder_name/i18n/$lang/LC_MESSAGES/
+            cp /usr/lib/adx/adx_develop/build/translations/$lang/$name.po /usr/lib/adx/$name/ckanext/$folder_name/i18n/$lang/LC_MESSAGES/
         done
     done
 }
@@ -125,7 +125,7 @@ compile_catalogs () {
             python setup.py compile_catalog --locale $lang 
         done
     done
-    cd /usr/lib/adx/adx_develop/translations
+    cd /usr/lib/adx/adx_develop/build/translations
 }
 
 update_catalogs () {
