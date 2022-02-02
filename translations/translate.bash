@@ -1,8 +1,32 @@
 #!/bin/bash
-# This script updates all translation .po files for every extension in the ADR project
-# The result translations are copied into this folder so that they can be shared with UNAIDS
-# Before running ensure that you have every repo checked out with latest development branch
-# To use this script: `adx bash ckan` followed by `bash /usr/lib/adx/adx_develop/translations/translate.bash`
+#
+# This script includes three tools to help with bulk translation operations:
+# - One tool updates all translation .po files for every extension in the ADR project and copies
+#   the resulting files into this scripts folder so that they can be shared with UNAIDS
+# - A further tool then copies files from this folder back to their original location
+# - A final tool then runs compile_catalog for every language and every extension
+#
+# It is recommended prior to running these commands that you ensure that you have every repo 
+# checked out with latest development branch.  You may then use `adx forall` command to make bulk
+# operations across all desired repos. 
+#
+# Also, check that the variables LANGUAGES and EXTENSIONS are set correctly prior to execution.
+#
+# To use this script: 
+#    ```
+#    adx bash ckan
+#
+#    bash /usr/lib/adx/adx_develop/translations/translate.bash update_catalogs
+#
+#    # Translate files that have been copied to this scripts parent directory
+#
+#    bash /usr/lib/adx/adx_develop/translations/translate.bash copy_translations
+#
+#    # Check that files have been correctly copied back to their original position
+#
+#    bash /usr/lib/adx/adx_develop/translations/translate.bash compile_translations
+#    ```
+
 set -e # exit when any command fails
 
 LANGUAGES=(
@@ -78,8 +102,19 @@ report_work_done () {
     echo ""
 }
 
-compile_catalogs () {
+copy_translations () {
+    for extension in ${EXTENSIONS[*]}
+    do
+        for lang in ${LANGUAGES[*]}
+        do
+            folder_name=${extension//[-]/_}
+            name=ckanext-$extension 
+            cp /usr/lib/adx/adx_develop/translations/$lang/$name.po /usr/lib/adx/$name/ckanext/$folder_name/i18n/$lang/LC_MESSAGES/
+        done
+    done
+}
 
+compile_catalogs () {
     for extension in ${EXTENSIONS[*]}
     do
         name=ckanext-$extension
@@ -97,8 +132,8 @@ update_catalogs () {
     create_directory_structure
     process_all_extensions
     report_work_done
-    deactivate
 }
 
 source /usr/lib/ckan/venv/bin/activate
-update_catalogs
+$1 
+deactivate
