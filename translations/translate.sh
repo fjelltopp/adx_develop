@@ -16,15 +16,15 @@
 #    ```
 #    adx bash ckan
 #
-#    bash /usr/lib/adx/adx_develop/translations/translate.bash update_catalogs
+#    bash /usr/lib/adx/adx_develop/translations/translate.sh update_catalogs
 #
 #    # Translate files that have been copied to this scripts parent directory
 #
-#    bash /usr/lib/adx/adx_develop/translations/translate.bash copy_translations
+#    bash /usr/lib/adx/adx_develop/translations/translate.sh copy_translations
 #
 #    # Check that files have been correctly copied back to their original position
 #
-#    bash /usr/lib/adx/adx_develop/translations/translate.bash compile_translations
+#    bash /usr/lib/adx/adx_develop/translations/translate.sh compile_translations
 #    ```
 
 set -e # exit when any command fails
