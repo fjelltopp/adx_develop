@@ -228,7 +228,7 @@ adx --log info demodata
 
 This repo includes a utility script to help translate all extension repos quickly and easily. It should be used as follows:
 
-1. Check that the list of extensions to be translated, and the list of languages they should be translated into, is complete in at the top of the translate.bash script.  The script should be located at: `adx_develop/translations/translate.bash`.
+1. Check that the list of extensions to be translated, and the list of languages they should be translated into, is complete in at the top of the translate.sh script.  The script should be located at: `adx_develop/translations/translate.sh`.
 
 2. Ensure you have latest development branch checked out everywhere. You can use `adx forall` to create translation branches in all neseccary repos quickly E.g.:
    ```
@@ -238,7 +238,7 @@ This repo includes a utility script to help translate all extension repos quickl
 3. Update all the message catalogs and copy the resulting .po files into a single directory using the command: 
    ```
    adx bash ckan
-   /usr/lib/adx/adx_develop/translations/translate.bash update_catalogs
+   /usr/lib/adx/adx_develop/translations/translate.sh update_catalogs
    ```
 
 4. Select all the language folders in `/adx_develop/translations/` containing po files and zip them up to send to the translator.  You probably want to use `adx forall` (similar to step 2) at this point to commit and push the updated message catalogs to github. 
@@ -248,7 +248,7 @@ This repo includes a utility script to help translate all extension repos quickl
 6. Run the following command to copy all files back to their original location.
    ```
    adx bash ckan
-   /usr/lib/adx/adx_develop/translations/translate.bash copy_translations
+   /usr/lib/adx/adx_develop/translations/translate.sh copy_translations
    ```
 
 7. Check that the files have been properly copied across.
@@ -259,7 +259,7 @@ This repo includes a utility script to help translate all extension repos quickl
 8. Compile all translations with the following command:
    ```
    adx bash ckan
-   /usr/lib/adx/adx_develop/translations/translate.bash compile_catalogs
+   /usr/lib/adx/adx_develop/translations/translate.sh compile_catalogs
    ```
    Check no error messages appear in the logs.
 
