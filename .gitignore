@@ -107,4 +107,4 @@ venv.bak/
 src/
 
 # Hide translation .po file copies
-translations/**/
+build/translations/*
