@@ -103,7 +103,8 @@ COPY ./ckanext-restricted/requirements.txt /usr/lib/ckan/restricted-requirements
 RUN ckan-pip install -r /usr/lib/ckan/restricted-requirements.txt
 
 COPY ./ckanext-unaids/requirements.txt /usr/lib/ckan/unaids-requirements.txt
-RUN ckan-pip install -r /usr/lib/ckan/unaids-requirements.txt
+COPY ./ckanext-unaids/dev-requirements.txt /usr/lib/ckan/unaids-dev-requirements.txt
+RUN ckan-pip install -r /usr/lib/ckan/unaids-requirements.txt -r /usr/lib/ckan/unaids-dev-requirements.txt
 
 COPY ./ckanext-blob-storage/requirements.py2.txt /usr/lib/ckan/blob-storage-requirements.txt
 RUN ckan-pip install -r /usr/lib/ckan/blob-storage-requirements.txt
