@@ -60,10 +60,11 @@ Docker-compose
    the branch out. It uses a script by Google called "repo" to do this. Repo
    may require a name and an email.
 
-5. Ensure you have a Fjelltopp AWS account created for you, then login to Fjelltopp's private container repositories using:
+5. Ensure you have a Fjelltopp AWS account created for you and follow the [AWS SSO CLI docs here](https://fjelltopp.atlassian.net/wiki/spaces/NAV/pages/166494232/AWS+EKS+setup) on configuring your AWS CLI
+6. 
+   Now run
    ```
-   aws sso login
-   aws ecr get-login-password --region eu-west-1 | docker login --username AWS --password-stdin 254010146609.dkr.ecr.eu-west-1.amazonaws.com
+   AWS_PROFILE=fjelltopp-adr aws ecr get-login-password --region eu-west-1 | docker login --username AWS --password-stdin 254010146609.dkr.ecr.eu-west-1.amazonaws.com
    ```
 
 6. Build and run the docker images as docker containers.
