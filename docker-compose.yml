@@ -4,7 +4,6 @@ volumes:
   ckan_storage:
   giftless_storage:
   pg_data:
-  solr_core:
   smtp4dev-data:
 
 services:
@@ -128,12 +127,8 @@ services:
       - "8983:8983"
     image: adr.solr:${IMAGE_TAG}
     build:
-      context: .
-      dockerfile: solr/Dockerfile
-      args:
-        - BUILD_CONTEXT=.
-    volumes:
-      - solr_core:/opt/solr/server/solr/ckan
+      context: ./solr
+      dockerfile: Dockerfile
     environment:
       - SOLR_LOG_LEVEL=WARN
 
