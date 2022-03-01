@@ -26,7 +26,7 @@ schema. We used to use the `version` attribute for this but this is an internal
 attribute that should not be used so starting from CKAN 2.10 we use the `name`
 attribute with the form `ckan-X.Y` -->
 <!-- With upgrade of ADR to CKAN 2.9.5 we're updating solr config with 
-     https://raw.githubusercontent.com/ckan/ckan/ckan-2.9.5/ckan/config/solr/schema.xml
+     https://raw.githubusercontent.com/ckan/ckan/ckan-2.9.5/ckan/config/solr/schema.solr8.xml
  -->
 <schema name="ckan" version="2.9">
 

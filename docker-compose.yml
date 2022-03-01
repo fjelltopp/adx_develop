@@ -127,10 +127,8 @@ services:
       - "8983:8983"
     image: adr.solr:${IMAGE_TAG}
     build:
-      context: ./
-      dockerfile: solr/Dockerfile
-      args:
-        - BUILD_CONTEXT=.
+      context: ./solr
+      dockerfile: Dockerfile
     environment:
       - SOLR_LOG_LEVEL=WARN
 
