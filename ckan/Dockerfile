@@ -24,6 +24,7 @@ RUN apt-get -q -y update \
         jq \
         supervisor \
     && apt-get -q clean \
+    && pip install uwsgi \
     && rm -rf /var/lib/apt/lists/*
 
 # Define environment variables
@@ -122,4 +123,5 @@ RUN npm install --global yarn
 # Configs
 COPY ./adx_develop/ckan/ckan-entrypoint-adx.sh /ckan-entrypoint.sh
 COPY ./adx_develop/ckan/wait-for-it.sh /wait-for-it.sh
+RUN which uwsgi
 ENTRYPOINT ["/ckan-entrypoint.sh"]

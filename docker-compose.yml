@@ -48,7 +48,10 @@ services:
       - ./ckan/utils/:/adx_utils
       - ./ckan/ckan-entrypoint-adx.sh:/ckan-entrypoint.sh
       - ./ckan/jwt_public_key.pem:/etc/ckan/jwt_public_key.pem
-    command: ["ckan","--config","/etc/ckan/ckan.ini", "run", "--host", "0.0.0.0", "--threaded"]
+      - ./ckan/ckan-uwsgi.ini:/etc/ckan/ckan-uwsgi.ini
+      - ./ckan/wsgi.py:/etc/ckan/wsgi.py
+    # command: ["ckan","--config","/etc/ckan/ckan.ini", "run", "--host", "0.0.0.0", "--threaded"]
+    command: ["/usr/local/bin/uwsgi", "--ini-paste", "/etc/ckan/ckan-uwsgi.ini"]
     stdin_open: true
     tty: true
 
