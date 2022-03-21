@@ -1,7 +1,6 @@
 def extensions = [
   "restricted",
   "dhis2harvester",
-  "pages",
   "pdfview",
   "scheming",
   "validation",
