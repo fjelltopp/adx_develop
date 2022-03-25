@@ -1,0 +1,60 @@
+{
+  "pages": [
+    {
+      "title": "About",
+      "name": "about",
+      "publish_date": "",
+      "private": "False",
+      "order": "1",
+      "content": "<p>Demo About content</p>"
+    },
+    {
+      "title": "Inputs UNAIDS",
+      "name": "inputs-unaids",
+      "publish_date": "",
+      "private": "False",
+      "order": "",
+      "content": "<p>Demo Inputs UNAIDS content</p>"
+    },
+    {
+      "title": "French Inputs UNAIDS",
+      "name": "fr-inputs-unaids",
+      "publish_date": "",
+      "private": "False",
+      "order": "",
+      "content": "<p>French Demo Inputs UNAIDS content</p>"
+    },
+    {
+      "title": "Portuguese Inputs UNAIDS",
+      "name": "pt-inputs-unaids",
+      "publish_date": "",
+      "private": "False",
+      "order": "",
+      "content": "<p>Portuguese Demo Inputs UNAIDS content</p>"
+    },
+    {
+      "title": "VMMC Instructions",
+      "name": "vmmc",
+      "publish_date": "",
+      "private": "False",
+      "order": "",
+      "content": "<p>Demo VMMC Instructions content</p>"
+    },
+    {
+      "title": "French VMMC Instructions",
+      "name": "fr-vmmc",
+      "publish_date": "",
+      "private": "False",
+      "order": "",
+      "content": "<p>French Demo VMMC Instructions content</p>"
+    },
+    {
+      "title": "Portuguese VMMC Instructions",
+      "name": "pt-vmmc",
+      "publish_date": "",
+      "private": "False",
+      "order": "",
+      "content": "<p>Portuguese Demo VMMC Instructions content</p>"
+    }
+  ]
+}

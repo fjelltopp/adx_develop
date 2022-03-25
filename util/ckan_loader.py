@@ -10,6 +10,7 @@ DEMO_ORGANIZATIONS = os.path.join(DEMO_DATA_PATH, 'organizations.json')
 DEMO_HARVESTERS = os.path.join(DEMO_DATA_PATH, 'harvesters.json')
 DEMO_DATASETS = os.path.join(DEMO_DATA_PATH, 'datasets.json')
 DEMO_RESOURCES = os.path.join(DEMO_DATA_PATH, 'resources.json')
+DEMO_PAGES = os.path.join(DEMO_DATA_PATH, 'pages.json')
 
 log = logging.getLogger(__name__)
 
@@ -138,6 +139,28 @@ def load_resources(ckan):
                     files={'upload': res_file}
                 )
 
+
+def load_pages(ckan):
+    """
+    Helper method to load demo pages for ckanext-pages extension
+    :param ckan: ckanapi instance
+    :return: None
+    """
+    with open(DEMO_PAGES, 'r') as pages_file:
+        pages = json.load(pages_file)['pages']
+        for page in pages:
+            try:
+                ckan.action.ckanext_pages_update(**page)
+                log.info(f"Created page {page['name']}")
+                continue
+            except ckanapi.errors.ValidationError as e:
+                log.warning(f"Page {page['name']} might already exists. Will try to update.")
+                try:
+                    ckan.action.ckanext_pages_delete(page=page['name'])
+                    ckan.action.ckanext_pages_update(**page)
+                    log.warning(f"Page {page['name']} successfully updated.")
+                except ckanapi.errors.ValidationError as e:
+                    log.error(f"Can't create page {page['name']}: {e.error_dict}")
 
 def load_data(adr_url, apikey):
     ckan = ckanapi.RemoteCKAN(adr_url, apikey=apikey)

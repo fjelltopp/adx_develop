@@ -71,7 +71,6 @@ ckan-pip install -e /usr/lib/adx/ckanext-restricted
 ckan-pip install --no-deps -e /usr/lib/adx/ckanext-scheming
 ckan-pip install --no-deps -e /usr/lib/adx/ckanext-validation
 ckan-pip install -e /usr/lib/adx/ckanext-ytp-request
-ckan-pip install -e /usr/lib/adx/ckanext-pages
 ckan-pip install -e /usr/lib/adx/ckanext-harvest
 ckan-pip install -e /usr/lib/adx/ckanext-dhis2harvester
 ckan-pip install -e /usr/lib/adx/ckanext-harvest
@@ -98,6 +97,8 @@ echo "unaids init..."
 ckan --config "${CKAN_CONFIG}/ckan.ini" unaids initdb
 echo "versions init..."
 ckan  --config "${CKAN_CONFIG}/ckan.ini" versions initdb
+echo "pages init..."
+ckan  --config "${CKAN_CONFIG}/ckan.ini" pages initdb
 
 echo "CKAN bootstrapping finished, environment ready"
 
