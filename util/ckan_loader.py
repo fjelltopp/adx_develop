@@ -157,8 +157,8 @@ def load_pages(ckan):
                 log.warning(f"Page {page['name']} might already exists. Will try to update.")
                 try:
                     ckan.action.ckanext_pages_delete(page=page['name'])
-                    log.warning("Page deleted.")
                     ckan.action.ckanext_pages_update(**page)
+                    log.warning(f"Page {page['name']} successfully updated.")
                 except ckanapi.errors.ValidationError as e:
                     log.error(f"Can't create page {page['name']}: {e.error_dict}")
 
