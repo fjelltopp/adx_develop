@@ -5,24 +5,8 @@
       "name": "about",
       "publish_date": "",
       "private": "False",
-      "order": "",
+      "order": "1",
       "content": "<p>Demo About content</p>"
-    },
-    {
-      "title": "French About",
-      "name": "fr-about",
-      "publish_date": "",
-      "private": "False",
-      "order": "",
-      "content": "<p>French Demo About content</p>"
-    },
-    {
-      "title": "Portuguese About",
-      "name": "pt-about",
-      "publish_date": "",
-      "private": "False",
-      "order": "",
-      "content": "<p>Portuguese Demo About content</p>"
     },
     {
       "title": "Inputs UNAIDS",
