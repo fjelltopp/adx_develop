@@ -170,6 +170,7 @@ def load_data(adr_url, apikey):
     load_harvesters(ckan, organizations_ids_dict=orgs)
     load_datasets(ckan)
     load_resources(ckan)
+    load_pages(ckan)
 
 
 if __name__ == '__main__':
