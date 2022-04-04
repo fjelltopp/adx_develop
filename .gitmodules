@@ -1,0 +1,52 @@
+[submodule "ckanext-auth"]
+	path = ckanext-auth
+	url = git@github.com:fjelltopp/ckanext-auth.git
+	branch = development
+[submodule "ckanext-unaids"]
+	path = ckanext-unaids
+	url = git@github.com:fjelltopp/ckanext-unaids.git
+  branch = development
+[submodule "ckanext-restricted"]
+	path = ckanext-restricted
+	url = git@github.com:fjelltopp/ckanext-restricted.git
+  branch = development
+[submodule "ckanext-scheming"]
+	path = ckanext-scheming
+	url = git@github.com:fjelltopp/ckanext-scheming.git
+  branch = development
+[submodule "ckanext-validation"]
+	path = ckanext-validation
+	url = git@github.com:fjelltopp/ckanext-validation.git
+  branch = development
+[submodule "ckanext-geoview"]
+	path = ckanext-geoview
+	url = git@github.com:fjelltopp/ckanext-geoview.git
+  branch = development
+[submodule "ckanext-ytp-request"]
+	path = ckanext-ytp-request
+	url = git@github.com:fjelltopp/ckanext-ytp-request.git
+  branch = development
+[submodule "ckanext-pdfview"]
+	path = ckanext-pdfview
+	url = git@github.com:fjelltopp/ckanext-pdfview.git
+  branch = development
+[submodule "ckanext-emailasusername"]
+	path = ckanext-emailasusername
+	url = git@github.com:fjelltopp/ckanext-emailasusername.git
+  branch = development
+[submodule "ckanext-dhis2harvester"]
+	path = ckanext-dhis2harvester
+	url = git@github.com:fjelltopp/ckanext-dhis2harvester.git
+  branch = development
+[submodule "ckanext-harvest"]
+	path = ckanext-harvest
+	url = git@github.com:fjelltopp/ckanext-harvest.git
+  branch = development
+[submodule "ckanext-blob-storage"]
+	path = ckanext-blob-storage
+	url = git@github.com:fjelltopp/ckanext-blob-storage.git
+  branch = development
+[submodule "ckanext-versions"]
+	path = ckanext-versions
+	url = git@github.com:fjelltopp/ckanext-versions.git
+  branch = development

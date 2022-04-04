@@ -1,0 +1,129 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+alembic = "==1.0.0"
+bleach = "==3.1.4"
+certifi = "==2019.3.9"
+chardet = "==3.0.4"
+click = "==7.1.2"
+decorator = "==4.4.0"
+dominate = "==2.4.0"
+fanstatic = "==0.12"
+flask-multistatic = "==1.0"
+feedgen = "==0.9.0"
+funcsigs = "==1.0.2"
+future = "==0.18.2"
+idna = "==2.8"
+itsdangerous = "==1.1.0"
+lxml = "==4.4.2"
+nose = "==1.3.7"
+passlib = "==1.6.5"
+pbr = "==5.2.0"
+polib = "==1.0.7"
+psycopg2 = "==2.8.2"
+pysolr = "==3.6.0"
+python-dateutil = "==2.8.0"
+python2-secrets = "==1.0.5"
+python-editor = "==1.0.4"
+python-magic = "==0.4.15"
+pytz = "==2016.7"
+redis = "==3.2.1"
+"repoze.lru" = "==0.7"
+"repoze.who-friendlyform" = "==1.0.8"
+"repoze.who" = "==2.3"
+requests = ">=2.11.1"
+rq = "==1.0"
+simplejson = "==3.10.0"
+six = ">=1.12.0"
+sqlalchemy-migrate = "==0.12.0"
+sqlparse = "==0.2.2"
+tzlocal = "==1.3"
+unicodecsv = "==0.14.1"
+urllib3 = "==1.25.8"
+watchdog = "==0.10.2"
+webassets = "==0.12.1"
+webencodings = "==0.5.1"
+"zope.interface" = "==4.3.2"
+Markdown = "==2.6.7"
+WebError = "==0.13.1"
+WebTest = "==1.4.3"
+Flask-Babel = "==0.11.2"
+Pygments = "==2.3.1"
+Pylons = "==0.9.7"
+Mako = "==1.0.9"
+FormEncode = "==1.3.1"
+Flask = "==1.1.1"
+Babel = "==2.7.0"
+PasteDeploy = "==2.0.1"
+Tempita = "==0.5.2"
+Werkzeug = "==0.15.5"
+WebOb = "==1.0.8"
+PyJWT = "==1.7.1"
+SQLAlchemy = "==1.3.5"
+PyUtilib = "==5.7.1"
+MarkupSafe = "==1.1.1"
+Jinja2 = "==2.11"
+Paste = "==1.7.5.1"
+Beaker = "==1.10.1"
+PyYAML = "==5.3.1"
+WebHelpers = "==1.3"
+Routes = "==1.13"
+PasteScript = "==2.0.2"
+ckanapi = "==4.3"
+ckantoolkit = "==0.0.3"
+pycountry = "==19.8.18"
+python-slugify = "==4.0.1"
+goodtables = "==2.2.1"
+pandas = "==0.24.2"
+pyshp = "==2.1.0"
+pyrsistent = "==0.16.0"
+jsonschema = "==3.2.0"
+pika = ">=1.1.0"
+pyOpenSSL = "==18.0.0"
+ckanext-spatial = {editable = true, ref = "ce4f03bcd2000f98de1a9534dce92de674eb9806", git = "https://github.com/ckan/ckanext-spatial.git"}
+ckanext-composite = {editable = true, ref = "23a060b03d2432a58cc66968d93a15f5f1654055", git = "https://github.com/EnviDat/ckanext-composite.git"}
+ckanext-repeating = {editable = true, ref = "291295557ff74b26784f6271c1a1b4ffdb990f43", git = "https://github.com/open-data/ckanext-repeating.git"}
+ckanext-sentry = {editable = true, ref = "d3b1d1cf1f975b3672891012e6c75e176497db8f", git = "https://github.com/okfn/ckanext-sentry"}
+ckanext-authz-service = {editable = true, ref = "bd4c80f55a714c1117a0e130d07463e383c494c7", git = "https://github.com/datopian/ckanext-authz-service"}
+ckanext-pages = {editable = true, ref = "v0.3.4", git = "https://github.com/ckan/ckanext-pages.git"}
+ckanext-auth = {editable = true, path = "./ckanext-auth"}
+ckanext-dhis2harvester = {editable = true, path = "./ckanext-dhis2harvester"}
+ckanext-emailasusername = {editable = true, path = "./ckanext-emailasusername"}
+ckanext-geoview = {editable = true, path = "./ckanext-geoview"}
+ckanext-harvest = {editable = true, path = "./ckanext-harvest"}
+ckanext-pdfview = {editable = true, path = "./ckanext-pdfview"}
+ckanext-restricted = {editable = true, path = "./ckanext-restricted"}
+ckanext-scheming = {editable = true, path = "./ckanext-scheming"}
+ckanext-unaids = {editable = true, path = "./ckanext-unaids"}
+ckanext-validation = {editable = true, path = "./ckanext-validation"}
+ckanext-versions = {editable = true, path = "./ckanext-versions"}
+ckanext-ytp-request = {editable = true, path = "./ckanext-ytp-request"}
+
+[dev-packages]
+beautifulsoup4 = "==4.9.1"
+coveralls = "*"
+docutils = "==0.12"
+factory-boy = "==2.12.0"
+freezegun = "==0.3.15"
+ipdb = "==0.13.2"
+responses = "==0.10.14"
+mock = "==2.0.0"
+pycodestyle = "==2.5.0"
+pip-tools = "==5.1.2"
+pyfakefs = "==3.2"
+sphinx-rtd-theme = "==0.4.3"
+cookiecutter = "==1.7.0"
+pytest = "==4.6.5"
+pytest-split-tests = "==1.0.9"
+pytest-cov = "==2.7.1"
+pytest-freezegun = "==0.4.1"
+pytest-rerunfailures = "==8.0"
+towncrier = "==19.2.0"
+Sphinx = "==1.8.5"
+Flask-DebugToolbar = "==0.11.0"
+
+[requires]
+python_version = "2.7"
