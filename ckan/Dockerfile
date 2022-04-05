@@ -109,6 +109,8 @@ RUN ckan-pip install -r /usr/lib/ckan/blob-storage-requirements.txt
 COPY ./ckanext-versions/requirements.txt /usr/lib/ckan/versions-requirements.txt
 RUN ckan-pip install -r /usr/lib/ckan/versions-requirements.txt
 
+COPY ./ckanext-googleanalytics/requirements.txt /usr/lib/ckan/googleanalytics-requirements.txt
+RUN ckan-pip install -r /usr/lib/ckan/googleanalytics-requirements.txt
 
 RUN rm /usr/lib/ckan/*-requirements.txt
 
