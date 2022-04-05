@@ -50,7 +50,7 @@ Docker-compose
    ```
    cp adx_develop/dev.env adx_develop/.env
    ```
-   You may also need to change `CKAN_SITE_URL=http://${ADR_HOSTNAME}` to `CKAN_SITE_URL=http://adr.local`
+   You may need to change `ADR_HOSTNAME=adr.local` in `adx_develop/.env`
    
 4. Setup the ADX code base.
    ```
