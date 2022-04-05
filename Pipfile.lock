@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "2ad6da38a7b8551569b15b988bf3bce1880e591ad871266a2226a75bf0100b4e"
+            "sha256": "f1e30089f2457cb92ef378a1569bafcb86fcefc6f4137e0f3ea6e80f2e5ba508"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -164,6 +164,11 @@
             "editable": true,
             "git": "https://github.com/datopian/ckanext-authz-service",
             "ref": "bd4c80f55a714c1117a0e130d07463e383c494c7"
+        },
+        "ckanext-blob-storage": {
+            "editable": true,
+            "git": "https://github.com/fjelltopp/ckanext-blob-storage",
+            "ref": "5b2f59217e8f88a3f2cdb9dc50bf4099d9abe0de"
         },
         "ckanext-composite": {
             "editable": true,

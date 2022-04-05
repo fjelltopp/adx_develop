@@ -1,52 +1,55 @@
-[submodule "ckanext-auth"]
-	path = ckanext-auth
+[submodule "ckan-extensions/ckanext-auth"]
+	path = ckan-extensions/ckanext-auth
 	url = git@github.com:fjelltopp/ckanext-auth.git
 	branch = development
-[submodule "ckanext-unaids"]
-	path = ckanext-unaids
+[submodule "ckan-extensions/ckanext-unaids"]
+	path = ckan-extensions/ckanext-unaids
 	url = git@github.com:fjelltopp/ckanext-unaids.git
   branch = development
-[submodule "ckanext-restricted"]
-	path = ckanext-restricted
+[submodule "ckan-extensions/ckanext-restricted"]
+	path = ckan-extensions/ckanext-restricted
 	url = git@github.com:fjelltopp/ckanext-restricted.git
   branch = development
-[submodule "ckanext-scheming"]
-	path = ckanext-scheming
+[submodule "ckan-extensions/ckanext-scheming"]
+	path = ckan-extensions/ckanext-scheming
 	url = git@github.com:fjelltopp/ckanext-scheming.git
   branch = development
-[submodule "ckanext-validation"]
-	path = ckanext-validation
+[submodule "ckan-extensions/ckanext-validation"]
+	path = ckan-extensions/ckanext-validation
 	url = git@github.com:fjelltopp/ckanext-validation.git
   branch = development
-[submodule "ckanext-geoview"]
-	path = ckanext-geoview
+[submodule "ckan-extensions/ckanext-geoview"]
+	path = ckan-extensions/ckanext-geoview
 	url = git@github.com:fjelltopp/ckanext-geoview.git
   branch = development
-[submodule "ckanext-ytp-request"]
-	path = ckanext-ytp-request
+[submodule "ckan-extensions/ckanext-ytp-request"]
+	path = ckan-extensions/ckanext-ytp-request
 	url = git@github.com:fjelltopp/ckanext-ytp-request.git
   branch = development
-[submodule "ckanext-pdfview"]
-	path = ckanext-pdfview
+[submodule "ckan-extensions/ckanext-pdfview"]
+	path = ckan-extensions/ckanext-pdfview
 	url = git@github.com:fjelltopp/ckanext-pdfview.git
   branch = development
-[submodule "ckanext-emailasusername"]
-	path = ckanext-emailasusername
+[submodule "ckan-extensions/ckanext-emailasusername"]
+	path = ckan-extensions/ckanext-emailasusername
 	url = git@github.com:fjelltopp/ckanext-emailasusername.git
   branch = development
-[submodule "ckanext-dhis2harvester"]
-	path = ckanext-dhis2harvester
+[submodule "ckan-extensions/ckanext-dhis2harvester"]
+	path = ckan-extensions/ckanext-dhis2harvester
 	url = git@github.com:fjelltopp/ckanext-dhis2harvester.git
   branch = development
-[submodule "ckanext-harvest"]
-	path = ckanext-harvest
+[submodule "ckan-extensions/ckanext-harvest"]
+	path = ckan-extensions/ckanext-harvest
 	url = git@github.com:fjelltopp/ckanext-harvest.git
   branch = development
-[submodule "ckanext-blob-storage"]
-	path = ckanext-blob-storage
+[submodule "ckan-extensions/ckanext-blob-storage"]
+	path = ckan-extensions/ckanext-blob-storage
 	url = git@github.com:fjelltopp/ckanext-blob-storage.git
   branch = development
-[submodule "ckanext-versions"]
-	path = ckanext-versions
+[submodule "ckan-extensions/ckanext-versions"]
+	path = ckan-extensions/ckanext-versions
 	url = git@github.com:fjelltopp/ckanext-versions.git
   branch = development
+[submodule "ckan-extensions/ckanext-pages"]
+	path = ckan-extensions/ckanext-pages
+	url = https://github.com/ckan/ckanext-pages.git
