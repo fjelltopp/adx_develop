@@ -90,18 +90,19 @@ ckanext-sentry = {editable = true, ref = "d3b1d1cf1f975b3672891012e6c75e176497db
 ckanext-authz-service = {editable = true, ref = "bd4c80f55a714c1117a0e130d07463e383c494c7", git = "https://github.com/datopian/ckanext-authz-service"}
 ckanext-blob-storage = {editable = true, ref = "5b2f59217e8f88a3f2cdb9dc50bf4099d9abe0de", git = "https://github.com/fjelltopp/ckanext-blob-storage"}
 ckanext-pages = {editable = true, ref = "v0.3.4", git = "https://github.com/ckan/ckanext-pages.git"}
-ckanext-auth = {editable = true, path = "./ckanext-auth"}
-ckanext-dhis2harvester = {editable = true, path = "./ckanext-dhis2harvester"}
-ckanext-emailasusername = {editable = true, path = "./ckanext-emailasusername"}
-ckanext-geoview = {editable = true, path = "./ckanext-geoview"}
-ckanext-harvest = {editable = true, path = "./ckanext-harvest"}
-ckanext-pdfview = {editable = true, path = "./ckanext-pdfview"}
-ckanext-restricted = {editable = true, path = "./ckanext-restricted"}
-ckanext-scheming = {editable = true, path = "./ckanext-scheming"}
-ckanext-unaids = {editable = true, path = "./ckanext-unaids"}
-ckanext-validation = {editable = true, path = "./ckanext-validation"}
-ckanext-versions = {editable = true, path = "./ckanext-versions"}
-ckanext-ytp-request = {editable = true, path = "./ckanext-ytp-request"}
+ckanext-auth = {editable = true, path = "./ckan-extensions/ckanext-auth"}
+ckanext-dhis2harvester = {editable = true, path = "./ckan-extensions/ckanext-dhis2harvester"}
+ckanext-emailasusername = {editable = true, path = "./ckan-extensions/ckanext-emailasusername"}
+ckanext-geoview = {editable = true, path = "./ckan-extensions/ckanext-geoview"}
+ckanext-harvest = {editable = true, path = "./ckan-extensions/ckanext-harvest"}
+ckanext-pdfview = {editable = true, path = "./ckan-extensions/ckanext-pdfview"}
+ckanext-restricted = {editable = true, path = "./ckan-extensions/ckanext-restricted"}
+ckanext-scheming = {editable = true, path = "./ckan-extensions/ckanext-scheming"}
+ckanext-unaids = {editable = true, path = "./ckan-extensions/ckanext-unaids"}
+ckanext-validation = {editable = true, path = "./ckan-extensions/ckanext-validation"}
+ckanext-versions = {editable = true, path = "./ckan-extensions/ckanext-versions"}
+ckanext-ytp-request = {editable = true, path = "./ckan-extensions/ckanext-ytp-request"}
+ckan = {editable = true, path = "./ckan-extensions/ckan"}
 
 [dev-packages]
 beautifulsoup4 = "==4.9.1"
