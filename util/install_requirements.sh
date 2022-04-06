@@ -24,3 +24,4 @@ pip install -r ${DIR}/../../ckanext-dhis2harvester/dev-requirements.txt
 pip install -r ${DIR}/../../ckanext-harvest/pip-requirements.txt
 pip install -r ${DIR}/../../ckanext-restricted/requirements.txt
 pip install -r ${DIR}/../../ckanext-versions/requirements.txt
+pip install -r ${DIR}/../../ckanext-googleanalytics/requirements.txt
