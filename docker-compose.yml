@@ -10,14 +10,11 @@ services:
 
   ckan:
     container_name: ckan
-    image: adr.ckan:latest
+    image: fjelltopp/ckan:development_base
     deploy:
       resources:
         limits:
           memory: 6G
-#     build:
-#      context: ../
-#      dockerfile: adx_develop/ckan/Dockerfile
     links:
       - db
       - solr
@@ -54,10 +51,7 @@ services:
 
   supervisor:
     container_name: supervisor
-    image: adr.ckan:${IMAGE_TAG}
-#    build:
-#      context: ../
-#      dockerfile: adx_develop/ckan/Dockerfile
+    image: fjelltopp/ckan:development_base
     depends_on:
       - ckan
     environment:

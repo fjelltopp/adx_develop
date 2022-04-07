@@ -34,6 +34,8 @@ RUN apt-get -q -y update \
         wget \
         curl \
         xmlsec1 \
+        jq \
+        supervisor \
     && apt-get -q clean \
     && rm -rf /var/lib/apt/lists/*
 RUN curl -sSL https://bootstrap.pypa.io/pip/2.7/get-pip.py --output get-pip.py
@@ -52,14 +54,13 @@ ENV CKAN_STORAGE_PATH=/var/lib/ckan
 
 # Build-time variables specified by docker-compose.yml / .env
 ARG CKAN_SITE_URL
-# Create ckan user
-USER root
 
 # Build-time variables specified by docker-compose.yml / .env
 ENV PATH=${CKAN_VENV}/bin:${PATH}
 COPY ckan-entrypoint-adx.sh /ckan-entrypoint.sh
 COPY wait-for-it.sh /wait-for-it.sh
 COPY bootstrap.sh /bootstrap.sh
+# Add CKAN user
 RUN useradd -r -u 900 -m -c "ckan account" -d $CKAN_HOME -s /bin/false ckan
 
 RUN chmod +x /*.sh 
