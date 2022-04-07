@@ -10,14 +10,14 @@ services:
 
   ckan:
     container_name: ckan
-    image: adr.ckan:${IMAGE_TAG}
+    image: adr.ckan:latest
     deploy:
       resources:
         limits:
           memory: 6G
-    build:
-      context: ../
-      dockerfile: adx_develop/ckan/Dockerfile
+#     build:
+#      context: ../
+#      dockerfile: adx_develop/ckan/Dockerfile
     links:
       - db
       - solr
@@ -42,7 +42,7 @@ services:
     volumes:
       - ckan_storage:/var/lib/ckan
       - ../:/usr/lib/adx
-      - ../ckan:/usr/lib/ckan/venv/src/ckan
+      - ./:/usr/lib/ckan
       - ./ckan/adx_config.ini:/etc/ckan/ckan.ini
       - ./ckan/adx_who.ini:/etc/ckan/who.ini
       - ./ckan/utils/:/adx_utils
@@ -54,10 +54,10 @@ services:
 
   supervisor:
     container_name: supervisor
-    image: adr.supervisor:${IMAGE_TAG}
-    build:
-      context: ../
-      dockerfile: adx_develop/ckan/Dockerfile
+    image: adr.ckan:${IMAGE_TAG}
+#    build:
+#      context: ../
+#      dockerfile: adx_develop/ckan/Dockerfile
     depends_on:
       - ckan
     environment:
@@ -69,7 +69,7 @@ services:
     volumes:
       - ckan_storage:/var/lib/ckan
       - ../:/usr/lib/adx
-      - ../ckan:/usr/lib/ckan/venv/src/ckan
+      - ./:/usr/lib/ckan
       - ./ckan/adx_config.ini:/etc/ckan/ckan.ini
       - ./ckan/adx_who.ini:/etc/ckan/who.ini
       - ./ckan/ckan_supervisor.conf:/etc/supervisor/conf.d/ckan_supervisor.conf

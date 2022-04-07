@@ -18,7 +18,7 @@ funcsigs = "==1.0.2"
 future = "==0.18.2"
 idna = "==2.8"
 itsdangerous = "==1.1.0"
-lxml = "==4.4.2"
+lxml = ">=2.3"
 nose = "==1.3.7"
 passlib = "==1.6.5"
 pbr = "==5.2.0"
@@ -34,7 +34,7 @@ redis = "==3.2.1"
 "repoze.lru" = "==0.7"
 "repoze.who-friendlyform" = "==1.0.8"
 "repoze.who" = "==2.3"
-requests = ">=2.11.1"
+requests = ">=1.1.0"
 rq = "==1.0"
 simplejson = "==3.10.0"
 six = ">=1.12.0"
@@ -90,19 +90,27 @@ ckanext-sentry = {editable = true, ref = "d3b1d1cf1f975b3672891012e6c75e176497db
 ckanext-authz-service = {editable = true, ref = "bd4c80f55a714c1117a0e130d07463e383c494c7", git = "https://github.com/datopian/ckanext-authz-service"}
 ckanext-blob-storage = {editable = true, ref = "5b2f59217e8f88a3f2cdb9dc50bf4099d9abe0de", git = "https://github.com/fjelltopp/ckanext-blob-storage"}
 ckanext-pages = {editable = true, ref = "v0.3.4", git = "https://github.com/ckan/ckanext-pages.git"}
-ckanext-auth = {editable = true, path = "./ckan-extensions/ckanext-auth"}
-ckanext-dhis2harvester = {editable = true, path = "./ckan-extensions/ckanext-dhis2harvester"}
-ckanext-emailasusername = {editable = true, path = "./ckan-extensions/ckanext-emailasusername"}
-ckanext-geoview = {editable = true, path = "./ckan-extensions/ckanext-geoview"}
-ckanext-harvest = {editable = true, path = "./ckan-extensions/ckanext-harvest"}
-ckanext-pdfview = {editable = true, path = "./ckan-extensions/ckanext-pdfview"}
-ckanext-restricted = {editable = true, path = "./ckan-extensions/ckanext-restricted"}
-ckanext-scheming = {editable = true, path = "./ckan-extensions/ckanext-scheming"}
-ckanext-unaids = {editable = true, path = "./ckan-extensions/ckanext-unaids"}
-ckanext-validation = {editable = true, path = "./ckan-extensions/ckanext-validation"}
-ckanext-versions = {editable = true, path = "./ckan-extensions/ckanext-versions"}
-ckanext-ytp-request = {editable = true, path = "./ckan-extensions/ckanext-ytp-request"}
-ckan = {editable = true, path = "./ckan-extensions/ckan"}
+ckanext-auth = {editable = true, path = "../ckanext-auth"}
+ckanext-dhis2harvester = {editable = true, path = "../ckanext-dhis2harvester"}
+ckanext-emailasusername = {editable = true, path = "../ckanext-emailasusername"}
+ckanext-geoview = {editable = true, path = "../ckanext-geoview"}
+ckanext-harvest = {editable = true, path = "../ckanext-harvest"}
+ckanext-pdfview = {editable = true, path = "../ckanext-pdfview"}
+ckanext-versions = {editable = true, path = "../ckanext-versions"}
+ckanext-restricted = {editable = true, path = "../ckanext-restricted"}
+ckanext-scheming = {editable = true, path = "../ckanext-scheming"}
+ckanext-unaids = {editable = true, path = "../ckanext-unaids"}
+ckanext-validation = {editable = true, path = "../ckanext-validation"}
+ckanext-ytp-request = {editable = true, path = "../ckanext-ytp-request"}
+ckan = {editable = true, path = "../ckan"}
+giftless-client = "==0.1.1"
+pyproj = "==2.2.2"
+argparse = "*"
+pyparsing = ">=2.1.10"
+GeoAlchemy = ">=0.6"
+GeoAlchemy2 = "==0.5.0"
+Shapely = ">=1.2.13"
+OWSLib = "==0.18.0"
 
 [dev-packages]
 beautifulsoup4 = "==4.9.1"

@@ -12,6 +12,7 @@ set -e
 : ${CKAN_DATAPUSHER_URL:=}
 
 CONFIG="${CKAN_CONFIG}/ckan.ini"
+/bootstrap.sh
 
 abort () {
   echo "$@" >&2
@@ -37,7 +38,7 @@ set_environment () {
 }
 
 write_config () {
-  ckan-paster make-config --no-interactive ckan "$CONFIG"
+  paster make-config --no-interactive ckan "$CONFIG"
 }
 
 # If we don't already have a config file, bootstrap
@@ -62,25 +63,6 @@ if [ -z "$CKAN_DATAPUSHER_URL" ]; then
     abort "ERROR: no CKAN_DATAPUSHER_URL specified in docker-compose.yml"
 fi
 
-ckan-pip install -e $CKAN_VENV/src/ckan/
-
-# Reinstall extensions with local source, now container has the latest code.
-# No need to install deps since they have already been installed during build
-ckan-pip install --no-deps -e /usr/lib/adx/ckanext-unaids
-ckan-pip install -e /usr/lib/adx/ckanext-restricted
-ckan-pip install --no-deps -e /usr/lib/adx/ckanext-scheming
-ckan-pip install --no-deps -e /usr/lib/adx/ckanext-validation
-ckan-pip install -e /usr/lib/adx/ckanext-ytp-request
-ckan-pip install -e /usr/lib/adx/ckanext-harvest
-ckan-pip install -e /usr/lib/adx/ckanext-dhis2harvester
-ckan-pip install -e /usr/lib/adx/ckanext-harvest
-ckan-pip install -e /usr/lib/adx/ckanext-geoview
-ckan-pip install -e /usr/lib/adx/ckanext-pdfview
-ckan-pip install --no-deps -e /usr/lib/adx/ckanext-emailasusername
-ckan-pip install --no-deps -e /usr/lib/adx/ckanext-blob-storage
-ckan-pip install -e /usr/lib/adx/ckanext-versions
-ckan-pip install -e /usr/lib/adx/ckanext-auth
-
 # build js components & allow editing
 echo "Starting yarn build"
 yarn --cwd /usr/lib/adx/ckanext-unaids/ckanext/unaids/react/
@@ -92,7 +74,7 @@ set_environment
 echo "db init..."
 ckan  --config "${CKAN_CONFIG}/ckan.ini" db init
 echo "validation init..."
-ckan-paster --plugin=ckanext-validation validation init-db --config "${CKAN_CONFIG}/ckan.ini"
+paster --plugin=ckanext-validation validation init-db --config "${CKAN_CONFIG}/ckan.ini"
 echo "unaids init..."
 ckan --config "${CKAN_CONFIG}/ckan.ini" unaids initdb
 echo "versions init..."

@@ -54,46 +54,18 @@ ENV CKAN_STORAGE_PATH=/var/lib/ckan
 ARG CKAN_SITE_URL
 # Create ckan user
 USER root
-# Define environment variables
-ENV CKAN_HOME /usr/lib/ckan
-ENV CKAN_VENV $CKAN_HOME/venv
-ENV CKAN_CONFIG /etc/ckan
-ENV CKAN_STORAGE_PATH=/var/lib/ckan
 
 # Build-time variables specified by docker-compose.yml / .env
-ARG CKAN_SITE_URL
-
-# Setup virtual environment for CKAN
-RUN mkdir -p $CKAN_VENV $CKAN_CONFIG $CKAN_STORAGE_PATH && \
-    python2 -m venv $CKAN_VENV && \
-    ln -s $CKAN_VENV/bin/pip3 /usr/local/bin/ckan-pip3 &&\
-    ln -s $CKAN_VENV/bin/ckan /usr/local/bin/ckan
-
-# Virtual environment binaries/scripts to be used first
 ENV PATH=${CKAN_VENV}/bin:${PATH}
-
-# Setup CKAN
-RUN git clone --branch ckan-2.9.4 --depth 1 https://github.com/ckan/ckan.git $CKAN_VENV/src/ckan/
-RUN ckan-pip3 install -U pip && \
-    ckan-pip3 install --upgrade --no-cache-dir -r $CKAN_VENV/src/ckan/requirement-setuptools.txt && \
-    ckan-pip3 install --upgrade --no-cache-dir -r $CKAN_VENV/src/ckan/requirements.txt && \
-    ckan-pip3 install -e $CKAN_VENV/src/ckan/ && \
-    ln -s $CKAN_VENV/src/ckan/ckan/config/who.ini $CKAN_CONFIG/who.ini && \
-    cp -v $CKAN_VENV/src/ckan/contrib/docker/ckan-entrypoint.sh /ckan-entrypoint.sh && \
-    chmod +x /ckan-entrypoint.sh && \
-    chown -R ckan:ckan $CKAN_HOME $CKAN_VENV $CKAN_CONFIG $CKAN_STORAGE_PATH
-
-
-USER ckan
-EXPOSE 5000
-
-
-RUN useradd -r -u 900 -m -c "ckan account" -d $CKAN_HOME -s /bin/false ckan
-
-# Configs
 COPY ckan-entrypoint-adx.sh /ckan-entrypoint.sh
 COPY wait-for-it.sh /wait-for-it.sh
-USER ckan
+COPY bootstrap.sh /bootstrap.sh
+RUN useradd -r -u 900 -m -c "ckan account" -d $CKAN_HOME -s /bin/false ckan
+
+RUN chmod +x /*.sh 
+
+# Configs
+USER root
 EXPOSE 5000
 
 ENTRYPOINT ["/ckan-entrypoint.sh"]

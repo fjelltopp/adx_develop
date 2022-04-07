@@ -108,3 +108,9 @@ src/
 
 # Hide translation .po file copies
 build/translations/*
+
+# Local venv
+.adxvenv/*
+.local/*
+venv
+
