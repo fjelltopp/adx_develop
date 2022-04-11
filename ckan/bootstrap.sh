@@ -3,6 +3,7 @@ export WORKON_HOME="/usr/lib/ckan/.adxvenv"
 export XDG_CACHE_HOME="/usr/lib/ckan/.adxvenv/cache"
 cd /usr/lib/ckan/ && mkdir .adxvenv
 cd /usr/lib/adx/adx_develop/
+rm -rf /usr/lib/adx/ckan/ckan/pastertemplates/template/ckanext_+project_shortname+.egg-info
 export HOME=/usr/lib/ckan/
 pipenv sync --dev
 ls -la
