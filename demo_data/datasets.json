@@ -49,6 +49,34 @@
       "type_name": "Inputs to UNAIDS Estimates",
       "notes": "This is test data generated automatically for the development servers.  It is intended for the purposes of testing interoperability with Naomi model.",
       "maintainer_email": "fjelltopp_admin@fjelltopp.org"
+    },
+    {
+      "type": "country-estimates-22",
+      "title": "Poland Country Estimates 2022 [TEST DATA]",
+      "owner_org": "fjelltopp",
+      "name": "poland-country-estimates-2022",
+      "geo-location": "Poland",
+      "tag_string": "UNAIDS Inputs, ANC, ART, SVY",
+      "maintainer": "Admin",
+      "license": "cc-by-igo",
+      "year": "2022",
+      "type_name": "Country Estimates",
+      "notes": "This is test data generated automatically for the development servers.  It is intended for the purposes of testing interoperability with Naomi model.",
+      "maintainer_email": "fjelltopp_admin@fjelltopp.org"
+    },
+    {
+      "type": "country-estimates-22",
+      "title": "Germany Country Estimates 2022 [TEST DATA]",
+      "owner_org": "north_pole",
+      "name": "germany-country-estimates-2022",
+      "geo-location": "Germany",
+      "tag_string": "UNAIDS Inputs, ANC, ART, SVY",
+      "maintainer": "Admin",
+      "license": "cc-by-igo",
+      "year": "2022",
+      "type_name": "Country Estimates",
+      "notes": "This is test data generated automatically for the development servers.  It is intended for the purposes of testing interoperability with Naomi model.",
+      "maintainer_email": "fjelltopp_admin@fjelltopp.org"
     }
   ]
 }

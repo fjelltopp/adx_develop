@@ -79,5 +79,123 @@
 			"restricted_allowed_orgs": "unaids",
 			"url": "upload"
 		}
+	},
+	"poland-country-estimates-2022": {
+		"files/estimates_inputs_demo_data/spectrum.PJNZ": {
+			"resource_type": "inputs-unaids-spectrum-file",
+			"format": "PJNZ",
+			"name": "Spectrum File",
+			"restricted_allowed_users": "",
+			"restricted_allowed_orgs": "unaids",
+			"url": "upload"
+		},
+		"files/estimates_inputs_demo_data/survey.csv": {
+			"resource_type": "inputs-unaids-survey",
+			"resource_schema": "3_survey_inputs",
+			"name": "Survey Data",
+			"restricted_allowed_users": "",
+			"restricted_allowed_orgs": "unaids",
+			"url": "upload"
+		},
+		"files/estimates_inputs_demo_data/geographic.geojson": {
+			"resource_type": "inputs-unaids-geographic",
+			"resource_schema": "3_geojson_inputs",
+			"name": "Geographic Data",
+			"format": "GeoJSON",
+			"restricted_allowed_users": "",
+			"restricted_allowed_orgs": "unaids",
+			"url": "upload"
+		},
+		"files/estimates_inputs_demo_data/anc.csv": {
+			"resource_type": "inputs-unaids-anc",
+			"resource_schema": "3_anc_inputs",
+			"name": "ANC Data",
+			"restricted_allowed_users": "",
+			"restricted_allowed_orgs": "unaids",
+			"url": "upload"
+		},
+		"files/estimates_inputs_demo_data/art.csv": {
+			"resource_type": "inputs-unaids-art",
+			"resource_schema": "3_art_inputs",
+			"name": "ART Data",
+			"restricted_allowed_users": "",
+			"restricted_allowed_orgs": "unaids",
+			"url": "upload"
+		},
+		"files/estimates_inputs_demo_data/population.csv": {
+			"resource_type": "inputs-unaids-population",
+			"resource_schema": "3_population_inputs",
+			"name": "Population Data",
+			"restricted_allowed_users": "",
+			"restricted_allowed_orgs": "unaids",
+			"url": "upload"
+		},
+		"files/estimates_inputs_demo_data/testing.csv": {
+			"resource_type": "inputs-unaids-hiv-testing",
+			"resource_schema": "1_hiv_testing_inputs",
+			"name": "HIV Testing Data",
+			"restricted_allowed_users": "",
+			"restricted_allowed_orgs": "unaids",
+			"url": "upload"
+		}
+	},
+	"germany-country-estimates-2022": {
+		"files/estimates_inputs_demo_data/spectrum.PJNZ": {
+			"resource_type": "inputs-unaids-spectrum-file",
+			"format": "PJNZ",
+			"name": "Spectrum File",
+			"restricted_allowed_users": "",
+			"restricted_allowed_orgs": "unaids",
+			"url": "upload"
+		},
+		"files/estimates_inputs_demo_data/survey.csv": {
+			"resource_type": "inputs-unaids-survey",
+			"resource_schema": "3_survey_inputs",
+			"name": "Survey Data",
+			"restricted_allowed_users": "",
+			"restricted_allowed_orgs": "unaids",
+			"url": "upload"
+		},
+		"files/estimates_inputs_demo_data/geographic.geojson": {
+			"resource_type": "inputs-unaids-geographic",
+			"resource_schema": "3_geojson_inputs",
+			"name": "Geographic Data",
+			"format": "GeoJSON",
+			"restricted_allowed_users": "",
+			"restricted_allowed_orgs": "unaids",
+			"url": "upload"
+		},
+		"files/estimates_inputs_demo_data/anc.csv": {
+			"resource_type": "inputs-unaids-anc",
+			"resource_schema": "3_anc_inputs",
+			"name": "ANC Data",
+			"restricted_allowed_users": "",
+			"restricted_allowed_orgs": "unaids",
+			"url": "upload"
+		},
+		"files/estimates_inputs_demo_data/art.csv": {
+			"resource_type": "inputs-unaids-art",
+			"resource_schema": "3_art_inputs",
+			"name": "ART Data",
+			"restricted_allowed_users": "",
+			"restricted_allowed_orgs": "unaids",
+			"url": "upload"
+		},
+		"files/estimates_inputs_demo_data/population.csv": {
+			"resource_type": "inputs-unaids-population",
+			"resource_schema": "3_population_inputs",
+			"name": "Population Data",
+			"restricted_allowed_users": "",
+			"restricted_allowed_orgs": "unaids",
+			"url": "upload"
+		},
+		"files/estimates_inputs_demo_data/testing.csv": {
+			"resource_type": "inputs-unaids-hiv-testing",
+			"resource_schema": "1_hiv_testing_inputs",
+			"name": "HIV Testing Data",
+			"restricted_allowed_users": "",
+			"restricted_allowed_orgs": "unaids",
+			"url": "upload"
+		}
 	}
 }
