@@ -113,7 +113,7 @@ RUN ckan-pip install -r /usr/lib/ckan/versions-requirements.txt
 RUN rm /usr/lib/ckan/*-requirements.txt
 
 RUN  apt-get -q -y update && apt-get -q -y install curl
-RUN curl -sL https://deb.nodesource.com/setup_14.x | bash - && apt-get install nodejs && npm version
+RUN curl -sL https://deb.nodesource.com/setup_16.x | bash - && apt-get install nodejs && npm version
 RUN npm install --global yarn
 
 # Configs
