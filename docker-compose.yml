@@ -38,6 +38,7 @@ services:
       - CKAN_SMTP_MAIL_FROM=support@fjelltopp_org
       - CKAN_EMAIL_TO=support@fjelltopp.org
       - CKAN_ERROR_EMAIL_FROM=support@fjelltopp_org
+      - CKAN_GOOGLE_ANALYTICS_ID=${CKAN_GOOGLE_ANALYTICS_ID}
       - PYTHONDONTWRITEBYTECODE=1
     volumes:
       - ckan_storage:/var/lib/ckan
