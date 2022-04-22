@@ -73,6 +73,7 @@ RUN ckan-pip install -e "git+https://github.com/okfn/ckanext-sentry@d3b1d1cf1f97
 RUN ckan-pip install -e "git+https://github.com/datopian/ckanext-authz-service@bd4c80f55a714c1117a0e130d07463e383c494c7#egg=ckanext-authz-service" && \
     ckan-pip install -r "https://raw.githubusercontent.com/datopian/ckanext-authz-service/bd4c80f55a714c1117a0e130d07463e383c494c7/requirements.py2.txt"
 RUN ckan-pip install -e "git+https://github.com/ckan/ckanext-pages.git@v0.3.4#egg=ckanext-pages"
+RUN ckan-pip install -e "git+https://github.com/ckan/ckanext-pdfview.git@3acd4a5d4cf53ca46bd3681e13e5d3ada051c644#egg=ckanext-pdfview"
 
 # Install requirements for extensions with a local source
 COPY ./ckanext-scheming/requirements.txt /usr/lib/ckan/scheming-requirements.txt
