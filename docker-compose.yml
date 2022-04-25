@@ -40,6 +40,7 @@ services:
       - ckan_storage:/var/lib/ckan
       - ../:/usr/lib/adx
       - ./:/usr/lib/ckan
+      - ./ckan/test-core.ini:/etc/ckan/test-core.ini
       - ./ckan/adx_config.ini:/etc/ckan/ckan.ini
       - ./ckan/adx_who.ini:/etc/ckan/who.ini
       - ./ckan/utils/:/adx_utils
