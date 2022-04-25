@@ -17,7 +17,13 @@
 		"files/demo.csv": {
 			"name": "Demo Data",
 			"restricted_allowed_users": "",
-			"restricted_allowed_orgs": "unaids",
+			"restricted_allowed_orgs": "",
+			"url": "upload"
+		},
+		"files/a_pdf_file.pdf": {
+			"name": "Demo PDF",
+			"restricted_allowed_users": "",
+			"restricted_allowed_orgs": "",
 			"url": "upload"
 		}
 	},
