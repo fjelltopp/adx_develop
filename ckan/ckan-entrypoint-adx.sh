@@ -86,18 +86,7 @@ yarn --cwd /usr/lib/adx/ckanext-unaids/ckanext/unaids/react/
 yarn --cwd /usr/lib/adx/ckanext-unaids/ckanext/unaids/react/ build
 chmod -R 777 /usr/lib/adx/ckanext-unaids/ckanext/unaids/assets/build
 
-echo "Initialize CKAN db"
 set_environment
-echo "db init..."
-ckan  --config "${CKAN_CONFIG}/ckan.ini" db init
-echo "validation init..."
-ckan-paster --plugin=ckanext-validation validation init-db --config "${CKAN_CONFIG}/ckan.ini"
-echo "unaids init..."
-ckan --config "${CKAN_CONFIG}/ckan.ini" unaids initdb
-echo "versions init..."
-ckan  --config "${CKAN_CONFIG}/ckan.ini" versions initdb
-echo "pages init..."
-ckan  --config "${CKAN_CONFIG}/ckan.ini" pages initdb
 
 echo "CKAN bootstrapping finished, environment ready"
 
