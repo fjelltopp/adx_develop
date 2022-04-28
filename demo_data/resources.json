@@ -77,10 +77,24 @@
 			"restricted_allowed_orgs": "unaids",
 			"url": "upload"
 		},
-		"files/estimates_inputs_demo_data/testing.csv": {
+		"files/estimates_inputs_demo_data/shiny90.csv": {
 			"resource_type": "inputs-unaids-hiv-testing",
 			"resource_schema": "1_hiv_testing_inputs",
-			"name": "HIV Testing Data",
+			"name": "Shiny90 HIV Testing Data",
+			"restricted_allowed_users": "",
+			"restricted_allowed_orgs": "unaids",
+			"url": "upload"
+		},
+		"files/estimates_inputs_demo_data/naomi_outputs.zip": {
+			"resource_type": "inputs-unaids-naomi-output-zip",
+			"name": "Naomi Output ZIP",
+			"restricted_allowed_users": "",
+			"restricted_allowed_orgs": "unaids",
+			"url": "upload"
+		},
+		"files/estimates_inputs_demo_data/naomi_summary.html": {
+			"resource_type": "inputs-unaids-naomi-report",
+			"name": "Naomi Results and Summary Report",
 			"restricted_allowed_users": "",
 			"restricted_allowed_orgs": "unaids",
 			"url": "upload"
@@ -136,10 +150,24 @@
 			"restricted_allowed_orgs": "unaids",
 			"url": "upload"
 		},
-		"files/estimates_inputs_demo_data/testing.csv": {
+		"files/estimates_inputs_demo_data/shiny90.csv": {
 			"resource_type": "inputs-unaids-hiv-testing",
 			"resource_schema": "1_hiv_testing_inputs",
-			"name": "HIV Testing Data",
+			"name": "Shiny90 HIV Testing Data",
+			"restricted_allowed_users": "",
+			"restricted_allowed_orgs": "unaids",
+			"url": "upload"
+		},
+		"files/estimates_inputs_demo_data/naomi_outputs.zip": {
+			"resource_type": "inputs-unaids-naomi-output-zip",
+			"name": "Naomi Output ZIP",
+			"restricted_allowed_users": "",
+			"restricted_allowed_orgs": "unaids",
+			"url": "upload"
+		},
+		"files/estimates_inputs_demo_data/naomi_summary.html": {
+			"resource_type": "inputs-unaids-naomi-report",
+			"name": "Naomi Results and Summary Report",
 			"restricted_allowed_users": "",
 			"restricted_allowed_orgs": "unaids",
 			"url": "upload"
@@ -195,10 +223,24 @@
 			"restricted_allowed_orgs": "unaids",
 			"url": "upload"
 		},
-		"files/estimates_inputs_demo_data/testing.csv": {
+		"files/estimates_inputs_demo_data/shiny90.csv": {
 			"resource_type": "inputs-unaids-hiv-testing",
 			"resource_schema": "1_hiv_testing_inputs",
-			"name": "HIV Testing Data",
+			"name": "Shiny90 HIV Testing Data",
+			"restricted_allowed_users": "",
+			"restricted_allowed_orgs": "unaids",
+			"url": "upload"
+		},
+		"files/estimates_inputs_demo_data/naomi_outputs.zip": {
+			"resource_type": "inputs-unaids-naomi-output-zip",
+			"name": "Naomi Output ZIP",
+			"restricted_allowed_users": "",
+			"restricted_allowed_orgs": "unaids",
+			"url": "upload"
+		},
+		"files/estimates_inputs_demo_data/naomi_summary.html": {
+			"resource_type": "inputs-unaids-naomi-report",
+			"name": "Naomi Results and Summary Report",
 			"restricted_allowed_users": "",
 			"restricted_allowed_orgs": "unaids",
 			"url": "upload"
