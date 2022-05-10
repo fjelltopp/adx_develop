@@ -74,7 +74,6 @@ ckan-pip install -e /usr/lib/adx/ckanext-ytp-request
 ckan-pip install -e /usr/lib/adx/ckanext-harvest
 ckan-pip install -e /usr/lib/adx/ckanext-dhis2harvester
 ckan-pip install -e /usr/lib/adx/ckanext-harvest
-ckan-pip install -e /usr/lib/adx/ckanext-geoview
 ckan-pip install --no-deps -e /usr/lib/adx/ckanext-emailasusername
 ckan-pip install --no-deps -e /usr/lib/adx/ckanext-blob-storage
 ckan-pip install -e /usr/lib/adx/ckanext-versions
