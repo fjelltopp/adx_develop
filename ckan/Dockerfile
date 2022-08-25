@@ -1,6 +1,4 @@
-# See CKAN docs on installation from Docker Compose on usage
-FROM ubuntu:focal
-MAINTAINER Open Knowledge
+FROM python:3.8.13
 
 # Set timezone
 ENV TZ=UTC
@@ -18,9 +16,8 @@ RUN update-locale LANG=${LC_ALL}
 RUN apt-get -q -y update \
     && DEBIAN_FRONTEND=noninteractive apt-get -q -y upgrade \
     && apt-get -q -y install \
-        python2.7\
-        python2-dev \
         python-wheel-common \
+        python3-distutils \
         libpq-dev \
         libxml2-dev \
         libxslt-dev \
@@ -38,10 +35,8 @@ RUN apt-get -q -y update \
         supervisor \
     && apt-get -q clean \
     && rm -rf /var/lib/apt/lists/*
-RUN curl -sSL https://bootstrap.pypa.io/pip/2.7/get-pip.py --output get-pip.py
-RUN python2 get-pip.py
-RUN pip install pipenv==2021.5.29 uwsgi
-RUN curl -sL https://deb.nodesource.com/setup_14.x | bash - && apt install nodejs -y && npm version
+RUN pip3 install pipenv
+RUN curl -sL https://deb.nodesource.com/setup_16.x | bash - && apt install nodejs -y && npm version
 RUN npm install --global yarn
 RUN mkdir -p /var/lib/ckan/resources && chmod 777 -R /var/lib/ckan
 

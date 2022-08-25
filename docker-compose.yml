@@ -36,6 +36,7 @@ services:
       - CKAN_EMAIL_TO=support@fjelltopp.org
       - CKAN_ERROR_EMAIL_FROM=support@fjelltopp_org
       - PYTHONDONTWRITEBYTECODE=1
+  
     volumes:
       - ckan_storage:/var/lib/ckan
       - ../:/usr/lib/adx

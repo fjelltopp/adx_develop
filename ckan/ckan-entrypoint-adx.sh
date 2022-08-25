@@ -11,7 +11,7 @@ set -e
 # URL for datapusher (required unless linked to a container called 'datapusher')
 : ${CKAN_DATAPUSHER_URL:=}
 
-CONFIG="${CKAN_CONFIG}/ckan.ini"
+export CONFIG="/etc/ckan/ckan.ini"
 /bootstrap.sh
 
 abort () {
@@ -35,10 +35,12 @@ set_environment () {
   export CKAN_SMTP_PASSWORD=${CKAN_SMTP_PASSWORD}
   export CKAN_SMTP_MAIL_FROM=${CKAN_SMTP_MAIL_FROM}
   export CKAN_MAX_UPLOAD_SIZE_MB=${CKAN_MAX_UPLOAD_SIZE_MB}
+  export CKAN_HOME=/usr/lib/ckan
+  export CKAN_VENV=$CKAN_HOME/venv
 }
 
 write_config () {
-  paster make-config --no-interactive ckan "$CONFIG"
+  ckan generate config "$CONFIG"
 }
 
 # If we don't already have a config file, bootstrap
@@ -68,20 +70,7 @@ echo "Starting yarn build"
 yarn --cwd /usr/lib/adx/ckanext-unaids/ckanext/unaids/react/
 yarn --cwd /usr/lib/adx/ckanext-unaids/ckanext/unaids/react/ build
 chmod -R 777 /usr/lib/adx/ckanext-unaids/ckanext/unaids/assets/build
-
-echo "Initialize CKAN db"
 set_environment
-echo "db init..."
-ckan  --config "${CKAN_CONFIG}/ckan.ini" db init
-echo "validation init..."
-paster --plugin=ckanext-validation validation init-db --config "${CKAN_CONFIG}/ckan.ini"
-echo "unaids init..."
-ckan --config "${CKAN_CONFIG}/ckan.ini" unaids initdb
-echo "versions init..."
-ckan  --config "${CKAN_CONFIG}/ckan.ini" versions initdb
-echo "pages init..."
-ckan  --config "${CKAN_CONFIG}/ckan.ini" pages initdb
-
 echo "CKAN bootstrapping finished, environment ready"
 
 exec "$@"
