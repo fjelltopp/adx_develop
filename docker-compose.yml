@@ -35,6 +35,7 @@ services:
       - CKAN_SMTP_MAIL_FROM=support@fjelltopp_org
       - CKAN_EMAIL_TO=support@fjelltopp.org
       - CKAN_ERROR_EMAIL_FROM=support@fjelltopp_org
+      - CKAN_GOOGLE_ANALYTICS_ID=${CKAN_GOOGLE_ANALYTICS_ID}
       - PYTHONDONTWRITEBYTECODE=1
   
     volumes:
@@ -57,6 +58,7 @@ services:
     depends_on:
       - ckan
     environment:
+      - CKAN_SITE_URL=${CKAN_SITE_URL}
       - CKAN_SQLALCHEMY_URL=postgresql://ckan:ckan@db/ckan
       - CKAN_SOLR_URL=http://solr:8983/solr/ckan
       - CKAN_REDIS_URL=redis://redis:6379/1

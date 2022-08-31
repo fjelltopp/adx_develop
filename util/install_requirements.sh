@@ -6,7 +6,7 @@ if [[ ! -d "$DIR" ]]; then DIR="$PWD"; fi
 
 pip install -r ${DIR}/../../ckan/requirement-setuptools.txt
 pip install ckanapi
-pip install -r ${DIR}/../../ckan/requirements-py2.txt
+pip install -r ${DIR}/../../ckan/requirements.txt
 pip install -r ${DIR}/../../ckan/dev-requirements.txt
 pip install -e "git+https://github.com/ckan/ckanext-spatial.git@ce4f03bcd2000f98de1a9534dce92de674eb9806#egg=ckanext-spatial"
 #pip install -r ${DIR}/../../ckanext-spatial/pip-requirements.txt
@@ -16,11 +16,11 @@ pip install -e "git+https://github.com/okfn/ckanext-sentry@d3b1d1cf1f975b3672891
 pip install -r ${DIR}/../../ckanext-scheming/requirements.txt
 pip install -r ${DIR}/../../ckanext-scheming/test-requirements.txt
 pip install -r ${DIR}/../../ckanext-geoview/pip-requirements.txt
-pip install -r ${DIR}/../../ckanext-validation/requirements.txt
+# pip install -r ${DIR}/../../ckanext-validation/requirements.txt
 pip install -r ${DIR}/../../ckanext-harvest/pip-requirements.txt
 pip install -r ${DIR}/../../ckanext-harvest/dev-requirements.txt
 pip install -r ${DIR}/../../ckanext-dhis2harvester/pip-requirements.txt
 pip install -r ${DIR}/../../ckanext-dhis2harvester/dev-requirements.txt
 pip install -r ${DIR}/../../ckanext-harvest/pip-requirements.txt
-pip install -r ${DIR}/../../ckanext-restricted/requirements.txt
+# pip install -r ${DIR}/../../ckanext-restricted/requirements.txt
 pip install -r ${DIR}/../../ckanext-versions/requirements.txt

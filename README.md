@@ -99,12 +99,13 @@ Docker-compose
 
 10. [Optional] Adding demo data to CKAN instance with:
     ```
-   adx demodata
-   ```
+    adx demodata
+    ```
 
 11. CKAN should be available at http://adr.local/
 
 ### [OPTIONAL] Setting up local ckan dev venv
+
 1. For Ubuntu you'll need to satisfy psycopg2:
 ```
 sudo apt-get install libpq-dev

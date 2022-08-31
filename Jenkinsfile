@@ -1,10 +1,7 @@
 def extensions = [
-  "restricted",
   "dhis2harvester",
-  "pdfview",
   "scheming",
   "validation",
-  "ytp-request",
   "unaids",
   "emailasusername"
 ]

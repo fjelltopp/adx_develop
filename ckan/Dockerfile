@@ -12,9 +12,8 @@ RUN sed -i "/$LC_ALL/s/^# //g" /etc/locale.gen
 RUN dpkg-reconfigure --frontend=noninteractive locales
 RUN update-locale LANG=${LC_ALL}
 
-# Install required system packages
+## Install required system packages
 RUN apt-get -q -y update \
-    && DEBIAN_FRONTEND=noninteractive apt-get -q -y upgrade \
     && apt-get -q -y install \
         python-wheel-common \
         python3-distutils \
@@ -33,6 +32,7 @@ RUN apt-get -q -y update \
         xmlsec1 \
         jq \
         supervisor \
+        jq \
     && apt-get -q clean \
     && rm -rf /var/lib/apt/lists/*
 RUN pip3 install pipenv
