@@ -36,6 +36,7 @@ set_environment () {
   export CKAN_SMTP_MAIL_FROM=${CKAN_SMTP_MAIL_FROM}
   export CKAN_MAX_UPLOAD_SIZE_MB=${CKAN_MAX_UPLOAD_SIZE_MB}
   export CKAN_HOME=/usr/lib/ckan
+  export PATH=${CKAN_VENV}/bin:${PATH}
   export CKAN_VENV=$CKAN_HOME/venv
 }
 
