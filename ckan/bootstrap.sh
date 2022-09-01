@@ -21,10 +21,7 @@ export
 cd "$HOME"
 rm -rf venv;
 if [ ! -L venv ]; then
-  ln -s .adxvenv/ venv
-fi
-if [ ! -L .venv ]; then
-  ln -s .adxvenv/ .venv
+  ln -s .adxvenv/adx_develop-YYZTJvBg venv
 fi
 if [ ! -L /usr/local/bin/ckan ]; then
   ln -s "$HOME"/venv/bin/ckan /usr/local/bin/ckan
