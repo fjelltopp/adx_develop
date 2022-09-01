@@ -36,10 +36,10 @@ adx dc ps
 
 echo "Waiting for CKAN container"
 counter=0
-while true; # ! docker logs ckan |grep 'CKAN bootstrapping finished, environment ready'; 
+while ! docker logs ckan |grep 'CKAN bootstrapping finished, environment ready'; 
   do
     ((counter=counter+1))
-    if [ $counter -ge 180 ]; then
+    if [ $counter -ge 80 ]; then
       echo "This is taking too long, break!"
       echo "Some logs first:"
       echo "CKAN container logs:"
