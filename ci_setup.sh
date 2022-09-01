@@ -36,7 +36,7 @@ adx dc ps
 
 echo "Waiting for CKAN container"
 counter=0
-while ! docker logs ckan |grep 'CKAN bootstrapping finished, environment ready'; 
+while true; # ! docker logs ckan |grep 'CKAN bootstrapping finished, environment ready'; 
   do
     ((counter=counter+1))
     if [ $counter -ge 80 ]; then
