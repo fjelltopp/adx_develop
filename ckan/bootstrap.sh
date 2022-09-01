@@ -12,7 +12,12 @@ cd /usr/lib/adx/adx_develop/
 rm -rf /usr/lib/adx/ckan/ckan/pastertemplates/template/ckanext_+project_shortname+.egg-info
 export HOME=/usr/lib/ckan/
 pipenv sync --dev
+echo "show current dir"
 ls -la
+echo "Show local/bin"
+ls -la /usr/local/bin
+echo "Show env vars"
+export
 cd "$HOME"
 rm -rf venv;
 if [ ! -L venv ]; then
