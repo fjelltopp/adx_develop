@@ -42,7 +42,7 @@ RUN mkdir -p /var/lib/ckan/resources && chmod 777 -R /var/lib/ckan
 
 
 # Define environment variables
-ENV CKAN_HOME /usr/lib/ckan
+ENV CKAN_HOME /usr/lib/adx_develop
 ENV CKAN_VENV $CKAN_HOME/venv
 ENV CKAN_CONFIG /etc/ckan
 ENV CKAN_STORAGE_PATH=/var/lib/ckan

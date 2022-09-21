@@ -89,6 +89,8 @@ venv/
 ENV/
 env.bak/
 venv.bak/
+.adxvenv/*
+.local/*
 
 # Spyder project settings
 .spyderproject
@@ -108,9 +110,3 @@ src/
 
 # Hide translation .po file copies
 build/translations/*
-
-# Local venv
-.adxvenv/*
-.local/*
-venv
-
