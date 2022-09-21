@@ -75,7 +75,7 @@ ckanext-restricted = {editable = true, path = "../ckanext-restricted"}
 ckanext-scheming = {editable = true, path = "../ckanext-scheming"}
 ckanext-unaids = {editable = true, path = "../ckanext-unaids"}
 ckanext-validation = {editable = true, path = "../ckanext-validation"}
-ckanext-blob-storage = {editable = true, ref = "5b2f59217e8f88a3f2cdb9dc50bf4099d9abe0de", git = "https://github.com/fjelltopp/ckanext-blob-storage"}
+ckanext-blob-storage = {editable = true, path = "../ckanext-blob-storage"}
 ckan = {path = "../ckan",editable = true}
 cffi = "==1.14.5"
 cryptography = "==3.4.7"
