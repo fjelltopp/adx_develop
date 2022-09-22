@@ -1,0 +1,137 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+ckanapi = "==4.3"
+alembic = "==1.0.0"
+babel = "==2.7.0"
+beaker = "==1.11.0"
+bleach = "==3.1.4"
+certifi = "==2021.10.8"
+chardet = "==4.0.0"
+click = "==8.1.2"
+dominate = "==2.4.0"
+fanstatic = "==1.1"
+feedgen = "==0.9.0"
+flask-babel = "==1.0.0"
+flask-multistatic = "==1.0"
+flask = "==1.1.1"
+funcsigs = "==1.0.2"
+idna = "==3.3"
+itsdangerous = "==1.1.0"
+jinja2 = "==2.11"
+lxml = ">=2.3"
+mako = "==1.1.5"
+markdown = "==2.6.7"
+markupsafe = "==1.1.1"
+nose = "==1.3.7"
+passlib = "==1.6.5"
+polib = "==1.0.7"
+psycopg2 = "==2.8.2"
+PyJWT = {version = "==2.1.0",extras = ["crypto"]}
+pysolr = "==3.6.0"
+python-dateutil = "==2.8.2"
+python-editor = "==1.0.4"
+python-magic = "==0.4.15"
+# Pytz upgraded because of Pandas dependencies for ckanext-validation (Py3)
+pytz = ">=2020.1"
+pyutilib = "==5.7.1"
+pyyaml = "==5.3.1"
+redis = "==3.5.3"
+"repoze.who" = "==2.3"
+requests = "==2.27.1"
+routes = "==1.13"
+rq = "==1.0"
+shutilwhich = "==1.1.0"
+simplejson = "==3.10.0"
+six = "==1.14.0"
+sqlalchemy = "==1.3.5"
+sqlparse = "==0.2.2"
+tzlocal = "==1.3"
+unicodecsv = "==0.14.1"
+urllib3 = "==1.26.9"
+watchdog = "==2.1.5"
+webassets = "==0.12.1"
+webencodings = "==0.5.1"
+webob = "==1.8.7"
+werkzeug = {version = "==1.0.0", extras = ["watchdog"]}
+zope = {interface = "==4.3.2"}
+ckanext-spatial = {editable = true, ref = "f00ad5b1d981691ffa51fbd3bbef701d569943cb", git = "https://github.com/ckan/ckanext-spatial.git"}
+ckanext-composite = {editable = true, ref = "1e6d7bb8fbe7d607376505860985c29816e64d36", git = "https://github.com/EnviDat/ckanext-composite.git"}
+ckanext-repeating = {editable = true, ref = "291295557ff74b26784f6271c1a1b4ffdb990f43", git = "https://github.com/open-data/ckanext-repeating.git"}
+ckanext-sentry = {editable = true, ref = "d3b1d1cf1f975b3672891012e6c75e176497db8f", git = "https://github.com/okfn/ckanext-sentry"}
+ckanext-authz-service = {editable = true, ref = "bd4c80f55a714c1117a0e130d07463e383c494c7", git = "https://github.com/datopian/ckanext-authz-service"}
+ckanext-pdfview = {editable = true, ref = "3acd4a5d4cf53ca46bd3681e13e5d3ada051c644", git = "https://github.com/ckan/ckanext-pdfview.git"}
+ckanext-geoview = {editable = true, ref = "cc30270e84c50df17a7a9f00b1223219dc3afa52", git ="https://github.com/ckan/ckanext-geoview.git"}
+ckanext-pages = {editable = true, ref = "v0.3.4", git = "https://github.com/ckan/ckanext-pages.git"}
+ckanext-auth = {editable = true, path = "../ckanext-auth"}
+ckanext-dhis2harvester = {editable = true, path = "../ckanext-dhis2harvester"}
+ckanext-emailasusername = {editable = true, path = "../ckanext-emailasusername"}
+ckanext-harvest = {editable = true, path = "../ckanext-harvest"}
+ckanext-versions = {editable = true, path = "../ckanext-versions"}
+ckanext-restricted = {editable = true, path = "../ckanext-restricted"}
+ckanext-scheming = {editable = true, path = "../ckanext-scheming"}
+ckanext-unaids = {editable = true, path = "../ckanext-unaids"}
+ckanext-validation = {editable = true, path = "../ckanext-validation"}
+ckanext-blob-storage = {editable = true, path = "../ckanext-blob-storage"}
+ckan = {path = "../ckan",editable = true}
+cffi = "==1.14.5"
+cryptography = "==3.4.7"
+pycparser = "==2.20"
+typing-extensions = "==4.2.0"
+typing = "==3.7.4.3"
+ckantoolkit = ">=0.0.3"
+geoalchemy = ">=0.6"
+geoalchemy2 = "==0.5.0"
+shapely = ">=1.2.13"
+pyproj = "==2.6.1"
+argparse = "*"
+pyparsing = ">=2.1.10"
+python-slugify = "==4.0.0"
+pandas = ">=1.4.2"
+pika = ">=1.1.0"
+pyopenssl = "==18.0.0"
+pycountry = "==19.8.18"
+giftless-client = "==0.1.1"
+cssmin = "==0.2.0"
+goodtables = "==2.2.1"
+pyshp = "==2.1.0"
+pyrsistent = "==0.16.0"
+jsonschema = "==3.2.0"
+charset-normalizer = "==2.0.12"
+owslib = "==0.18.0"
+ckanext-ytp-request = {editable = true, path = "./../ckanext-ytp-request"}
+
+[dev-packages]
+beautifulsoup4 = "==4.9.1"
+coveralls = "*"
+docutils = "==0.13.1"
+factory-boy = "==2.12.0"
+freezegun = "==0.3.15"
+ipdb = "==0.13.2"
+responses = "==0.10.14"
+mock = "==2.0.0"
+pycodestyle = "==2.5.0"
+pip-tools = "==5.1.2"
+sphinx-rtd-theme = "==0.4.3"
+cookiecutter = "==1.7.0"
+pytest = "==7.1.2"
+pytest-split-tests = "==1.0.9"
+pytest-cov = "==2.7.1"
+pytest-freezegun = "==0.4.1"
+pytest-rerunfailures = "==10.2"
+pytest-mock = "*"
+towncrier = "==19.2.0"
+Sphinx = "==1.8.5"
+Flask-DebugToolbar = "==0.11.0"
+rarfile = "*"
+slugify = "*"
+pydevd-pycharm = "*"
+pytest-ckan = "*"
+pyfakefs = "==3.2"
+twine = "*"
+
+[requires]
+python_version = "3.8"
