@@ -11,7 +11,8 @@ set -e
 # URL for datapusher (required unless linked to a container called 'datapusher')
 : ${CKAN_DATAPUSHER_URL:=}
 
-CONFIG="${CKAN_CONFIG}/ckan.ini"
+export CONFIG="/etc/ckan/ckan.ini"
+/bootstrap.sh
 
 abort () {
   echo "$@" >&2
@@ -34,10 +35,13 @@ set_environment () {
   export CKAN_SMTP_PASSWORD=${CKAN_SMTP_PASSWORD}
   export CKAN_SMTP_MAIL_FROM=${CKAN_SMTP_MAIL_FROM}
   export CKAN_MAX_UPLOAD_SIZE_MB=${CKAN_MAX_UPLOAD_SIZE_MB}
+  export CKAN_HOME=/usr/lib/adx_develop
+  export PATH=${CKAN_VENV}/bin:${PATH}
+  export CKAN_VENV=$CKAN_HOME/venv
 }
 
 write_config () {
-  ckan-paster make-config --no-interactive ckan "$CONFIG"
+  ckan generate config "$CONFIG"
 }
 
 # If we don't already have a config file, bootstrap
@@ -62,31 +66,12 @@ if [ -z "$CKAN_DATAPUSHER_URL" ]; then
     abort "ERROR: no CKAN_DATAPUSHER_URL specified in docker-compose.yml"
 fi
 
-ckan-pip install -e $CKAN_VENV/src/ckan/
-
-# Reinstall extensions with local source, now container has the latest code.
-# No need to install deps since they have already been installed during build
-ckan-pip install --no-deps -e /usr/lib/adx/ckanext-unaids
-ckan-pip install -e /usr/lib/adx/ckanext-restricted
-ckan-pip install --no-deps -e /usr/lib/adx/ckanext-scheming
-ckan-pip install --no-deps -e /usr/lib/adx/ckanext-validation
-ckan-pip install -e /usr/lib/adx/ckanext-ytp-request
-ckan-pip install -e /usr/lib/adx/ckanext-harvest
-ckan-pip install -e /usr/lib/adx/ckanext-dhis2harvester
-ckan-pip install -e /usr/lib/adx/ckanext-harvest
-ckan-pip install --no-deps -e /usr/lib/adx/ckanext-emailasusername
-ckan-pip install --no-deps -e /usr/lib/adx/ckanext-blob-storage
-ckan-pip install -e /usr/lib/adx/ckanext-versions
-ckan-pip install -e /usr/lib/adx/ckanext-auth
-
 # build js components & allow editing
 echo "Starting yarn build"
 yarn --cwd /usr/lib/adx/ckanext-unaids/ckanext/unaids/react/
 yarn --cwd /usr/lib/adx/ckanext-unaids/ckanext/unaids/react/ build
 chmod -R 777 /usr/lib/adx/ckanext-unaids/ckanext/unaids/assets/build
-
 set_environment
-
 echo "CKAN bootstrapping finished, environment ready"
 
 exec "$@"

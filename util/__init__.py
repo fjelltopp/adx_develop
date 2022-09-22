@@ -189,9 +189,9 @@ def reset_test_db(args, extra):
     call_command([f'docker exec db psql -U {PG_USER} -c "CREATE DATABASE ckan_test OWNER ckan_default ENCODING \'utf-8\';"'])
     call_command([f'docker exec db psql -U {PG_USER} -c "CREATE DATABASE datastore_test OWNER ckan_default ENCODING \'utf-8\';"'])
     call_command([f'docker exec -e CKAN_SQLALCHEMY_URL="{CKAN_TEST_SQLALCHEMY_URL}"'
-                  f' ckan /usr/local/bin/ckan -c test-core.ini datastore set-permissions | docker exec -i db psql -U {PG_USER}'])
+                  f' ckan /usr/local/bin/ckan -c /etc/ckan/test-core.ini datastore set-permissions | docker exec -i db psql -U {PG_USER}'])
     call_command([f'docker exec -e CKAN_SQLALCHEMY_URL="{CKAN_TEST_SQLALCHEMY_URL}"'
-                  f' ckan /usr/local/bin/ckan -c test-core.ini db init'])
+                  f' ckan /usr/local/bin/ckan -c /etc/ckan/test-core.ini db init'])
 
 
 def run_tests(args, extra):
