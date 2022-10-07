@@ -10,14 +10,11 @@ services:
 
   ckan:
     container_name: ckan
-    image: adr.ckan:${IMAGE_TAG}
+    image: fjelltopp/ckan:development_base
     deploy:
       resources:
         limits:
           memory: 6G
-    build:
-      context: ../
-      dockerfile: adx_develop/ckan/Dockerfile
     links:
       - db
       - solr
@@ -40,10 +37,12 @@ services:
       - CKAN_ERROR_EMAIL_FROM=support@fjelltopp_org
       - CKAN_GOOGLE_ANALYTICS_ID=${CKAN_GOOGLE_ANALYTICS_ID}
       - PYTHONDONTWRITEBYTECODE=1
+  
     volumes:
       - ckan_storage:/var/lib/ckan
       - ../:/usr/lib/adx
-      - ../ckan:/usr/lib/ckan/venv/src/ckan
+      - ./:/usr/lib/adx_develop
+      - ./ckan/test-core.ini:/etc/ckan/test-core.ini
       - ./ckan/adx_config.ini:/etc/ckan/ckan.ini
       - ./ckan/adx_who.ini:/etc/ckan/who.ini
       - ./ckan/utils/:/adx_utils
@@ -55,10 +54,7 @@ services:
 
   supervisor:
     container_name: supervisor
-    image: adr.supervisor:${IMAGE_TAG}
-    build:
-      context: ../
-      dockerfile: adx_develop/ckan/Dockerfile
+    image: fjelltopp/ckan:development_base
     depends_on:
       - ckan
     environment:
@@ -71,7 +67,7 @@ services:
     volumes:
       - ckan_storage:/var/lib/ckan
       - ../:/usr/lib/adx
-      - ../ckan:/usr/lib/ckan/venv/src/ckan
+      - ./:/usr/lib/ckan
       - ./ckan/adx_config.ini:/etc/ckan/ckan.ini
       - ./ckan/adx_who.ini:/etc/ckan/who.ini
       - ./ckan/ckan_supervisor.conf:/etc/supervisor/conf.d/ckan_supervisor.conf
@@ -205,3 +201,4 @@ services:
       - ServerOptions__TlsCertificate=""
       #Sets the name of the SMTP server that will be used to relay messages or "" if messages should not be relayed
       - RelayOptions__SmtpServer=""
+
