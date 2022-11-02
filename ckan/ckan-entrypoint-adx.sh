@@ -38,6 +38,7 @@ set_environment () {
   export CKAN_HOME=/usr/lib/adx_develop
   export PATH=${CKAN_VENV}/bin:${PATH}
   export CKAN_VENV=$CKAN_HOME/venv
+  echo "${ADR_CKAN_SAML_IDP_CERT}" > /etc/ckan/saml_idp.crt
 }
 
 write_config () {
