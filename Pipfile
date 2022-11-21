@@ -76,6 +76,7 @@ ckanext-scheming = {editable = true, path = "../ckanext-scheming"}
 ckanext-unaids = {editable = true, path = "../ckanext-unaids"}
 ckanext-validation = {editable = true, path = "../ckanext-validation"}
 ckanext-blob-storage = {editable = true, path = "../ckanext-blob-storage"}
+ckanext-fork = {editable = true, path = "../ckanext-fork"}
 ckan = {path = "../ckan",editable = true}
 cffi = "==1.14.5"
 cryptography = "==3.4.7"
