@@ -1,4 +1,4 @@
-FROM python:3.8.13
+FROM python:3.8
 
 # Set timezone
 ENV TZ=UTC
