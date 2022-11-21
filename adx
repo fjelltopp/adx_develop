@@ -83,49 +83,6 @@ actions['bash'].set_defaults(func=util.run_docker_compose)
 actions['bash'].add_argument('container', metavar='container', type=str,
                              help='The service name e.g."frontend."')
 
-# Add the Google repo command arguments
-actions['sync'] = subparsers.add_parser(
-    'sync',
-    description='Runs the Google Repo "sync" command',
-    help='Sync the Meerkat code base with Github (Google Repo)',
-    add_help=False
-)
-actions['sync'].set_defaults(func=util.run_repo)
-
-actions['status'] = subparsers.add_parser(
-    'status',
-    description='Runs the Google Repo "status" command',
-    help='Print out the Git status messages for all Meerkat Git repositories '
-         '(Google repo)',
-    add_help=False
-)
-actions['status'].set_defaults(func=util.run_repo)
-
-actions['diff'] = subparsers.add_parser(
-    'diff',
-    description='Runs the Google Repo "" command',
-    help='View the Git diff messages for all Meerkat Git repositories '
-         '(Google repo)',
-    add_help=False
-)
-actions['diff'].set_defaults(func=util.run_repo)
-
-actions['forall'] = subparsers.add_parser(
-    'forall',
-    description='Runs the Google Repo "forall" command',
-    help='Run a shell command in all Git repositories (Google repo)',
-    add_help=False
-)
-actions['forall'].set_defaults(func=util.run_repo)
-
-actions['repo'] = subparsers.add_parser(
-    'repo',
-    description='Run any Google repo command',
-    help='Run any Google Repo command',
-    add_help=False
-)
-actions['repo'].set_defaults(func=util.run_repo)
-
 # Add the setup command arguments
 actions['setup'] = subparsers.add_parser(
     'setup',

@@ -1,8 +1,6 @@
 import os
 import subprocess
-from multiprocessing.context import Process
 import sys
-from . import repo
 from time import sleep
 
 SUDO = os.environ.get('ADX_SUDO', '')
@@ -14,11 +12,6 @@ COMPOSE_PATH = os.path.join(
     '..'
 )
 
-ADX_MANIFEST_URL = os.environ.get(
-    'ADX_MANIFEST_URL',
-    'git@github.com:fjelltopp/adx_manifest.git'
-)
-DEFAULT_MANIFEST = 'default.xml'
 ADX_PATH = os.path.expanduser(os.environ.get(
     "ADX_PATH",
     "~/fjelltopp/adx"
@@ -91,35 +84,9 @@ def run_docker_compose(args, extra_args):
         call_command(sudo_dc + [args.action] + extra_args)
 
 
-def run_repo(args, extra):
-    """
-    Run's a Google Repo command by just forwarding the supplied args to the
-    main() function of the Google Repo script.
-
-    Args:
-        args (NameSpace): The known args NameSpace object returned by argsparse
-        extra ([str]): A list of strings detailing any extra unkown args
-            supplied by the user
-    """
-    if args.action == "repo":
-        print(extra)
-        repo.main(extra)
-    else:
-        repo.main([args.action] + extra)
-
-
-def _run_repo_main(_args):
-    p = Process(target=repo.main, args=(_args,))
-    p.start()
-    p.join()
-
-
 def init(args, extra):
-    print("Initializing the ADX codebase...")
-    manifest = args.manifest if args.manifest else DEFAULT_MANIFEST
-    _run_repo_main(['init', '-u', ADX_MANIFEST_URL, '-m', manifest])
-    print("ADX status:")
-    _run_repo_main(['status'])
+    print("Initializing ADR submodules...")
+    call_command(['git submodule update --init'])
 
 
 def setup(args, extra):
@@ -131,22 +98,14 @@ def setup(args, extra):
     print('This will destroy changes, resetting everything to the remote.')
 
     if input('SURE YOU WANT TO CONTINUE? (y/N) ').lower() in ['y', 'yes']:
-        manifest = args.manifest if args.manifest else DEFAULT_MANIFEST
-        repo_main_args = (
-            ['init', '-u', ADX_MANIFEST_URL, '-m', manifest],
-            ['sync', '--force-sync'],
-            ['forall', '-c', 'git', 'checkout', 'development'],
-            ['forall', 'ckan', '-c', 'git', 'checkout', 'refs/tags/ckan-2.9.1'],
-            ['status']
-        )
-        for _args in repo_main_args:
-            _run_repo_main(_args)
+        call_command(['git submodule foreach "git checkout development|| :"'])
+        call_command(['git submodule foreach "git reset --hard  || :"'])
         print('ADX code synced')
         print('--SETUP COMPLETE--')
 
 
 def init_ckan_db(args, extra):
-    call_command([f"docker exec -it ckan /wait-for-it.sh localhost:5000 --timeout=0 -- echo 'CKAN ready'"])
+    call_command(['docker exec -it ckan /wait-for-it.sh localhost:5000 --timeout=0 -- echo "CKAN ready"'])
     call_command(['docker exec -it ckan /usr/local/bin/ckan -c /etc/ckan/ckan.ini db init'])
     call_command(['docker exec -it ckan /usr/local/bin/ckan -c /etc/ckan/ckan.ini unaids initdb'])
     call_command(['docker exec -it ckan /usr/local/bin/ckan -c /etc/ckan/ckan.ini harvester initdb'])
@@ -161,7 +120,7 @@ def init_ckan_db(args, extra):
 
 
 def load_demo_data(args, extra):
-    call_command([f"docker exec -it ckan /wait-for-it.sh localhost:5000 --timeout=0 -- echo 'CKAN ready'"])
+    call_command(['docker exec -it ckan /wait-for-it.sh localhost:5000 --timeout=0 -- echo "CKAN ready"'])
     import util.ckan_loader as loader
     loader.load_data(f"{CKAN_SITE_URL}", ADMIN_APIKEY)
 
