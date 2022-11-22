@@ -156,7 +156,7 @@ def reset_test_db(args, extra):
 
 def run_tests(args, extra):
     extension_name = "ckanext-" + args.extension
-    extension_path = "/usr/lib/adx/" + extension_name
+    extension_path = "/usr/lib/adx/submodules/" + extension_name
     extension_sub_path = "/".join(extension_name.split("-", 1))
     # for cases like ckanext-ytp-requests repository which uses ytp_requests test directory internally
     extension_sub_path = extension_sub_path.replace("-", "_")

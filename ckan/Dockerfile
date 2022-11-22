@@ -1,5 +1,12 @@
 FROM python:3.8
 
+# OCI Annotations from https://github.com/opencontainers/image-spec/blob/master/annotations.md
+LABEL org.opencontainers.image.maintainer="support@fjelltopp.org"
+LABEL org.opencontainers.image.title="CKAN-development"
+LABEL org.opencontainers.image.description="Fjelltopp's base CKAN development image"
+LABEL org.opencontainers.image.documentation="http://www.fjelltopp.org"
+LABEL org.opencontainers.image.source="https://github.com/"
+
 # Set timezone
 ENV TZ=UTC
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
@@ -40,9 +47,8 @@ RUN curl -sL https://deb.nodesource.com/setup_16.x | bash - && apt install nodej
 RUN npm install --global yarn
 RUN mkdir -p /var/lib/ckan/resources && chmod 777 -R /var/lib/ckan
 
-
 # Define environment variables
-ENV CKAN_HOME /usr/lib/adx_develop
+ENV CKAN_HOME /usr/lib/adx
 ENV CKAN_VENV $CKAN_HOME/venv
 ENV CKAN_CONFIG /etc/ckan
 ENV CKAN_STORAGE_PATH=/var/lib/ckan
@@ -57,7 +63,6 @@ COPY wait-for-it.sh /wait-for-it.sh
 COPY bootstrap.sh /bootstrap.sh
 # Add CKAN user
 RUN useradd -r -u 900 -m -c "ckan account" -d $CKAN_HOME -s /bin/false ckan
-
 RUN chmod +x /*.sh 
 
 # Configs

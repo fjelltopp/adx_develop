@@ -46,4 +46,3 @@
 [submodule "submodules/giftless"]
   path = submodules/giftless
   url = https://github.com/fjelltopp/giftless.git
-
