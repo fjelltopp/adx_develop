@@ -93,9 +93,9 @@ services:
     container_name: datapusher
     image: adr.datapusher:${IMAGE_TAG}
     build:
-      context: ../datapusher
+      context: ./datapusher
     volumes:
-      - ../datapusher:/var/www/datapusher
+      - ./datapusher:/var/www/datapusher
     ports:
       - "8800:8800"
     stdin_open: true
