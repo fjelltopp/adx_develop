@@ -86,31 +86,19 @@ actions['bash'].add_argument('container', metavar='container', type=str,
 # Add the setup command arguments
 actions['setup'] = subparsers.add_parser(
     'setup',
-    description='Sets up the Meerkat code base locally',
-    help='Sets up the Meerkat codebase locally (Google repo).',
-)
-actions['setup'].add_argument(
-    '-m', '--manifest',
-    help='Specify the particular manifest which defines the dev env you want '
-         'to run  N.B. some manifests may require extra access to Git repos.',
-    choices=['all.xml', 'deafult.xml']
+    description='Sets up the ADR code base locally',
+    help='Sets up the ADR codebase locally.',
 )
 actions['setup'].set_defaults(func=util.setup)
 
 actions['init'] = subparsers.add_parser(
     'init',
-    description="Initializes ADX project using google repo.",
+    description="Initializes ADX project",
     help="Configures the already existing ADX codebase with already "
-         "checkout repositories (Google repo)."
+         "checkout repositories."
 )
 actions['init'].set_defaults(func=util.init)
 
-actions['init'].add_argument(
-    '-m', '--manifest',
-    help='Specify the particular manifest which defines the dev env you want '
-         'to run  N.B. some manifests may require extra access to Git repos.',
-    choices=['all.xml', 'deafult.xml']
-)
 # Add the setup command arguments
 actions['dbsetup'] = subparsers.add_parser(
     'dbsetup',

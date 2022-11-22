@@ -20,6 +20,8 @@ export PATH=$WORKSPACE/adx_develop/:$PATH
 export SKIP_DB_RESTART=True
 # prepare environment
 cp "$WORKSPACE"/adx_develop/dev.env "$WORKSPACE"/adx_develop/.env
+# Init submodules
+adx init
 # Setup environment
 yes | adx setup
 git fetch origin +refs/pull/*/merge:refs/remotes/origin/pr/* && git checkout "${BRANCH}"
