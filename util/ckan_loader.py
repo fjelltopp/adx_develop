@@ -12,7 +12,10 @@ DEMO_DATASETS = os.path.join(DEMO_DATA_PATH, 'datasets.json')
 DEMO_RESOURCES = os.path.join(DEMO_DATA_PATH, 'resources.json')
 DEMO_PAGES = os.path.join(DEMO_DATA_PATH, 'pages.json')
 
+FJELLTOPP_PASSWORD = os.environ.get("FJELLTOPP_PASSWORD", "fjelltopp")
+
 log = logging.getLogger(__name__)
+log.setLevel("INFO")
 
 
 def load_organizations(ckan):
@@ -53,19 +56,20 @@ def load_users(ckan):
     with open(DEMO_USERS, 'r') as users_file:
         users = json.load(users_file)['users']
         for user in users:
+            user.update({"password": FJELLTOPP_PASSWORD})
             try:
                 ckan.action.user_create(**user)
                 log.info(f"Created user {user['name']}")
                 continue
             except ckanapi.errors.ValidationError as e:
+                log.warning(f"User {user['name']} might already exists. Will try to update.")
                 pass  # fallback to user update
             try:
-                log.warning(f"User {user['name']} might already exists. Will try to update.")
                 id = ckan.action.user_show(id=user['name'])['id']
                 ckan.action.user_update(id=id, **user)
-                log.info(f"Updated user {user['name']}")
+                log.info(f"Updated user {user['name']} ({id})")
             except ckanapi.errors.ValidationError as e:
-                log.error(f"Can't create user {user['name']}: {e.error_dict}")
+                log.error(f"Can't update user {user['name']} ({id}): {e.error_dict}")
 
 
 def load_harvesters(ckan, organizations_ids_dict):
@@ -138,6 +142,7 @@ def load_resources(ckan):
                     resource_dict,
                     files={'upload': res_file}
                 )
+                log.info(f"Created resource {resource_dict['name']}")
 
 
 def load_pages(ckan):

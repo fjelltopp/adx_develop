@@ -76,10 +76,12 @@ ckanext-scheming = {editable = true, path = "../ckanext-scheming"}
 ckanext-unaids = {editable = true, path = "../ckanext-unaids"}
 ckanext-validation = {editable = true, path = "../ckanext-validation"}
 ckanext-blob-storage = {editable = true, path = "../ckanext-blob-storage"}
+ckanext-saml2auth = "==1.2.3"
+importlib-resources = "*"
 ckanext-fork = {editable = true, path = "../ckanext-fork"}
 ckan = {path = "../ckan",editable = true}
 cffi = "==1.14.5"
-cryptography = "==3.4.7"
+cryptography = "~=3.4.7"
 pycparser = "==2.20"
 typing-extensions = "==4.2.0"
 typing = "==3.7.4.3"
@@ -87,13 +89,13 @@ ckantoolkit = ">=0.0.3"
 geoalchemy = ">=0.6"
 geoalchemy2 = "==0.5.0"
 shapely = ">=1.2.13"
-pyproj = "==2.6.1"
+pyproj = "~=2.6.1"
 argparse = "*"
 pyparsing = ">=2.1.10"
 python-slugify = "==4.0.0"
 pandas = ">=1.4.2"
 pika = ">=1.1.0"
-pyopenssl = "==18.0.0"
+pyopenssl = "~=18.0.0"
 pycountry = "==19.8.18"
 giftless-client = "==0.1.1"
 cssmin = "==0.2.0"

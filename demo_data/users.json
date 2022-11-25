@@ -1,112 +1,103 @@
 {
-  "users": [
-    {
-      "email": "fjelltopp_admin@fjelltopp.org",
-      "about": null,
-      "display_name": "Fjelltopp Admin",
-      "name": "fjelltopp_admin",
-      "password": "fjelltopp",
-      "activity_streams_email_notifications": false,
-      "state": "active",
-      "fullname": "Fjelltopp Admin",
-      "job_title": "Admin",
-      "affiliation": "Fjelltopp"
-    },
-    {
-      "email": "fjelltopp_editor@fjelltopp.org",
-      "about": null,
-      "display_name": "Fjelltopp Editor",
-      "name": "fjelltopp_editor",
-      "password": "fjelltopp",
-      "activity_streams_email_notifications": false,
-      "state": "active",
-      "fullname": "Fjelltopp Editor",
-      "job_title": "Editor",
-      "affiliation": "Fjelltopp"
-    },
-    {
-      "email": "fjelltopp_member@fjelltopp.org",
-      "about": null,
-      "display_name": "Fjelltopp Member",
-      "name": "fjelltopp_member",
-      "password": "fjelltopp",
-      "activity_streams_email_notifications": false,
-      "state": "active",
-      "fullname": "Fjelltopp Member",
-      "job_title": "Member",
-      "affiliation": "Fjelltopp"
-    },
-    {
-      "email": "north_pole_admin@northpole.org",
-      "about": null,
-      "display_name": "North Pole Admin",
-      "name": "north_pole_admin",
-      "password": "fjelltopp",
-      "activity_streams_email_notifications": false,
-      "state": "active",
-      "fullname": "North Pole Admin",
-      "job_title": "Admin",
-      "affiliation": "North Pole"
-    },
-    {
-      "email": "north_pole_editor@northpole.org",
-      "about": null,
-      "display_name": "North Pole Editor",
-      "name": "north_pole_editor",
-      "password": "fjelltopp",
-      "activity_streams_email_notifications": false,
-      "state": "active",
-      "fullname": "North Pole Editor",
-      "job_title": "Editor",
-      "affiliation": "North Pole"
-    },
-    {
-      "email": "north_pole_member@northpole.org",
-      "about": null,
-      "display_name": "North Pole Member",
-      "name": "north_pole_member",
-      "password": "fjelltopp",
-      "activity_streams_email_notifications": false,
-      "state": "active",
-      "fullname": "North Pole Member",
-      "job_title": "Member",
-      "affiliation": "North Pole"
-    },
-    {
-      "email": "cote_admin@cote.org",
-      "about": null,
-      "display_name": "Cote Admin",
-      "name": "cote_admin",
-      "password": "fjelltopp",
-      "activity_streams_email_notifications": false,
-      "state": "active",
-      "fullname": "Cote Admin",
-      "job_title": "Admin",
-      "affiliation": "Cote"
-    },
-    {
-      "email": "cote_editor@cote.org",
-      "about": null,
-      "display_name": "Cote Editor",
-      "name": "cote_editor",
-      "password": "fjelltopp",
-      "activity_streams_email_notifications": false,
-      "state": "active",
-      "fullname": "Cote Editor",
-      "job_title": "Editor",
-      "affiliation": "Cote"
-    },
-    {
-      "email": "cote_member@cote.org",
-      "about": null,
-      "display_name": "Cote Member",
-      "name": "cote_member",
-      "password": "fjelltopp",
-      "activity_streams_email_notifications": false,
-      "state": "active",
-      "fullname": "Cote Member",
-      "job_title": "Member",
-      "affiliation": "Cote"
-    }
-  ]
+    "users": [
+        {
+            "email": "fjelltopp_admin@fjelltopp.org",
+            "name": "fjelltopp_admin",
+            "fullname": "Fjelltopp Admin",
+            "about": null,
+            "display_name": "Fjelltopp Admin",
+            "activity_streams_email_notifications": false,
+            "state": "active",
+            "job_title": "Admin",
+            "affiliation": "Fjelltopp"
+        },
+        {
+            "email": "fjelltopp_editor@fjelltopp.org",
+            "name": "fjelltopp_editor",
+            "fullname": "Fjelltopp Editor",
+            "about": null,
+            "display_name": "Fjelltopp Editor",
+            "activity_streams_email_notifications": false,
+            "state": "active",
+            "job_title": "Editor",
+            "affiliation": "Fjelltopp"
+        },
+        {
+            "email": "fjelltopp_member@fjelltopp.org",
+            "name": "fjelltopp_member",
+            "fullname": "Fjelltopp Member",
+            "about": null,
+            "display_name": "Fjelltopp Member",
+            "activity_streams_email_notifications": false,
+            "state": "active",
+            "job_title": "Member",
+            "affiliation": "Fjelltopp"
+        },
+        {
+            "email": "north_pole_admin@northpole.org",
+            "name": "north_pole_admin",
+            "fullname": "North Pole Admin",
+            "about": null,
+            "display_name": "North Pole Admin",
+            "activity_streams_email_notifications": false,
+            "state": "active",
+            "job_title": "Admin",
+            "affiliation": "North Pole"
+        },
+        {
+            "email": "north_pole_editor@northpole.org",
+            "name": "north_pole_editor",
+            "fullname": "North Pole Editor",
+            "about": null,
+            "display_name": "North Pole Editor",
+            "activity_streams_email_notifications": false,
+            "state": "active",
+            "job_title": "Editor",
+            "affiliation": "North Pole"
+        },
+        {
+            "email": "north_pole_member@northpole.org",
+            "name": "north_pole_member",
+            "fullname": "North Pole Member",
+            "about": null,
+            "display_name": "North Pole Member",
+            "activity_streams_email_notifications": false,
+            "state": "active",
+            "job_title": "Member",
+            "affiliation": "North Pole"
+        },
+        {
+            "email": "cote_admin@cote.org",
+            "name": "cote_admin",
+            "fullname": "Cote Admin",
+            "about": null,
+            "display_name": "Cote Admin",
+            "activity_streams_email_notifications": false,
+            "state": "active",
+            "job_title": "Admin",
+            "affiliation": "Cote"
+        },
+        {
+            "email": "cote_editor@cote.org",
+            "name": "cote_editor",
+            "fullname": "Cote Editor",
+            "about": null,
+            "display_name": "Cote Editor",
+            "activity_streams_email_notifications": false,
+            "state": "active",
+            "job_title": "Editor",
+            "affiliation": "Cote"
+        },
+        {
+            "email": "cote_member@cote.org",
+            "name": "cote_member",
+            "fullname": "Cote Member",
+            "about": null,
+            "display_name": "Cote Member",
+            "activity_streams_email_notifications": false,
+            "state": "active",
+            "job_title": "Member",
+            "affiliation": "Cote"
+        }
+    ]
 }

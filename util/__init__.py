@@ -25,6 +25,7 @@ ADX_PATH = os.path.expanduser(os.environ.get(
 ))
 PG_USER = os.environ.get('PG_USER', 'ckan')
 CKAN_TEST_SQLALCHEMY_URL = os.environ.get("CKAN_TEST_SQLALCHEMY_URL", "postgresql://ckan_default:pass@db/ckan_test")
+FJELLTOPP_PASSWORD = os.environ.get("FJELLTOPP_PASSWORD", "fjelltopp")
 ADMIN_APIKEY = os.environ.get("ADMIN_APIKEY", "6011357f-a7f8-4367-a47d-8c2ab8059520")
 CKAN_SITE_URL = os.environ.get("CKAN_SITE_URL", "http://adr.local")
 SKIP_DB_RESTART = (os.environ.get("SKIP_DB_RESTART", 'false').lower() == 'true')
@@ -154,7 +155,7 @@ def init_ckan_db(args, extra):
     call_command(['docker exec -it ckan /usr/local/bin/ckan -c /etc/ckan/ckan.ini versions initdb'])
     call_command(['docker exec -it ckan /usr/local/bin/ckan -c /etc/ckan/ckan.ini pages initdb'])
     call_command(['docker exec -it ckan /usr/local/bin/ckan -c /etc/ckan/ckan.ini opendata-request init-db'])
-    call_command(['docker exec -it ckan /usr/local/bin/ckan -c /etc/ckan/ckan.ini user add admin email=admin@localhost name=admin fullname=Admin job_title=chief affiliation=fjelltopp password=fjelltopp apikey=a4bf5640-e1b2-4141-8c22-f2b96b6df2c3'])
+    call_command(['docker exec -it ckan /usr/local/bin/ckan -c /etc/ckan/ckan.ini user add admin email=admin@localhost name=admin fullname=Admin job_title=chief affiliation=fjelltopp password={FJELLTOPP_PASSWORD} apikey=a4bf5640-e1b2-4141-8c22-f2b96b6df2c3'])
     call_command([f'docker exec db psql -U {PG_USER} -c "UPDATE public.user SET apikey = \'{ADMIN_APIKEY}\' WHERE name = \'admin\';"'])
     call_command(['docker exec -it ckan /usr/local/bin/ckan -c /etc/ckan/ckan.ini sysadmin add admin'])
 
