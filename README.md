@@ -105,31 +105,6 @@ Docker-compose
 11. CKAN should be available at http://adr.local/
 
 
-### [DEBUG] Local db issues
-
-If you get the following error (or similar) when running ckan (step 7 above):
-
-```
-ckan  | sqlalchemy.exc.OperationalError: (psycopg2.OperationalError) could not translate host name "db" to address: Name or service not known
-ckan  |
-ckan  | (Background on this error at: http://sqlalche.me/e/e3q8)
-ckan exited with code 1
-```
-
-Check if the `db` container is exiting with the following message:
-
-```
-initdb: directory "/var/lib/postgresql/data" exists but is not empty"
-```
-
-Then you need to do the following:
-
-1. `docker volume inspect adx_develop_pg_data` from your local host to find your db mountpoint, e.g. `/var/lib/docker/volumes/adx_develop_pg_data/_data`
-2. `sudo rm <MOUNTPOINT>/pg_hba.conf` from your local host
-3. `adx up && adx logs ckan`
-
-Then continue with the installation as above.
-
 ### [OPTIONAL] Setting up local ckan dev venv
 
 1. For Ubuntu you'll need to satisfy psycopg2:
