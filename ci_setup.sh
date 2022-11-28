@@ -13,7 +13,7 @@ else
 fi
 echo "CHANGE_ID: ${CHANGE_ID}" 
 
-IMAGE_TAG=$(git branch --show-current)
+IMAGE_TAG="$BRANCH_NAME"
 export IMAGE_TAG
 echo "IMAGE_TAG: ${IMAGE_TAG}"
 
