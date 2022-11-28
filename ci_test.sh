@@ -5,6 +5,8 @@
 
 # add adx script to PATH
 export PATH=$WORKSPACE/adx_develop/:$PATH
+IMAGE_TAG=$(git branch --show-current)
+export IMAGE_TAG
 
 error(){
   echo "CKAN ${1} test did fail, check logs, docker output below:"

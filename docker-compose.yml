@@ -10,7 +10,7 @@ services:
 
   ckan:
     container_name: ckan
-    image: ghcr.io/fjelltopp/adx_develop/ckan_development:adx-871_submodules
+    image: ghcr.io/fjelltopp/adx_develop/ckan_development:${IMAGE_TAG}
     deploy:
       resources:
         limits:

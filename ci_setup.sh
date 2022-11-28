@@ -12,6 +12,9 @@ else
   BRANCH="origin/pr/$CHANGE_ID"
 fi
 
+IMAGE_TAG=$(git branch --show-current)
+export IMAGE_TAG
+
 echo "Preparing environment"
 cd ../
 # add adx script to PATH
