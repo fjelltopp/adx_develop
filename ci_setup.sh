@@ -11,9 +11,11 @@ then
 else 
   BRANCH="origin/pr/$CHANGE_ID"
 fi
+echo "CHANGE_ID: ${CHANGE_ID}" 
 
 IMAGE_TAG=$(git branch --show-current)
 export IMAGE_TAG
+echo "IMAGE_TAG: ${IMAGE_TAG}"
 
 echo "Preparing environment"
 cd ../
