@@ -82,7 +82,8 @@ ckanext-ytp-request = {editable = true, path = "./submodules/ckanext-ytp-request
 ckanext-fork = {editable = true, path = "./submodules/ckanext-fork"}
 ckan = {editable = true, path = "./submodules/ckan"}
 # end of submodules
-
+ckanext-saml2auth = "==1.2.3"
+importlib-resources = "*"
 cffi = "==1.14.5"
 cryptography = "~=3.4.7"
 pycparser = "==2.20"
