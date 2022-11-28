@@ -13,7 +13,7 @@ else
 fi
 echo "CHANGE_ID: ${CHANGE_ID}" 
 
-IMAGE_TAG="$BRANCH_NAME"
+IMAGE_TAG="$CHANGE_BRANCH"
 export IMAGE_TAG
 echo "IMAGE_TAG: ${IMAGE_TAG}"
 

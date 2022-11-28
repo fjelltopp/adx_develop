@@ -5,7 +5,7 @@
 
 # add adx script to PATH
 export PATH=$WORKSPACE/adx_develop/:$PATH
-IMAGE_TAG=$(git branch --show-current)
+IMAGE_TAG="$CHANGE_BRANCH"
 export IMAGE_TAG
 
 error(){
