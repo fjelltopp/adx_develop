@@ -10,7 +10,7 @@ services:
 
   ckan:
     container_name: ckan
-    image: ghcr.io/fjelltopp/adx_develop/ckan_development:${IMAGE_TAG}
+    image: ghcr.io/fjelltopp/adx_develop/ckan_base:${CKAN_IMAGE_TAG}
     deploy:
       resources:
         limits:
@@ -54,7 +54,7 @@ services:
 
   supervisor:
     container_name: supervisor
-    image: fjelltopp/ckan:development_base
+    image: ghcr.io/fjelltopp/adx_develop/ckan_base:${CKAN_IMAGE_TAG}
     depends_on:
       - ckan
     environment:

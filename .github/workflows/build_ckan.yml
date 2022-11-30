@@ -17,7 +17,7 @@ jobs:
       uses: VaultVulp/gp-docker-action@1.5.0
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }} # Provide GITHUB_TOKEN to login into the GitHub Packages
-        image-name: ckan_development
+        image-name: ckan_base
         image-tag: ${{ github.ref_name }}
         build-context: ckan/
         dockerfile: ckan/Dockerfile
