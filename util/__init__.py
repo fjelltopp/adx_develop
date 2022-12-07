@@ -98,8 +98,9 @@ def setup(args, extra):
     print('This will destroy changes, resetting everything to the remote.')
 
     if input('SURE YOU WANT TO CONTINUE? (y/N) ').lower() in ['y', 'yes']:
-        call_command(['git submodule foreach "git checkout development|| :"'])
         call_command(['git submodule foreach "git reset --hard  || :"'])
+        call_command(['git submodule foreach "git checkout development|| :"'])
+        call_command(['git submodule foreach "git pull  || :"'])
         print('ADX code synced')
         print('--SETUP COMPLETE--')
 
