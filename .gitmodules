@@ -1,0 +1,48 @@
+[submodule "ckan-extensions/ckan"]
+	path = submodules/ckan
+	url = git@github.com:/ckan/ckan.git
+[submodule "ckan-extensions/ckanext-auth"]
+	path = submodules/ckanext-auth
+	url = git@github.com:/fjelltopp/ckanext-auth.git
+[submodule "ckan-extensions/ckanext-dhis2harvester"]
+	path = submodules/ckanext-dhis2harvester
+	url = git@github.com:/fjelltopp/ckanext-dhis2harvester.git
+[submodule "ckan-extensions/ckanext-emailasusername"]
+	path = submodules/ckanext-emailasusername
+	url = git@github.com:/fjelltopp/ckanext-emailasusername.git
+[submodule "ckan-extensions/ckanext-harvest"]
+	path = submodules/ckanext-harvest
+	url = git@github.com:/fjelltopp/ckanext-harvest.git
+[submodule "ckan-extensions/ckanext-versions"]
+	path = submodules/ckanext-versions
+	url = git@github.com:/fjelltopp/ckanext-versions.git
+[submodule "ckan-extensions/ckanext-restricted"]
+	path = submodules/ckanext-restricted
+	url = git@github.com:/fjelltopp/ckanext-restricted.git
+[submodule "ckan-extensions/ckanext-scheming"]
+	path = submodules/ckanext-scheming
+	url = git@github.com:/fjelltopp/ckanext-scheming.git
+[submodule "ckan-extensions/ckanext-unaids"]
+	path = submodules/ckanext-unaids
+	url = git@github.com:/fjelltopp/ckanext-unaids.git
+[submodule "ckan-extensions/ckanext-validation"]
+	path = submodules/ckanext-validation
+	url = git@github.com:/fjelltopp/ckanext-validation.git
+[submodule "ckan-extensions/ckanext-blob-storage"]
+	path = submodules/ckanext-blob-storage
+	url = git@github.com:/fjelltopp/ckanext-blob-storage.git
+[submodule "ckan-extensions/ckanext-ytp-request"]
+	path = submodules/ckanext-ytp-request
+	url = git@github.com:/fjelltopp/ckanext-ytp-request.git
+[submodule "unaids_data_specifications"]
+	path = submodules/unaids_data_specifications
+	url = https://github.com/fjelltopp/unaids_data_specifications.git
+[submodule "ckan-extensions/ckanext-fork"]
+	path = submodules/ckanext-fork
+	url = https://github.com/fjelltopp/ckanext-fork.git
+[submodule "submodules/datapusher"]
+	path = submodules/datapusher
+	url = https://github.com/fjelltopp/datapusher.git
+[submodule "submodules/giftless"]
+  path = submodules/giftless
+  url = https://github.com/fjelltopp/giftless.git

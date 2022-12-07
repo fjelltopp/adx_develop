@@ -1,15 +1,15 @@
-#!/bin/sh
+#!/bin/bash
 set -e
 
 # URL for the primary database, in the format expected by sqlalchemy (required
 # unless linked to a container called 'db')
-: ${CKAN_SQLALCHEMY_URL:=}
+: "${CKAN_SQLALCHEMY_URL:=}"
 # URL for solr (required unless linked to a container called 'solr')
-: ${CKAN_SOLR_URL:=}
+: "${CKAN_SOLR_URL:=}"
 # URL for redis (required unless linked to a container called 'redis')
-: ${CKAN_REDIS_URL:=}
+: "${CKAN_REDIS_URL:=}"
 # URL for datapusher (required unless linked to a container called 'datapusher')
-: ${CKAN_DATAPUSHER_URL:=}
+: "${CKAN_DATAPUSHER_URL:=}"
 
 export CONFIG="/etc/ckan/ckan.ini"
 /bootstrap.sh
@@ -35,7 +35,7 @@ set_environment () {
   export CKAN_SMTP_PASSWORD=${CKAN_SMTP_PASSWORD}
   export CKAN_SMTP_MAIL_FROM=${CKAN_SMTP_MAIL_FROM}
   export CKAN_MAX_UPLOAD_SIZE_MB=${CKAN_MAX_UPLOAD_SIZE_MB}
-  export CKAN_HOME=/usr/lib/adx_develop
+  export CKAN_HOME=/usr/lib/adx
   export PATH=${CKAN_VENV}/bin:${PATH}
   export CKAN_VENV=$CKAN_HOME/venv
   echo "${ADR_CKAN_SAML_IDP_CERT}" > /etc/ckan/saml_idp.crt
@@ -69,9 +69,9 @@ fi
 
 # build js components & allow editing
 echo "Starting yarn build"
-yarn --cwd /usr/lib/adx/ckanext-unaids/ckanext/unaids/react/
-yarn --cwd /usr/lib/adx/ckanext-unaids/ckanext/unaids/react/ build
-chmod -R 777 /usr/lib/adx/ckanext-unaids/ckanext/unaids/assets/build
+yarn --cwd /usr/lib/adx/submodules/ckanext-unaids/ckanext/unaids/react/
+yarn --cwd /usr/lib/adx/submodules/ckanext-unaids/ckanext/unaids/react/ build
+chmod -R 777 /usr/lib/adx/submodules/ckanext-unaids/ckanext/unaids/assets/build
 set_environment
 echo "CKAN bootstrapping finished, environment ready"
 
