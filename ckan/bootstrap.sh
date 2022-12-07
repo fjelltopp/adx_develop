@@ -1,5 +1,8 @@
-#!/bin/sh
-export CKAN_HOME=/usr/lib/adx_develop
+#!/bin/bash
+
+set -e
+
+export CKAN_HOME=/usr/lib/adx
 export WORKON_HOME="$CKAN_HOME/.adxvenv"
 export XDG_CACHE_HOME="$CKAN_HOME/.adxvenv/cache"
 export CKAN_VENV=$CKAN_HOME/venv
@@ -8,10 +11,13 @@ export CKAN_STORAGE_PATH="$CKAN_HOME"
 export PATH=${CKAN_VENV}/bin:${PATH}
 export HOME="$CKAN_HOME"
 
-cd "$CKAN_HOME" && mkdir .adxvenv
+cd "$CKAN_HOME" 
+if [ ! -d .adxvenv  ]; then
+  mkdir .adxvenv
+fi
 # The rm command below is a workaround for building the current 2.9.* version of CKAN with pipenv
-rm -rf /usr/lib/adx/ckan/ckan/pastertemplates/template/ckanext_+project_shortname+.egg-info
-cd /usr/lib/adx/adx_develop
+rm -rf /usr/lib/adx/submodules/ckan/ckan/pastertemplates/template/ckanext_+project_shortname+.egg-info
+cd /usr/lib/adx/ || exit 1
 pipenv sync --dev
 echo "show current dir"
 ls -la
@@ -22,7 +28,10 @@ export
 cd "$HOME" || exit 1
 rm -rf venv;
 if [ ! -L venv ]; then
-  ln -s .adxvenv/adx_develop-YYZTJvBg venv
+  ln -s .adxvenv/adx* venv
+fi
+if [ ! -L .venv ]; then
+    ln -s venv .venv
 fi
 if [ ! -L /usr/local/bin/ckan ]; then
   ln -s "$HOME"/venv/bin/ckan /usr/local/bin/ckan

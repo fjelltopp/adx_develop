@@ -10,7 +10,7 @@ services:
 
   ckan:
     container_name: ckan
-    image: fjelltopp/ckan:development_base
+    image: ghcr.io/fjelltopp/adx_develop/ckan_base:${CKAN_IMAGE_TAG}
     deploy:
       resources:
         limits:
@@ -40,8 +40,8 @@ services:
   
     volumes:
       - ckan_storage:/var/lib/ckan
-      - ../:/usr/lib/adx
-      - ./:/usr/lib/adx_develop
+      - ./:/usr/lib/adx
+      - ./:/usr/lib/ckan
       - ./ckan/test-core.ini:/etc/ckan/test-core.ini
       - ./ckan/adx_config.ini:/etc/ckan/ckan.ini
       - ./ckan/adx_who.ini:/etc/ckan/who.ini
@@ -54,7 +54,7 @@ services:
 
   supervisor:
     container_name: supervisor
-    image: fjelltopp/ckan:development_base
+    image: ghcr.io/fjelltopp/adx_develop/ckan_base:${CKAN_IMAGE_TAG}
     depends_on:
       - ckan
     environment:
@@ -66,7 +66,7 @@ services:
       - PYTHONDONTWRITEBYTECODE=1
     volumes:
       - ckan_storage:/var/lib/ckan
-      - ../:/usr/lib/adx
+      - ./:/usr/lib/adx
       - ./:/usr/lib/ckan
       - ./ckan/adx_config.ini:/etc/ckan/ckan.ini
       - ./ckan/adx_who.ini:/etc/ckan/who.ini
@@ -87,15 +87,15 @@ services:
       - CKAN_SITE_URL
     volumes:
       - /etc/localtime:/etc/localtime:ro
-      - ../ckan:/usr/lib/ckan/venv/src/ckan
+      - ./submodules/ckan:/usr/lib/ckan/venv/src/ckan
 
   datapusher:
     container_name: datapusher
     image: adr.datapusher:${IMAGE_TAG}
     build:
-      context: ../datapusher
+      context: ./submodules/datapusher
     volumes:
-      - ../datapusher:/var/www/datapusher
+      - ./submodules/datapusher:/var/www/datapusher
     ports:
       - "8800:8800"
     stdin_open: true
@@ -108,7 +108,8 @@ services:
       - "5432:5432"
     image: adr.db:${IMAGE_TAG}
     build:
-      context: ./db
+      context: ./submodules/ckan/
+      dockerfile: contrib/docker/postgresql/Dockerfile
       args:
         - DS_RO_PASS=datastore
         - POSTGRES_PASSWORD=ckan
@@ -141,7 +142,7 @@ services:
       - "6001:6001"
     image: adr.giftless:${IMAGE_TAG}
     build:
-      context: ../giftless/
+      context: ./submodules/giftless/
       dockerfile: Dockerfile
     environment:
       - GIFTLESS_CONFIG_FILE=/giftless.yaml
@@ -152,7 +153,7 @@ services:
       - ./giftless/giftless.yaml:/giftless.yaml
       - ./ckan/jwt_public_key.pem:/jwt_public_key.pem
       - giftless_storage:/lfs-storage
-      - ../giftless:/app
+      - ./submodules/giftless:/app
     command: ["--http", "0.0.0.0:6001", "-M", "-T", "--threads", "2", "-p", "2", "--manage-script-name", "--callable", "app", "--honour-stdin"]
     stdin_open: true
     tty: true
@@ -185,7 +186,7 @@ services:
       # Change the number before : to the port the IMAP server should be accessible on
       - "143:143"
     volumes:
-      # This is where smtp4dev stores the database..
+      # This is where smtp4dev stores the database.
         - smtp4dev-data:/smtp4dev
     environment:
       #Specifies the server hostname. Used in auto-generated TLS certificate if enabled.

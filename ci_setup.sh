@@ -11,6 +11,11 @@ then
 else 
   BRANCH="origin/pr/$CHANGE_ID"
 fi
+echo "CHANGE_ID: ${CHANGE_ID}" 
+
+CKAN_IMAGE_TAG="$CHANGE_BRANCH"
+export CKAN_IMAGE_TAG
+echo "CKAN_IMAGE_TAG: ${CKAN_IMAGE_TAG}"
 
 echo "Preparing environment"
 cd ../
@@ -20,6 +25,8 @@ export PATH=$WORKSPACE/adx_develop/:$PATH
 export SKIP_DB_RESTART=True
 # prepare environment
 cp "$WORKSPACE"/adx_develop/dev.env "$WORKSPACE"/adx_develop/.env
+# Init submodules
+adx init
 # Setup environment
 yes | adx setup
 git fetch origin +refs/pull/*/merge:refs/remotes/origin/pr/* && git checkout "${BRANCH}"
