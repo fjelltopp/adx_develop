@@ -5,8 +5,8 @@
 
 # add adx script to PATH
 export PATH=$WORKSPACE/adx_develop/:$PATH
-IMAGE_TAG="$CHANGE_BRANCH"
-export IMAGE_TAG
+CKAN_IMAGE_TAG="$CHANGE_BRANCH"
+echo "CKAN_IMAGE_TAG: ${CKAN_IMAGE_TAG}"
 
 error(){
   echo "CKAN ${1} test did fail, check logs, docker output below:"

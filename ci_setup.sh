@@ -13,9 +13,9 @@ else
 fi
 echo "CHANGE_ID: ${CHANGE_ID}" 
 
-IMAGE_TAG="$CHANGE_BRANCH"
-export IMAGE_TAG
-echo "IMAGE_TAG: ${IMAGE_TAG}"
+CKAN_IMAGE_TAG="$CHANGE_BRANCH"
+export CKAN_IMAGE_TAG
+echo "CKAN_IMAGE_TAG: ${CKAN_IMAGE_TAG}"
 
 echo "Preparing environment"
 cd ../
