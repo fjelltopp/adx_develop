@@ -218,7 +218,7 @@
         "ckanext-pages": {
             "editable": true,
             "git": "https://github.com/ckan/ckanext-pages.git",
-            "ref": "79d9740ffa048ac25ab94de0a5209db0411d0c42"
+            "ref": "d062c9c6fb3967baebd5166ee20e6bd99056f5d7"
         },
         "ckanext-pdfview": {
             "editable": true,
