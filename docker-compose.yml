@@ -47,6 +47,7 @@ services:
       - ./ckan/adx_who.ini:/etc/ckan/who.ini
       - ./ckan/utils/:/adx_utils
       - ./ckan/ckan-entrypoint-adx.sh:/ckan-entrypoint.sh
+      - ./ckan/bootstrap.sh:/bootstrap.sh
       - ./ckan/jwt_public_key.pem:/etc/ckan/jwt_public_key.pem
     command: ["ckan","--config","/etc/ckan/ckan.ini", "run", "--host", "0.0.0.0", "--threaded"]
     stdin_open: true
@@ -72,6 +73,7 @@ services:
       - ./ckan/adx_who.ini:/etc/ckan/who.ini
       - ./ckan/ckan_supervisor.conf:/etc/supervisor/conf.d/ckan_supervisor.conf
       - ./ckan/ckan-entrypoint-adx.sh:/ckan-entrypoint.sh
+      - ./ckan/bootstrap.sh:/bootstrap.sh
     entrypoint: ["/wait-for-it.sh", "ckan:5000", "--timeout=0",  "--", "/ckan-entrypoint.sh"]
     command: ["/usr/bin/supervisord"]
     stdin_open: true
