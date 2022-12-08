@@ -13,9 +13,13 @@ else
 fi
 echo "CHANGE_ID: ${CHANGE_ID}" 
 
-CKAN_IMAGE_TAG="$CHANGE_BRANCH"
-export CKAN_IMAGE_TAG
-echo "CKAN_IMAGE_TAG: ${CKAN_IMAGE_TAG}"
+# check if custom ckan image should be built
+git diff -s --exit-code ./ckan
+if [ $? == 1 ]; then
+  CKAN_IMAGE_TAG="$CHANGE_BRANCH"
+  export CKAN_IMAGE_TAG
+  echo "CKAN_IMAGE_TAG: ${CKAN_IMAGE_TAG}"
+fi
 
 echo "Preparing environment"
 cd ../
