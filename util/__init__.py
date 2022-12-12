@@ -115,7 +115,7 @@ def init_ckan_db(args, extra):
     call_command(['docker exec -it ckan /usr/local/bin/ckan -c /etc/ckan/ckan.ini versions initdb'])
     call_command(['docker exec -it ckan /usr/local/bin/ckan -c /etc/ckan/ckan.ini pages initdb'])
     call_command(['docker exec -it ckan /usr/local/bin/ckan -c /etc/ckan/ckan.ini opendata-request init-db'])
-    call_command(['docker exec -it ckan /usr/local/bin/ckan -c /etc/ckan/ckan.ini user add admin email=admin@localhost name=admin fullname=Admin job_title=chief affiliation=fjelltopp password={FJELLTOPP_PASSWORD} apikey=a4bf5640-e1b2-4141-8c22-f2b96b6df2c3'])
+    call_command(['docker exec -it ckan /usr/local/bin/ckan -c /etc/ckan/ckan.ini user add admin email=admin@fjelltopp.org name=admin fullname=Admin job_title=chief affiliation=fjelltopp password={FJELLTOPP_PASSWORD} apikey=a4bf5640-e1b2-4141-8c22-f2b96b6df2c3'])
     call_command([f'docker exec db psql -U {PG_USER} -c "UPDATE public.user SET apikey = \'{ADMIN_APIKEY}\' WHERE name = \'admin\';"'])
     call_command(['docker exec -it ckan /usr/local/bin/ckan -c /etc/ckan/ckan.ini sysadmin add admin'])
 
