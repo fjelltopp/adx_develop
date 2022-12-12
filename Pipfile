@@ -65,7 +65,7 @@ ckanext-sentry = {editable = true, ref = "d3b1d1cf1f975b3672891012e6c75e176497db
 ckanext-authz-service = {editable = true, ref = "bd4c80f55a714c1117a0e130d07463e383c494c7", git = "https://github.com/datopian/ckanext-authz-service"}
 ckanext-pdfview = {editable = true, ref = "3acd4a5d4cf53ca46bd3681e13e5d3ada051c644", git = "https://github.com/ckan/ckanext-pdfview.git"}
 ckanext-geoview = {editable = true, ref = "cc30270e84c50df17a7a9f00b1223219dc3afa52", git ="https://github.com/ckan/ckanext-geoview.git"}
-ckanext-pages = {editable = true, ref = "v0.3.4", git = "https://github.com/ckan/ckanext-pages.git"}
+ckanext-pages = {editable = true, ref = "v0.3.7", git = "https://github.com/ckan/ckanext-pages.git"}
 
 # Submodules
 ckanext-auth = {editable = true, path = "./submodules/ckanext-auth"}
