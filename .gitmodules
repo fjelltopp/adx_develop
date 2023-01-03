@@ -44,5 +44,5 @@
 	path = submodules/datapusher
 	url = https://github.com/fjelltopp/datapusher.git
 [submodule "submodules/giftless"]
-  path = submodules/giftless
-  url = https://github.com/fjelltopp/giftless.git
+	path = submodules/giftless
+	url = https://github.com/datopian/giftless.git
