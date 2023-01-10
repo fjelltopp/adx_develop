@@ -159,13 +159,15 @@ def run_tests(args, extra):
     extension_name = "ckanext-" + args.extension
     extension_path = "/usr/lib/adx/submodules/" + extension_name
     extension_sub_path = "/".join(extension_name.split("-", 1))
+    test_specifier = "/" + args.testspecifier if args.testspecifier else ""
+
     # for cases like ckanext-ytp-requests repository which uses ytp_requests test directory internally
     extension_sub_path = extension_sub_path.replace("-", "_")
     retcode = call_command([
         f'docker exec {args.interaction} -e CKAN_SQLALCHEMY_URL={CKAN_TEST_SQLALCHEMY_URL} '
         f'ckan /usr/local/bin/ckan-pytest --capture=no --disable-warnings '
         f'--ckan-ini={extension_path}/test.ini '
-        f'{extension_path}/{extension_sub_path}/tests '
+        f'{extension_path}/{extension_sub_path}/tests{test_specifier} '
         f'--log-level=WARNING '
     ] + extra)
     if retcode != 0:
