@@ -46,3 +46,5 @@
 [submodule "submodules/giftless"]
 	path = submodules/giftless
 	url = git@github.com:/fjelltopp/giftless.git
+[submodule "submodules/ckanext-validation"]
+	url = git@github.com:fjelltopp/ckanext-validation.git
