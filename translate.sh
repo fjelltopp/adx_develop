@@ -110,11 +110,9 @@ copy_translations () {
         do
             folder_name=${extension//[-]/_}
             name=ckanext-$extension
-            ext_name=$name
-            if [ $name = "ckanext-ytp-request" ]; then
-                ext_name=ckanext-ytp_request
-            fi
-            cp /usr/lib/adx/build/translations/$lang/$ext_name.po /usr/lib/adx/submodules/$name/ckanext/$folder_name/i18n/$lang/LC_MESSAGES/ || :
+            extension_name=${name//[-]/_}
+
+            cp /usr/lib/adx/build/translations/$lang/$extension_name.po /usr/lib/adx/submodules/$name/ckanext/$folder_name/i18n/$lang/LC_MESSAGES/ || :
         done
     done
 }
