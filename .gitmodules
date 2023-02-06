@@ -36,13 +36,13 @@
 	url = git@github.com:/fjelltopp/ckanext-ytp-request.git
 [submodule "unaids_data_specifications"]
 	path = submodules/unaids_data_specifications
-	url = https://github.com/fjelltopp/unaids_data_specifications.git
+	url = git@github.com:/fjelltopp/unaids_data_specifications.git
 [submodule "ckan-extensions/ckanext-fork"]
 	path = submodules/ckanext-fork
-	url = https://github.com/fjelltopp/ckanext-fork.git
+	url = git@github.com:/fjelltopp/ckanext-fork.git
 [submodule "submodules/datapusher"]
 	path = submodules/datapusher
-	url = https://github.com/fjelltopp/datapusher.git
+	url = git@github.com:/fjelltopp/datapusher.git
 [submodule "submodules/giftless"]
 	path = submodules/giftless
 	url = https://github.com/datopian/giftless.git
