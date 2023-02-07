@@ -109,8 +109,10 @@ copy_translations () {
         for lang in ${LANGUAGES[*]}
         do
             folder_name=${extension//[-]/_}
-            name=ckanext-$extension 
-            cp /usr/lib/adx/build/translations/$lang/$name.po /usr/lib/adx/$name/ckanext/$folder_name/i18n/$lang/LC_MESSAGES/
+            name=ckanext-$extension
+            extension_name=${name//[-]/_}
+
+            cp /usr/lib/adx/build/translations/$lang/$extension_name.po /usr/lib/adx/submodules/$name/ckanext/$folder_name/i18n/$lang/LC_MESSAGES/ || :
         done
     done
 }
@@ -120,7 +122,7 @@ compile_catalogs () {
     do
         name=ckanext-$extension
         echo $name
-        cd /usr/lib/adx/$name
+        cd /usr/lib/adx/submodules/$name
         for lang in ${LANGUAGES[*]}
         do
             python setup.py compile_catalog --locale $lang 
