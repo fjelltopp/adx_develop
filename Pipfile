@@ -109,6 +109,7 @@ pyrsistent = "==0.16.0"
 jsonschema = "==3.2.0"
 charset-normalizer = "==2.0.12"
 owslib = "==0.18.0"
+GitPython = "*"
 
 [dev-packages]
 beautifulsoup4 = "==4.9.1"
