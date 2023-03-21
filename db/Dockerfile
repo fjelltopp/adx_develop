@@ -1,7 +1,7 @@
 # FROM postgres:9.6
 # FROM mdillon/postgis:11
-# FROM postgres:12
-FROM postgis/postgis:12-3.3
+FROM postgres:12
+# FROM postgis/postgis:12-3.3
 MAINTAINER Fjelltopp
 
 # RUN echo "host all  all    0.0.0.0/0  md5" >> /var/lib/postgresql/data/pg_hba.conf
