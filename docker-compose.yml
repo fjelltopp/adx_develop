@@ -111,7 +111,7 @@ services:
     image: adr.db:${IMAGE_TAG}
     build:
       context: ./db
-      dockerfile: db/Dockerfile
+      dockerfile: Dockerfile
       args:
         - DS_RO_PASS=datastore
         - POSTGRES_PASSWORD=ckan
