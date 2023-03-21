@@ -1,5 +1,6 @@
-#FROM postgres:9.6
-FROM mdillon/postgis:11
+# FROM postgres:9.6
+# FROM mdillon/postgis:11
+FROM postgres:12
 MAINTAINER Fjelltopp
 
 # Customize default user/pass/db
