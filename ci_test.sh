@@ -18,6 +18,8 @@ error(){
   echo "*** CKAN container logs start ***"
   sudo docker logs ckan
   echo "*** CKAN container logs end ***"
+  echo "DB container logs:"
+  docker logs db
   return 1
 }
 
