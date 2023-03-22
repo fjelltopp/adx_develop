@@ -110,8 +110,8 @@ services:
       - "5432:5432"
     image: adr.db:${IMAGE_TAG}
     build:
-      context: ./submodules/ckan/
-      dockerfile: contrib/docker/postgresql/Dockerfile
+      context: ./db
+      dockerfile: Dockerfile
       args:
         - DS_RO_PASS=datastore
         - POSTGRES_PASSWORD=ckan
