@@ -26,7 +26,7 @@ cd ../
 # add adx script to PATH
 export PATH=$WORKSPACE/adx_develop/:$PATH
 # disable db restart during test setup
-# export SKIP_DB_RESTART=True
+export SKIP_DB_RESTART=True
 # prepare environment
 cp "$WORKSPACE"/adx_develop/dev.env "$WORKSPACE"/adx_develop/.env
 # Init submodules
