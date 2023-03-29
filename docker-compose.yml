@@ -96,15 +96,16 @@ services:
     image: adr.datapusher:${IMAGE_TAG}
     build:
       context: ./submodules/datapusher
+    environment:
+      - DATAPUSHER_MAX_CONTENT_LENGTH=${DATAPUSHER_MAX_CONTENT_LENGTH}
     volumes:
       - ./submodules/datapusher:/var/www/datapusher
     ports:
       - "8800:8800"
-    environment:
-      DATAPUSHER_MAX_CONTENT_LENGTH: ${DATAPUSHER_MAX_CONTENT_LENGTH}
     stdin_open: true
     tty: true
     command: /usr/local/bin/uwsgi --ini-paste deployment/datapusher-uwsgi.ini --honour-stdin
+
 
   db:
     container_name: db
