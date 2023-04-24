@@ -111,7 +111,7 @@ charset-normalizer = "==2.0.12"
 owslib = "==0.18.0"
 python-dotenv = "*"
 python-jose = "*"
-setuptools = "==67.3.1"
+setuptools = "==67.0.0"
 
 [dev-packages]
 beautifulsoup4 = "==4.9.1"
