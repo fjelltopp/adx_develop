@@ -10,7 +10,10 @@ services:
 
   ckan:
     container_name: ckan
-    image: ghcr.io/fjelltopp/adx_develop/ckan_base:${CKAN_IMAGE_TAG}
+    image: adr.ckan:${IMAGE_TAG}
+    build:
+      context: ./ckan
+      dockerfile: Dockerfile
     deploy:
       resources:
         limits:
