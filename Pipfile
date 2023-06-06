@@ -116,6 +116,7 @@ python-dotenv = "==1.0.0"
 python-jose = "==3.3.0"
 setuptools = "==67.2.0"
 frictionless= {version = "==5.0.0b9", extras = ["ckan"]}
+raven = "==6.1.0"
 
 [dev-packages]
 beautifulsoup4 = "==4.11.1"
