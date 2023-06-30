@@ -58,14 +58,13 @@ webencodings = "==0.5.1"
 webob = "==1.8.7"
 werkzeug = {version = "==1.0.0", extras = ["watchdog"]}
 "zope.interface" = "<5.0"
-ckanext-spatial = {editable = true, ref = "f00ad5b1d981691ffa51fbd3bbef701d569943cb", git = "https://github.com/ckan/ckanext-spatial.git"}
 ckanext-composite = {editable = true, ref = "1e6d7bb8fbe7d607376505860985c29816e64d36", git = "https://github.com/EnviDat/ckanext-composite.git"}
 ckanext-repeating = {editable = true, ref = "291295557ff74b26784f6271c1a1b4ffdb990f43", git = "https://github.com/open-data/ckanext-repeating.git"}
 ckanext-sentry = {editable = true, ref = "d3b1d1cf1f975b3672891012e6c75e176497db8f", git = "https://github.com/okfn/ckanext-sentry"}
 ckanext-authz-service = {editable = true, ref = "bd4c80f55a714c1117a0e130d07463e383c494c7", git = "https://github.com/datopian/ckanext-authz-service"}
 ckanext-pdfview = {editable = true, ref = "3acd4a5d4cf53ca46bd3681e13e5d3ada051c644", git = "https://github.com/ckan/ckanext-pdfview.git"}
 ckanext-geoview = {editable = true, ref = "cc30270e84c50df17a7a9f00b1223219dc3afa52", git ="https://github.com/ckan/ckanext-geoview.git"}
-ckanext-pages = {editable = true, ref = "v0.3.7", git = "https://github.com/ckan/ckanext-pages.git"}
+ckanext-pages = {editable = true, ref = "v0.4.0", git = "https://github.com/ckan/ckanext-pages.git"}
 
 # Submodules
 ckanext-auth = {editable = true, path = "./submodules/ckanext-auth"}
@@ -90,12 +89,6 @@ pycparser = "==2.20"
 typing-extensions = "==4.2.0"
 typing = "==3.7.4.3"
 ckantoolkit = ">=0.0.3"
-geoalchemy = ">=0.6"
-geoalchemy2 = "==0.5.0"
-shapely = ">=1.2.13"
-pyproj = "~=2.6.1"
-argparse = "*"
-pyparsing = ">=2.1.10"
 python-slugify = "==4.0.0"
 pandas = ">=1.4.2"
 pika = ">=1.1.0"
@@ -108,7 +101,6 @@ pyshp = "==2.1.0"
 pyrsistent = "==0.16.0"
 jsonschema = "==3.2.0"
 charset-normalizer = "==2.0.12"
-owslib = "==0.18.0"
 python-dotenv = "==1.0.0"
 python-jose = "==3.3.0"
 setuptools = "==67.2.0"
