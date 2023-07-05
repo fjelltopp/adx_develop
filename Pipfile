@@ -104,10 +104,8 @@ python-dotenv = "==1.0.0"
 python-jose = "==3.3.0"
 setuptools = "==67.2.0"
 raven = "==6.10.0"
-
 frictionless = "==5.0.0b9"
 tableschema = "*"
-jinja2 = "==3.0"
 
 [dev-packages]
 beautifulsoup4 = "==4.9.1"

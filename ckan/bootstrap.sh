@@ -19,6 +19,9 @@ fi
 rm -rf /usr/lib/adx/submodules/ckan/ckan/pastertemplates/template/ckanext_+project_shortname+.egg-info
 cd /usr/lib/adx/ || exit 1
 pipenv sync --dev
+pipenv run python -m pip install --no-warn-conflicts jinja2==2.11
+pipenv run python -c "import jinja2; print(jinja2.__version__)"
+pipenv run python -m pip freeze
 echo "show current dir"
 ls -la
 echo "Show local/bin"
