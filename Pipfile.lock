@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "2aeb603736f48239303701ede511c12c3fb715bf3b4eb6e050333e57f00af06a"
+            "sha256": "87f006901a2bfd4459ec8c70983eb7d7086cd6d9023782f36ec6d3cbe0760d9b"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -557,11 +557,11 @@
         },
         "jinja2": {
             "hashes": [
-                "sha256:2f2de5285cf37f33d33ecd4a9080b75c87cd0c1994d5a9c6df17131ea1f049c6",
-                "sha256:ea8d7dd814ce9df6de6a761ec7f1cac98afe305b8cdc4aaae4e114b8d8ce24c5"
+                "sha256:31351a702a408a9e7595a8fc6150fc3f43bb6bf7e319770cbc0db9df9437e852",
+                "sha256:6088930bfe239f0e6710546ab9c19c9ef35e29792895fed6e6e31a023a182a61"
             ],
-            "index": "pypi",
-            "version": "==3.0"
+            "markers": "python_version >= '3.7'",
+            "version": "==3.1.2"
         },
         "jmespath": {
             "hashes": [
@@ -1846,8 +1846,8 @@
                 "sha256:352042ddcb019f7c04e48171b4dd78e4c4bb67bf97030d170e154aac42b656d9",
                 "sha256:882899fe78d5417a0aa07f995db298fa28b58faeba2112d2e3a4c95fe14bb738"
             ],
-            "markers": "python_version >= '3.8'",
-            "version": "==8.7.0"
+            "markers": "python_version >= '3.4'",
+            "version": "==8.12.2"
         },
         "itsdangerous": {
             "hashes": [
@@ -1883,11 +1883,11 @@
         },
         "jinja2": {
             "hashes": [
-                "sha256:2f2de5285cf37f33d33ecd4a9080b75c87cd0c1994d5a9c6df17131ea1f049c6",
-                "sha256:ea8d7dd814ce9df6de6a761ec7f1cac98afe305b8cdc4aaae4e114b8d8ce24c5"
+                "sha256:31351a702a408a9e7595a8fc6150fc3f43bb6bf7e319770cbc0db9df9437e852",
+                "sha256:6088930bfe239f0e6710546ab9c19c9ef35e29792895fed6e6e31a023a182a61"
             ],
-            "index": "pypi",
-            "version": "==3.0"
+            "markers": "python_version >= '3.7'",
+            "version": "==3.1.2"
         },
         "jinja2-time": {
             "hashes": [
