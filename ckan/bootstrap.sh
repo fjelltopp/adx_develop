@@ -19,7 +19,6 @@ fi
 rm -rf /usr/lib/adx/submodules/ckan/ckan/pastertemplates/template/ckanext_+project_shortname+.egg-info
 cd /usr/lib/adx/ || exit 1
 pipenv sync --dev
-pipenv run python -m pip install --no-warn-conflicts jinja2==2.11
 echo "installed python packages"
 pipenv run python -m pip freeze
 echo "show current dir"
