@@ -111,9 +111,8 @@ python-dotenv = "==1.0.0"
 python-jose = "==3.3.0"
 setuptools = "==67.2.0"
 raven = "==6.10.0"
-frictionless = {editable = true, ref = "jinja2_2_10_1", git = "https://github.com/fjelltopp/frictionless-py", extras=["ckan"]}
-frictionless-geojson = {editable = true, ref = "v1.0.0", git = "https://github.com/fjelltopp/frictionless-geojson"}
-jinja2 = "==2.10.1"
+owslib = "==0.18.0"
+frictionless = {editable = true, ref = "frictionless_5_0_0b9_jinja2_2_10_1", git = "https://github.com/fjelltopp/frictionless-py", extras=["ckan"]}
 tableschema = "*"
 
 [dev-packages]
