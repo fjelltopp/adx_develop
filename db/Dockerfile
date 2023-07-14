@@ -3,7 +3,7 @@ MAINTAINER Fjelltopp
 
 # after https://github.com/postgis/docker-postgis/blob/master/12-3.3/Dockerfile
 ENV POSTGIS_MAJOR 3
-ENV POSTGIS_VERSION 3.3.2+dfsg-1.pgdg110+1
+ENV POSTGIS_VERSION 3.3.3+dfsg-1.pgdg110+1
 
 RUN apt-get update \
       && apt-cache showpkg postgresql-$PG_MAJOR-postgis-$POSTGIS_MAJOR \
