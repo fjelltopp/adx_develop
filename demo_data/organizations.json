@@ -65,6 +65,28 @@
       "name": "cote",
       "state": "active",
       "title": "Côte d'Ivoire"
+    },
+    {
+      "users": [
+        {
+          "name": "fjelltopp_admin",
+          "capacity": "admin"
+        },
+        {
+          "name": "fjelltopp_editor",
+          "capacity": "editor"
+        },
+        {
+          "name": "fjelltopp_member",
+          "capacity": "member"
+        }
+      ],
+      "display_name": "UNAIDS",
+      "description": "UNAIDS demo organization",
+      "image_url": "https://unaids.org/sites/all/themes/unaidsV2/images/logo-unaids_sdg.png",
+      "name": "unaids",
+      "state": "active",
+      "title": "UNAIDS"
     }
   ]
 }
