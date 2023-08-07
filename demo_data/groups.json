@@ -1,0 +1,24 @@
+{
+  "groups": [
+    {
+      "name": "administrative-boundaries",
+      "description": "Administrative boundaries of countries taking part in HIV Estimates process.",
+      "image_url": "https://unaids.org/sites/all/themes/unaidsV2/images/logo-unaids_sdg.png",
+      "state": "active",
+      "users": [
+        {
+          "name": "north_pole_admin",
+          "capacity": "admin"
+        },
+        {
+          "name": "north_pole_editor",
+          "capacity": "editor"
+        },
+        {
+          "name": "north_pole_member",
+          "capacity": "member"
+        }
+      ]
+    }
+  ]
+}
