@@ -8,15 +8,15 @@
       "state": "active",
       "users": [
         {
-          "name": "north_pole_admin",
+          "name": "fjelltopp_admin",
           "capacity": "admin"
         },
         {
-          "name": "north_pole_editor",
+          "name": "fjelltopp_editor",
           "capacity": "editor"
         },
         {
-          "name": "north_pole_member",
+          "name": "fjelltopp_member",
           "capacity": "member"
         }
       ]
