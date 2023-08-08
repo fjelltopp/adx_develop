@@ -82,7 +82,7 @@
         }
       ],
       "display_name": "UNAIDS",
-      "description": "UNAIDS demo organization",
+      "description": "UNAIDS demo organisation",
       "image_url": "https://adr.unaids.org/uploads/group/2019-03-26-091157.595395unaids-logo.png",
       "name": "unaids",
       "state": "active",
