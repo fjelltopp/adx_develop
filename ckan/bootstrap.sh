@@ -19,8 +19,6 @@ fi
 rm -rf /usr/lib/adx/submodules/ckan/ckan/pastertemplates/template/ckanext_+project_shortname+.egg-info
 cd /usr/lib/adx/ || exit 1
 pipenv sync --dev
-echo "installed python packages"
-pipenv run python -m pip freeze
 echo "show current dir"
 ls -la
 echo "Show local/bin"
