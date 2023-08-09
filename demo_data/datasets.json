@@ -51,6 +51,35 @@
       "maintainer_email": "fjelltopp_admin@fjelltopp.org"
     },
     {
+      "type": "country-estimates-23",
+      "title": "Madagascar HIV estimates dataset [TEST DATA]",
+      "owner_org": "fjelltopp",
+      "name": "madagascar-country-estimates-2023",
+      "geo-location": "Madagascar",
+      "tag_string": "UNAIDS Inputs, ANC, ART, SVY",
+      "maintainer": "Admin",
+      "license": "cc-by-igo",
+      "year": "2023",
+      "type_name": "Inputs to UNAIDS Estimates",
+      "notes": "This is test data generated automatically for the development servers.  It is intended for the purposes of testing geodata dataset.",
+      "maintainer_email": "fjelltopp_admin@fjelltopp.org"
+    },
+
+    {
+      "type": "country-estimates-23",
+      "title": "Malawi HIV estimates dataset [TEST DATA]",
+      "owner_org": "fjelltopp",
+      "name": "malawi-country-estimates-2023",
+      "geo-location": "Malawi",
+      "tag_string": "UNAIDS Inputs, ANC, ART, SVY",
+      "maintainer": "Admin",
+      "license": "cc-by-igo",
+      "year": "2023",
+      "type_name": "Inputs to UNAIDS Estimates",
+      "notes": "This is test data generated automatically for the development servers.  It is intended for the purposes of testing geodata dataset.",
+      "maintainer_email": "fjelltopp_admin@fjelltopp.org"
+    },
+    {
       "type": "country-estimates-22",
       "title": "Poland Country Estimates 2022 [TEST DATA]",
       "owner_org": "fjelltopp",

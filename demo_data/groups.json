@@ -1,0 +1,25 @@
+{
+  "groups": [
+    {
+      "name": "administrative-boundaries",
+      "title": "Administrative Boundaries",
+      "description": "Administrative boundaries of countries taking part in HIV Estimates process.",
+      "image_url": "https://adr.unaids.org/uploads/group/2019-03-26-091157.595395unaids-logo.png",
+      "state": "active",
+      "users": [
+        {
+          "name": "fjelltopp_admin",
+          "capacity": "admin"
+        },
+        {
+          "name": "fjelltopp_editor",
+          "capacity": "editor"
+        },
+        {
+          "name": "fjelltopp_member",
+          "capacity": "member"
+        }
+      ]
+    }
+  ]
+}
