@@ -11,6 +11,7 @@ DEMO_HARVESTERS = os.path.join(DEMO_DATA_PATH, 'harvesters.json')
 DEMO_DATASETS = os.path.join(DEMO_DATA_PATH, 'datasets.json')
 DEMO_RESOURCES = os.path.join(DEMO_DATA_PATH, 'resources.json')
 DEMO_PAGES = os.path.join(DEMO_DATA_PATH, 'pages.json')
+DEMO_GROUPS = os.path.join(DEMO_DATA_PATH, 'groups.json')
 
 FJELLTOPP_PASSWORD = os.environ.get("FJELLTOPP_PASSWORD", "fjelltopp")
 
@@ -167,6 +168,22 @@ def load_pages(ckan):
                 except ckanapi.errors.ValidationError as e:
                     log.error(f"Can't create page {page['name']}: {e.error_dict}")
 
+
+def load_groups(ckan):
+    """
+    Helper method to load demo groups
+    """
+    with open(DEMO_GROUPS, 'r') as groups_file:
+        groups = json.load(groups_file)['groups']
+        for group in groups:
+            try:
+                ckan.action.group_create(**group)
+                log.info(f"Created group {group['name']}")
+                continue
+            except ckanapi.errors.ValidationError as e:
+                log.warning(f"Group {group['name']} might already exists. Will try to update.")
+
+
 def load_data(adr_url, apikey):
     ckan = ckanapi.RemoteCKAN(adr_url, apikey=apikey)
 
@@ -176,6 +193,7 @@ def load_data(adr_url, apikey):
     load_datasets(ckan)
     load_resources(ckan)
     load_pages(ckan)
+    load_groups(ckan)
 
 
 if __name__ == '__main__':
