@@ -25,9 +25,6 @@
 [submodule "ckan-extensions/ckanext-unaids"]
 	path = submodules/ckanext-unaids
 	url = git@github.com:/fjelltopp/ckanext-unaids.git
-[submodule "ckan-extensions/ckanext-validation"]
-	path = submodules/ckanext-validation
-	url = git@github.com:/fjelltopp/ckanext-validation.git
 [submodule "ckan-extensions/ckanext-blob-storage"]
 	path = submodules/ckanext-blob-storage
 	url = git@github.com:/fjelltopp/ckanext-blob-storage.git
@@ -46,3 +43,6 @@
 [submodule "submodules/giftless"]
 	path = submodules/giftless
 	url = git@github.com:/fjelltopp/giftless.git
+[submodule "ckan-extensions/ckanext-validation"]
+    path = submodules/ckanext-validation
+	url = git@github.com:fjelltopp/ckanext-validation.git
