@@ -57,8 +57,6 @@ webencodings = "==0.5.1"
 webob = "==1.8.7"
 werkzeug = {version = "==1.0.0", extras = ["watchdog"]}
 "zope.interface" = "<5.0"
-ckanext-composite = {editable = true, ref = "1e6d7bb8fbe7d607376505860985c29816e64d36", git = "https://github.com/EnviDat/ckanext-composite.git"}
-ckanext-repeating = {editable = true, ref = "291295557ff74b26784f6271c1a1b4ffdb990f43", git = "https://github.com/open-data/ckanext-repeating.git"}
 ckanext-sentry = {editable = true, ref = "d3b1d1cf1f975b3672891012e6c75e176497db8f", git = "https://github.com/okfn/ckanext-sentry"}
 ckanext-authz-service = {editable = true, ref = "bd4c80f55a714c1117a0e130d07463e383c494c7", git = "https://github.com/datopian/ckanext-authz-service"}
 ckanext-pdfview = {editable = true, ref = "3acd4a5d4cf53ca46bd3681e13e5d3ada051c644", git = "https://github.com/ckan/ckanext-pdfview.git"}
