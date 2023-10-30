@@ -42,7 +42,7 @@ RUN apt-get -q -y update \
         jq \
     && apt-get -q clean \
     && rm -rf /var/lib/apt/lists/*
-RUN pip3 install pipenv
+RUN pip3 install pipenv==2022.11.30
 RUN curl -sL https://deb.nodesource.com/setup_16.x | bash - && apt-get install nodejs npm -y && npm version
 RUN npm install --global yarn
 RUN mkdir -p /var/lib/ckan/resources && chmod 777 -R /var/lib/ckan
