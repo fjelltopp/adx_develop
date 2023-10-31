@@ -60,7 +60,7 @@ werkzeug = {version = "==1.0.0", extras = ["watchdog"]}
 ckanext-sentry = {editable = true, ref = "d3b1d1cf1f975b3672891012e6c75e176497db8f", git = "https://github.com/okfn/ckanext-sentry"}
 ckanext-authz-service = {editable = true, ref = "bd4c80f55a714c1117a0e130d07463e383c494c7", git = "https://github.com/datopian/ckanext-authz-service"}
 ckanext-pdfview = {editable = true, ref = "3acd4a5d4cf53ca46bd3681e13e5d3ada051c644", git = "https://github.com/ckan/ckanext-pdfview.git"}
-ckanext-geoview = {editable = true, ref = "1eea3f2b2db008f5d1c84905ec700212e701e58f", git ="https://github.com/ckan/ckanext-geoview.git"}
+ckanext-geoview = {editable = true, ref = "v0.0.21", git ="https://github.com/ckan/ckanext-geoview.git"}
 ckanext-pages = {editable = true, ref = "v0.4.0", git = "https://github.com/ckan/ckanext-pages.git"}
 
 # Submodules
