@@ -96,6 +96,8 @@ services:
     image: adr.datapusher:${IMAGE_TAG}
     build:
       context: ./submodules/datapusher
+    environment:
+      - DATAPUSHER_MAX_CONTENT_LENGTH
     volumes:
       - ./submodules/datapusher:/var/www/datapusher
     ports:
