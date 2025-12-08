@@ -22,8 +22,8 @@ RUN update-locale LANG=${LC_ALL}
 ## Install required system packages
 RUN apt-get -q -y update \
     && apt-get -q -y install \
+        ca-certificates \
         python-wheel-common \
-        python3-distutils \
         libpq-dev \
         libxml2-dev \
         libxslt-dev \
@@ -42,9 +42,10 @@ RUN apt-get -q -y update \
         jq \
     && apt-get -q clean \
     && rm -rf /var/lib/apt/lists/*
-RUN pip3 install pipenv
-RUN curl -sL https://deb.nodesource.com/setup_16.x | bash - && apt-get install nodejs npm -y && npm version
-RUN npm install --global yarn
+RUN pip3 install --upgrade pip --trusted-host pypi.org --trusted-host files.pythonhosted.org
+RUN pip3 install pipenv --trusted-host pypi.org --trusted-host files.pythonhosted.org
+RUN curl -sL https://deb.nodesource.com/setup_16.x | bash - && apt-get update && apt-get install -y nodejs npm
+RUN npm config set strict-ssl false && npm install --global yarn && npm version
 RUN mkdir -p /var/lib/ckan/resources && chmod 777 -R /var/lib/ckan
 
 # Define environment variables

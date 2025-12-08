@@ -10,6 +10,9 @@ services:
 
   ckan:
     container_name: ckan
+    build:
+      context: ./ckan
+      dockerfile: Dockerfile
     image: ghcr.io/fjelltopp/adx_develop/ckan_base:${CKAN_IMAGE_TAG}
     deploy:
       resources:
@@ -55,6 +58,9 @@ services:
 
   supervisor:
     container_name: supervisor
+    build:
+      context: ./ckan
+      dockerfile: Dockerfile
     image: ghcr.io/fjelltopp/adx_develop/ckan_base:${CKAN_IMAGE_TAG}
     depends_on:
       - ckan
