@@ -1,4 +1,4 @@
-FROM python:3.8
+FROM python:3.10
 
 # OCI Annotations from https://github.com/opencontainers/image-spec/blob/master/annotations.md
 LABEL org.opencontainers.image.maintainer="support@fjelltopp.org"
