@@ -42,14 +42,10 @@ RUN apt-get -q -y update \
         jq \
     && apt-get -q clean \
     && rm -rf /var/lib/apt/lists/*
-# Note: --trusted-host flags may be needed in some build environments with SSL inspection/proxies
-# In production, these should be removed if proper certificate chains are available
-RUN pip3 install --upgrade pip --trusted-host pypi.org --trusted-host files.pythonhosted.org
-RUN pip3 install pipenv --trusted-host pypi.org --trusted-host files.pythonhosted.org
+RUN pip3 install --upgrade pip
+RUN pip3 install pipenv
 RUN curl -sL https://deb.nodesource.com/setup_16.x | bash - && apt-get update && apt-get install -y nodejs npm
-# Note: strict-ssl false may be needed in some build environments with SSL inspection/proxies
-# In production, remove this configuration if proper certificates are available
-RUN npm config set strict-ssl false && npm install --global yarn && npm version
+RUN npm install --global yarn && npm version
 RUN mkdir -p /var/lib/ckan/resources && chmod 777 -R /var/lib/ckan
 
 # Define environment variables
