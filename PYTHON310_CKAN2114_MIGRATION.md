@@ -112,6 +112,15 @@ This document tracks all changes made to upgrade the ADX project from Python 3.x
   `unaids_datatables_view=ckanext.unaids.plugin:UNAIDSDataTablesView`
 - **Reason:** Renamed view plugin to match code changes
 
+### 7. ckanext-versions Model
+**File:** `submodules/ckanext-versions/ckanext/versions/model.py`
+
+#### Change: SQLAlchemy 1.4 compatibility
+- **Lines 46-61:** Updated `create_tables()` and `tables_exist()` functions
+- Added `bind` parameter to `exists()` and `create()` methods
+- Get engine from `ckan.model.meta` when metadata.bind is None
+- **Reason:** SQLAlchemy 1.4 requires explicit bind parameter for table operations
+
 ## Configuration Changes
 
 ### CKAN Configuration
