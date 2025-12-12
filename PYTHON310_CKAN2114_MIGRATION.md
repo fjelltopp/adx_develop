@@ -46,8 +46,8 @@ This document tracks all changes made to upgrade the ADX project from Python 3.x
 #### Added Missing Extensions
 - ckanext-authz-service: Added as editable submodule dependency
 - ckanext-validation: Added as editable submodule dependency
-- ckanext-pages: Re-added as git dependency (v0.5.2, was accidentally removed)
-  - Note: Installed as non-editable git dependency (editable mode caused pipenv errors)
+- ckanext-pages: Converted from git dependency to local submodule (v0.5.2)
+  - Note: Converted to submodule to apply SQLAlchemy 1.4 compatibility fix
 
 ## Code Changes
 
@@ -142,6 +142,28 @@ This document tracks all changes made to upgrade the ADX project from Python 3.x
 - Add None check for engine during early startup
 - **Reason:** SQLAlchemy 1.4 deprecated table.exists() and requires explicit engine
 
+### 10. ckanext-pages Database Model
+**File:** `submodules/ckanext-pages/ckanext/pages/db.py`
+
+#### Change: SQLAlchemy 1.4 compatibility
+- **Lines 27-39:** Updated `init_db()` function
+- Use `inspector.has_table()` instead of deprecated `table.exists()`
+- Pass engine to `table.create()` method
+- Add None check for engine during early startup
+- **Note:** Converted from git dependency to local submodule to apply this fix
+- **Reason:** SQLAlchemy 1.4 deprecated table.exists() and requires explicit engine
+
+### 11. ckanext-harvest Model
+**File:** `submodules/ckanext-harvest/ckanext/harvest/model/__init__.py`
+
+#### Change: SQLAlchemy 1.4 compatibility
+- **Lines 44-76:** Updated `setup()` function
+- Use `inspector.has_table()` instead of deprecated `table.exists()` for both `model.package_table` and `harvest_source_table`
+- Pass engine to all `table.create()` method calls
+- Add None check for engine during early startup
+- Move inspector initialization to top of function for reuse
+- **Reason:** SQLAlchemy 1.4 deprecated table.exists() and requires explicit engine
+
 ## Configuration Changes
 
 ### CKAN Configuration
@@ -191,6 +213,14 @@ This document tracks all changes made to upgrade the ADX project from Python 3.x
 git submodule add https://github.com/datopian/ckanext-authz-service.git submodules/ckanext-authz-service
 cd submodules/ckanext-authz-service
 git checkout bd4c80f55a714c1117a0e130d07463e383c494c7
+```
+
+### Added ckanext-pages
+```bash
+git submodule add https://github.com/ckan/ckanext-pages.git submodules/ckanext-pages
+cd submodules/ckanext-pages
+git checkout v0.5.2
+# Applied SQLAlchemy 1.4 compatibility fix to ckanext/pages/db.py
 ```
 
 ## Issues Fixed
@@ -249,6 +279,9 @@ After these changes, the following should be tested:
 - `submodules/ckanext-ytp-request/ckanext/ytp_request/model.py` - CKAN 2.11.4 import fix
 - `submodules/ckanext-versions/ckanext/versions/model.py` - SQLAlchemy 1.4 compatibility
 - `submodules/ckanext-validation/ckanext/validation/model.py` - SQLAlchemy 1.4 compatibility
+- `submodules/ckanext-pages/ckanext/pages/db.py` - SQLAlchemy 1.4 compatibility
+- `submodules/ckanext-harvest/ckanext/harvest/model/__init__.py` - SQLAlchemy 1.4 compatibility
+- `submodules/ckanext-blob-storage/setup.py` - Fixed version import
 
 ## Date
 December 12, 2025

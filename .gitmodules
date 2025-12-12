@@ -49,3 +49,6 @@
 [submodule "submodules/ckanext-authz-service"]
 	path = submodules/ckanext-authz-service
 	url = https://github.com/datopian/ckanext-authz-service.git
+[submodule "submodules/ckanext-pages"]
+	path = submodules/ckanext-pages
+	url = https://github.com/ckan/ckanext-pages.git

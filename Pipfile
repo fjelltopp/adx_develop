@@ -62,8 +62,8 @@ ckanext-fork = {editable = true, path = "./submodules/ckanext-fork"}
 ckan = {editable = true, path = "./submodules/ckan"}
 # end of submodules
 
-# Additional CKAN extensions (git dependencies)
-ckanext-pages = {ref = "v0.5.2", git = "https://github.com/ckan/ckanext-pages.git"}
+# Additional CKAN extensions (local submodule)
+ckanext-pages = {editable = true, path = "./submodules/ckanext-pages"}
 
 # Additional ADX dependencies
 ckanapi = "==4.3"

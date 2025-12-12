@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "af17e06f4cbc346e6c50d284734ad7c120525bcf4476232be2f57b870acc76e4"
+            "sha256": "f011abc071e8043f9e38bd38d40d7b9f2cef34547e648bc93daee254b4d477d6"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -311,8 +311,8 @@
             "path": "./submodules/ckanext-harvest"
         },
         "ckanext-pages": {
-            "git": "https://github.com/ckan/ckanext-pages.git",
-            "ref": "170f8cf90c27afd9bc4d09a0f4db3438ea44fd40"
+            "editable": true,
+            "path": "./submodules/ckanext-pages"
         },
         "ckanext-restricted": {
             "editable": true,
