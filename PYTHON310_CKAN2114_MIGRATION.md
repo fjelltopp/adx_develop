@@ -160,6 +160,7 @@ The following plugins were removed and may need replacement extensions if functi
 - **PDF viewing:** `pdf_view` - may need separate ckanext-pdfview extension
 - **GeoJSON/Map viewing:** `geo_view`, `geojson_view` - may need separate mapping extension
 - **Graph views:** `recline_graph_view` - functionality may need alternative
+- **Error tracking:** `sentry` - ckanext-sentry was not installed, removed from config
 
 ## Testing Required
 
