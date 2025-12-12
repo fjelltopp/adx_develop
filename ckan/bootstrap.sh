@@ -14,11 +14,19 @@ export HOME="$CKAN_HOME"
 cd "$CKAN_HOME" 
 if [ ! -d .adxvenv  ]; then
   mkdir .adxvenv
+else
+  # Clean old venv directory to ensure fresh environment
+  rm -rf .adxvenv
+  mkdir .adxvenv
 fi
 # The rm command below is a workaround for building the current 2.9.* version of CKAN with pipenv
 rm -rf /usr/lib/adx/submodules/ckan/ckan/pastertemplates/template/ckanext_+project_shortname+.egg-info
 cd /usr/lib/adx/ || exit 1
-pipenv sync --dev
+
+# Install dependencies
+echo "Installing dependencies..."
+pipenv install --dev --python /usr/local/bin/python3 --skip-lock
+
 echo "show current dir"
 ls -la
 echo "Show local/bin"

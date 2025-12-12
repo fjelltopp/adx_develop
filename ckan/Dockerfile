@@ -44,7 +44,7 @@ RUN apt-get -q -y update \
     && rm -rf /var/lib/apt/lists/*
 RUN pip3 install --upgrade pip
 RUN pip3 install pipenv
-RUN curl -sL https://deb.nodesource.com/setup_16.x | bash - && apt-get update && apt-get install -y nodejs npm
+RUN curl -fsSL https://deb.nodesource.com/setup_16.x | bash - && apt-get update && apt-get install -y nodejs
 RUN npm install --global yarn && npm version
 RUN mkdir -p /var/lib/ckan/resources && chmod 777 -R /var/lib/ckan
 
@@ -62,6 +62,7 @@ ENV PATH=${CKAN_VENV}/bin:${PATH}
 COPY ckan-entrypoint-adx.sh /ckan-entrypoint.sh
 COPY wait-for-it.sh /wait-for-it.sh
 COPY bootstrap.sh /bootstrap.sh
+COPY fix_ckanext_sentry.py /fix_ckanext_sentry.py
 # Add CKAN user
 RUN useradd -r -u 900 -m -c "ckan account" -d $CKAN_HOME -s /bin/false ckan
 RUN chmod +x /*.sh 

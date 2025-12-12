@@ -46,3 +46,6 @@
 [submodule "ckan-extensions/ckanext-validation"]
     path = submodules/ckanext-validation
 	url = git@github.com:fjelltopp/ckanext-validation.git
+[submodule "submodules/ckanext-authz-service"]
+	path = submodules/ckanext-authz-service
+	url = https://github.com/datopian/ckanext-authz-service.git
