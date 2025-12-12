@@ -166,6 +166,24 @@ This document tracks all changes made to upgrade the ADX project from Python 3.x
 - **Before:** `geojson_view unaids_recline_view pdf_view image_view text_view`
 - **After:** `unaids_datatables_view image_view text_view webpage_view`
 
+#### Change: Added DataPusher API token configuration (Lines 274-280)
+**Added settings:**
+- `ckan.datapusher.callback_url_base = http://ckan:5000/`
+- `ckan.datapusher.api_token = ${CKAN_DATAPUSHER_API_TOKEN}`
+- **Reason:** CKAN 2.11.4 requires API token for DataPusher authentication
+
+### Docker Configuration
+**Files:** `docker-compose.yml`, `.env`
+
+#### Change: Added DataPusher API token environment variable
+**docker-compose.yml:**
+- Added `CKAN_DATAPUSHER_API_TOKEN=${CKAN_DATAPUSHER_API_TOKEN}` to both `ckan` and `supervisor` services
+- **Reason:** Pass API token from environment to CKAN configuration
+
+**.env:**
+- Added `CKAN_DATAPUSHER_API_TOKEN` with development token
+- **Reason:** Store API token for local development environment
+
 ## Git Submodule Changes
 
 ### Added ckanext-authz-service
@@ -217,15 +235,20 @@ After these changes, the following should be tested:
 
 ### Configuration Files
 - `/Pipfile` - Dependency updates
-- `ckan/adx_config.ini` - Plugin configuration updates
+- `ckan/adx_config.ini` - Plugin configuration updates and DataPusher API token
+- `docker-compose.yml` - Added DataPusher API token environment variable
+- `.env` - Added CKAN_DATAPUSHER_API_TOKEN
 
 ### Extension Code
 - `submodules/ckanext-unaids/ckanext/unaids/plugin.py` - Multiple API updates
 - `submodules/ckanext-unaids/ckanext/unaids/auth_logic.py` - Flask 3.x updates
 - `submodules/ckanext-unaids/ckanext/unaids/blueprints/user_info_blueprint.py` - Blueprint pattern update
+- `submodules/ckanext-unaids/ckanext/unaids/dataset_transfer/model.py` - SQLAlchemy 1.4 compatibility
 - `submodules/ckanext-unaids/setup.py` - Entry point update
 - `submodules/ckanext-authz-service/ckanext/authz_service/authzzie.py` - Python 3.10 fix
 - `submodules/ckanext-ytp-request/ckanext/ytp_request/model.py` - CKAN 2.11.4 import fix
+- `submodules/ckanext-versions/ckanext/versions/model.py` - SQLAlchemy 1.4 compatibility
+- `submodules/ckanext-validation/ckanext/validation/model.py` - SQLAlchemy 1.4 compatibility
 
 ## Date
 December 12, 2025
