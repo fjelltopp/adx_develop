@@ -63,7 +63,7 @@ ckan = {editable = true, path = "./submodules/ckan"}
 # end of submodules
 
 # Additional CKAN extensions (git dependencies)
-ckanext-pages = {editable = true, ref = "v0.5.2", git = "https://github.com/ckan/ckanext-pages.git"}
+ckanext-pages = {ref = "v0.5.2", git = "https://github.com/ckan/ckanext-pages.git"}
 
 # Additional ADX dependencies
 ckanapi = "==4.3"

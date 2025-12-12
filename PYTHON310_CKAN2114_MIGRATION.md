@@ -47,6 +47,7 @@ This document tracks all changes made to upgrade the ADX project from Python 3.x
 - ckanext-authz-service: Added as editable submodule dependency
 - ckanext-validation: Added as editable submodule dependency
 - ckanext-pages: Re-added as git dependency (v0.5.2, was accidentally removed)
+  - Note: Installed as non-editable git dependency (editable mode caused pipenv errors)
 
 ## Code Changes
 
