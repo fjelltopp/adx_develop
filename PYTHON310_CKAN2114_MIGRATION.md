@@ -116,10 +116,31 @@ This document tracks all changes made to upgrade the ADX project from Python 3.x
 **File:** `submodules/ckanext-versions/ckanext/versions/model.py`
 
 #### Change: SQLAlchemy 1.4 compatibility
-- **Lines 46-61:** Updated `create_tables()` and `tables_exist()` functions
-- Added `bind` parameter to `exists()` and `create()` methods
-- Get engine from `ckan.model.meta` when metadata.bind is None
-- **Reason:** SQLAlchemy 1.4 requires explicit bind parameter for table operations
+- **Lines 46-67:** Updated `create_tables()` and `tables_exist()` functions
+- Use `inspector.has_table()` instead of deprecated `table.exists()`
+- Pass engine to `table.create()` method
+- Add None check for engine during early startup
+- **Reason:** SQLAlchemy 1.4 deprecated table.exists() and requires explicit engine
+
+### 8. ckanext-validation Model
+**File:** `submodules/ckanext-validation/ckanext/validation/model.py`
+
+#### Change: SQLAlchemy 1.4 compatibility
+- **Lines 35-58:** Updated `create_tables()` and `tables_exist()` functions
+- Use `inspector.has_table()` instead of deprecated `table.exists()`
+- Pass engine to `table.create()` method
+- Add None check for engine during early startup
+- **Reason:** SQLAlchemy 1.4 deprecated table.exists() and requires explicit engine
+
+### 9. ckanext-unaids Dataset Transfer Model
+**File:** `submodules/ckanext-unaids/ckanext/unaids/dataset_transfer/model.py`
+
+#### Change: SQLAlchemy 1.4 compatibility
+- **Lines 31-53:** Updated `init_tables()` and `tables_exists()` functions
+- Use `inspector.has_table()` instead of deprecated `table.exists()`
+- Pass engine to `table.create()` method
+- Add None check for engine during early startup
+- **Reason:** SQLAlchemy 1.4 deprecated table.exists() and requires explicit engine
 
 ## Configuration Changes
 
