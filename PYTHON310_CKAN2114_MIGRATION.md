@@ -37,6 +37,8 @@ This document tracks all changes made to upgrade the ADX project from Python 3.x
 - pyparsing==3.1.2
 - frictionless>=5.0.0,<6.0.0 (required by ckanext-validation)
 - markupsafe>=2.0.1 (required by ckanext-validation)
+- async-timeout==4.0.3 (required by redis 5.0.7 on Python < 3.11)
+- numpy>=1.21.0 (required by pandas>=1.4.2)
 
 #### Version Fixes
 - setuptools: Downgraded to 58.1.0 (from 67.2.0) for compatibility
@@ -195,7 +197,7 @@ This document tracks all changes made to upgrade the ADX project from Python 3.x
 - **Reason:** CKAN 2.11.4 requires API token for DataPusher authentication
 
 ### Docker Configuration
-**Files:** `docker-compose.yml`, `.env`
+**Files:** `docker-compose.yml`, `.env`, `ckan/bootstrap.sh`
 
 #### Change: Added DataPusher API token environment variable
 **docker-compose.yml:**
@@ -205,6 +207,13 @@ This document tracks all changes made to upgrade the ADX project from Python 3.x
 **.env:**
 - Added `CKAN_DATAPUSHER_API_TOKEN` with development token
 - **Reason:** Store API token for local development environment
+
+#### Change: Fixed pipenv installation in bootstrap script
+**ckan/bootstrap.sh (Line 28):**
+- Removed `--skip-lock` flag from pipenv install command
+- **Before:** `pipenv install --dev --python /usr/local/bin/python3 --skip-lock`
+- **After:** `pipenv install --dev --python /usr/local/bin/python3`
+- **Reason:** `--skip-lock` bypasses Pipfile.lock and can cause incomplete dependency installations. This was causing the `ModuleNotFoundError: No module named 'click.testing'` error even though click was in the Pipfile
 
 ## Git Submodule Changes
 
@@ -231,6 +240,9 @@ git checkout v0.5.2
 4. **Python 3.10 compatibility:** Fixed collections.abc imports
 5. **CKAN 2.11.4 API changes:** Updated all changed/removed function imports
 6. **View plugins:** Migrated from deprecated ReclineView to DataTablesView pattern
+7. **pipenv --skip-lock issue:** Removed `--skip-lock` flag from bootstrap.sh causing incomplete dependency installations
+8. **Missing async-timeout:** Added async-timeout==4.0.3 (required by redis 5.0.7 on Python 3.10)
+9. **Missing numpy:** Added numpy>=1.21.0 (required by pandas>=1.4.2)
 
 ## Known Missing Features
 
@@ -268,6 +280,7 @@ After these changes, the following should be tested:
 - `ckan/adx_config.ini` - Plugin configuration updates and DataPusher API token
 - `docker-compose.yml` - Added DataPusher API token environment variable
 - `.env` - Added CKAN_DATAPUSHER_API_TOKEN
+- `ckan/bootstrap.sh` - Removed `--skip-lock` flag from pipenv install
 
 ### Extension Code
 - `submodules/ckanext-unaids/ckanext/unaids/plugin.py` - Multiple API updates

@@ -25,7 +25,7 @@ cd /usr/lib/adx/ || exit 1
 
 # Install dependencies
 echo "Installing dependencies..."
-pipenv install --dev --python /usr/local/bin/python3 --skip-lock
+pipenv install --dev --python /usr/local/bin/python3
 
 echo "show current dir"
 ls -la
