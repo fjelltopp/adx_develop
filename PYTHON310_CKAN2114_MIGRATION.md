@@ -170,6 +170,16 @@ This document tracks all changes made to upgrade the ADX project from Python 3.x
 - Move inspector initialization to top of function for reuse
 - **Reason:** SQLAlchemy 1.4 deprecated table.exists() and requires explicit engine
 
+### 12. ckanext-restricted Logic
+**File:** `submodules/ckanext-restricted/ckanext/restricted/logic.py`
+
+#### Change: Handle AnonymousUser in CKAN 2.11.4 (Flask-Login compatibility)
+- **Lines 33-46:** Updated `restricted_get_username_from_context()` function
+- Check `is_authenticated` attribute before calling `as_dict()` on auth_user_obj
+- In CKAN 2.11.4, `auth_user_obj` is always set (either User or AnonymousUser from Flask-Login)
+- AnonymousUser doesn't have `as_dict()` method, causing AttributeError
+- **Reason:** CKAN 2.11.4 uses Flask-Login which always provides a user object (authenticated or anonymous)
+
 ## Configuration Changes
 
 ### CKAN Configuration
