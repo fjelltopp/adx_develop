@@ -25,7 +25,12 @@ cd /usr/lib/adx/ || exit 1
 
 # Install dependencies
 echo "Installing dependencies..."
-pipenv install --dev --python /usr/local/bin/python3
+pipenv install --dev --python /usr/local/bin/python3 --verbose
+if [ $? -ne 0 ]; then
+    echo "ERROR: pipenv install failed!"
+    exit 1
+fi
+echo "Dependencies installed successfully!"
 
 echo "show current dir"
 ls -la
