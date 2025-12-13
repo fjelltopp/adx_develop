@@ -56,10 +56,14 @@ This document tracks all changes made to upgrade the ADX project from Python 3.x
 ### 1. ckanext-unaids Plugin
 **File:** `submodules/ckanext-unaids/ckanext/unaids/plugin.py`
 
-#### Change: Updated identify_user import (CKAN 2.11.4 API change)
-- **Line 16:** `from ckan.views import _identify_user_default` → `from ckan.views import identify_user`
-- **Line 66:** `_identify_user_default()` → `identify_user()`
-- **Reason:** Function was renamed in CKAN 2.11.4
+#### Change: Updated user identification to avoid infinite recursion (CKAN 2.11.4 API change)
+- **Line 16:** Changed imports from `from ckan.views import _identify_user_default` to `from ckan.common import g, current_user`
+- **Lines 66-69:** Replaced `_identify_user_default()` call with direct assignment:
+  ```python
+  g.user = current_user.name
+  g.userobj = '' if current_user.is_anonymous else current_user
+  ```
+- **Reason:** In CKAN 2.11.4, `_identify_user_default()` was removed. Calling `identify_user()` instead causes infinite recursion because it calls all IAuthenticator plugins' `identify()` methods, including this one. The solution is to directly set `g.user` and `g.userobj` from `current_user`, which is what the old `_identify_user_default()` function did.
 
 #### Change: Removed ReclineView dependency
 - **Line 47:** Removed `from ckanext.reclineview.plugin import ReclineViewBase`
