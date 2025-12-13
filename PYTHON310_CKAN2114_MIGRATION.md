@@ -216,6 +216,9 @@ This document tracks all changes made to upgrade the ADX project from Python 3.x
 
 **Added plugins:**
 - `activity` (REQUIRED in CKAN 2.11.4 - provides activity stream actions like package_activity_list)
+  - **Note:** The activity plugin is properly registered in CKAN 2.11.4's setup.cfg entry points
+  - If you encounter "PluginNotFoundException: Interface activity does not exist", ensure the Docker bootstrap process completes fully
+  - The plugin must be explicitly enabled; without it, extensions that chain to `package_activity_list` will fail
 - `unaids_datatables_view` (custom view plugin)
 - `datatables_view` (CKAN 2.11.4 core plugin)
 - `webpage_view` (CKAN 2.11.4 core plugin)
@@ -277,6 +280,8 @@ git checkout v0.5.2
 7. **pipenv --skip-lock issue:** Removed `--skip-lock` flag from bootstrap.sh causing incomplete dependency installations
 8. **Missing async-timeout:** Added async-timeout==4.0.3 (required by redis 5.0.7 on Python 3.10)
 9. **Missing numpy:** Added numpy>=1.21.0 (required by pandas>=1.4.2)
+10. **SAML2 auth session serialization:** Enhanced patch_saml2auth.py to handle both `ava` and `session_info` objects, ensuring all SAML session data is JSON serializable for Flask 3.x
+11. **Activity plugin loading:** Verified activity plugin is properly registered in CKAN 2.11.4; resolved by ensuring Docker bootstrap process completes fully
 
 ## Known Missing Features
 
