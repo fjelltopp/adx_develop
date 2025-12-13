@@ -32,6 +32,10 @@ if [ $? -ne 0 ]; then
 fi
 echo "Dependencies installed successfully!"
 
+# Patch ckanext-saml2auth for Flask 3.x compatibility
+echo "Patching ckanext-saml2auth for Flask 3.x..."
+python3 /usr/lib/adx/ckan/patch_saml2auth.py
+
 echo "show current dir"
 ls -la
 echo "Show local/bin"

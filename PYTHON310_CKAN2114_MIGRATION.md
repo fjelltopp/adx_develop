@@ -189,6 +189,16 @@ This document tracks all changes made to upgrade the ADX project from Python 3.x
 - Added check: `if users_matching_email is None: users_matching_email = []`
 - **Reason:** Prevents TypeError when trying to iterate over None during OAuth user creation
 
+### 14. ckanext-saml2auth Package (Installed from PyPI)
+**Files:** `ckan/patch_saml2auth.py`, `ckan/bootstrap.sh`
+
+#### Change: Patch for Flask 3.x session serialization compatibility
+- Created `patch_saml2auth.py` script that patches the installed ckanext-saml2auth package
+- Added patch execution to `bootstrap.sh` after dependency installation
+- **Patch:** Converts SAML `ava` (attribute value assertion) dict values to strings for JSON serialization
+- **Reason:** Flask 3.x requires all session data to be JSON serializable. SAML NameID and other objects cannot be serialized, causing TypeError during session save
+- **Note:** This is a temporary fix until ckanext-saml2auth releases a Flask 3.x compatible version
+
 ## Configuration Changes
 
 ### CKAN Configuration
