@@ -186,6 +186,7 @@ This document tracks all changes made to upgrade the ADX project from Python 3.x
 - `pdf_view` (removed from CKAN 2.11.4)
 
 **Added plugins:**
+- `activity` (REQUIRED in CKAN 2.11.4 - provides activity stream actions like package_activity_list)
 - `unaids_datatables_view` (custom view plugin)
 - `datatables_view` (CKAN 2.11.4 core plugin)
 - `webpage_view` (CKAN 2.11.4 core plugin)
