@@ -180,6 +180,15 @@ This document tracks all changes made to upgrade the ADX project from Python 3.x
 - AnonymousUser doesn't have `as_dict()` method, causing AttributeError
 - **Reason:** CKAN 2.11.4 uses Flask-Login which always provides a user object (authenticated or anonymous)
 
+### 13. ckanext-emailasusername Plugin
+**File:** `submodules/ckanext-emailasusername/ckanext/emailasusername/plugin.py`
+
+#### Change: Handle None return from User.by_email() in CKAN 2.11.4
+- **Lines 99-102:** Added null check for `model.User.by_email()` result
+- In CKAN 2.11.4, `User.by_email()` may return `None` instead of an empty list when no users match
+- Added check: `if users_matching_email is None: users_matching_email = []`
+- **Reason:** Prevents TypeError when trying to iterate over None during OAuth user creation
+
 ## Configuration Changes
 
 ### CKAN Configuration
