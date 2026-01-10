@@ -19,6 +19,14 @@ fi
 rm -rf /usr/lib/adx/submodules/ckan/ckan/pastertemplates/template/ckanext_+project_shortname+.egg-info
 cd /usr/lib/adx/ || exit 1
 pipenv sync --dev
+
+# Fix Python 3.10 compatibility in ckanext-authz-service
+AUTHZ_FILE=$(find /usr/lib/adx/.adxvenv -name "authzzie.py" -path "*/ckanext/authz_service/authzzie.py" 2>/dev/null | head -n 1)
+if [ -n "$AUTHZ_FILE" ]; then
+  sed -i 's/from collections import Iterable, defaultdict/from collections.abc import Iterable\nfrom collections import defaultdict/' "$AUTHZ_FILE"
+  echo "Fixed ckanext-authz-service Python 3.10 compatibility"
+fi
+
 echo "show current dir"
 ls -la
 echo "Show local/bin"
