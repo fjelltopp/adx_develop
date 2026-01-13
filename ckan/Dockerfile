@@ -22,8 +22,6 @@ RUN update-locale LANG=${LC_ALL}
 ## Install required system packages
 RUN apt-get -q -y update \
     && apt-get -q -y install \
-        python-wheel-common \
-        python3-distutils \
         libpq-dev \
         libxml2-dev \
         libxslt-dev \
@@ -39,11 +37,10 @@ RUN apt-get -q -y update \
         xmlsec1 \
         jq \
         supervisor \
-        jq \
     && apt-get -q clean \
     && rm -rf /var/lib/apt/lists/*
 RUN pip3 install pipenv
-RUN curl -sL https://deb.nodesource.com/setup_16.x | bash - && apt-get install nodejs npm -y && npm version
+RUN curl -sL https://deb.nodesource.com/setup_20.x | bash - && apt-get install nodejs -y && npm version
 RUN npm install --global yarn
 RUN mkdir -p /var/lib/ckan/resources && chmod 777 -R /var/lib/ckan
 

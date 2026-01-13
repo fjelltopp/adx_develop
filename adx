@@ -140,6 +140,13 @@ actions['test'].add_argument(
     const=""
 )
 
+actions['clean'] = subparsers.add_parser(
+    'clean',
+    description='Clean up build artifacts like egg-info directories from submodules.',
+    help='Clean up build artifacts like egg-info directories from submodules.'
+)
+actions['clean'].set_defaults(func=util.clean_build_artifacts)
+
 parser.add_argument(
     "-log",
     "--log",

@@ -1,4 +1,4 @@
-FROM ckan/ckan-solr:2.9-solr8
+FROM ckan/ckan-solr:2.11-solr9
 MAINTAINER CKAN
 
 # Enviroment

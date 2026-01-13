@@ -1,4 +1,4 @@
-FROM postgres:12-bullseye
+FROM postgres:16
 MAINTAINER Fjelltopp
 
 RUN apt-get update \

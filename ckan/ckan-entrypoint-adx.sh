@@ -75,4 +75,14 @@ chmod -R 777 /usr/lib/adx/submodules/ckanext-unaids/ckanext/unaids/assets/build
 set_environment
 echo "CKAN bootstrapping finished, environment ready"
 
+# Initialize CKAN database and run plugin migrations
+echo "Initializing CKAN database..."
+ckan --config="$CONFIG" db init || echo "CKAN database already initialized"
+
+echo "Running database migrations for plugins..."
+ckan --config="$CONFIG" db upgrade -p pages || echo "Warning: ckanext-pages migration failed or already applied"
+ckan --config="$CONFIG" versions initdb || echo "Warning: ckanext-versions initdb failed or already applied"
+ckan --config="$CONFIG" validation init-db || echo "Warning: ckanext-validation init-db failed or already applied"
+ckan --config="$CONFIG" unaids initdb || echo "Warning: ckanext-unaids initdb failed or already applied"
+
 exec "$@"

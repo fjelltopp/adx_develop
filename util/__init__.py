@@ -182,3 +182,66 @@ def deploy_master(args, extra):
             ADX_PATH
         )
     ])
+
+def clean_build_artifacts(args, extra):
+    """
+    Clean up build artifacts like egg-info directories from submodules.
+    This is useful when directories were created with different permissions
+    (e.g., by root in Docker containers) and are blocking pipenv lock.
+    
+    Args:
+        args (NameSpace): The known args NameSpace object returned by argsparse
+        extra (list): The extra args not parsed by argsparse
+    """
+    import glob
+    import shutil
+    import stat
+    
+    submodules_path = os.path.join(COMPOSE_PATH, 'submodules')
+    
+    if not os.path.exists(submodules_path):
+        print(f"Submodules directory not found: {submodules_path}")
+        return
+    
+    # Find all .egg-info directories
+    egg_info_dirs = glob.glob(os.path.join(submodules_path, '*', '*.egg-info'))
+    
+    if not egg_info_dirs:
+        print("No egg-info directories found to clean.")
+        return
+    
+    print(f"Found {len(egg_info_dirs)} egg-info directories to clean:")
+    for egg_dir in egg_info_dirs:
+        print(f"  - {os.path.relpath(egg_dir, COMPOSE_PATH)}")
+    
+    # Check if any are owned by root or not writable
+    need_sudo = False
+    for egg_dir in egg_info_dirs:
+        try:
+            # Try to check if we can write to it
+            if not os.access(egg_dir, os.W_OK):
+                need_sudo = True
+                break
+        except Exception:
+            need_sudo = True
+            break
+    
+    if need_sudo:
+        print("\nSome directories require elevated permissions.")
+        print("Attempting to remove with sudo...")
+        retcode = call_command([
+            f'sudo rm -rf {os.path.join(submodules_path, "*", "*.egg-info")}'
+        ])
+        if retcode == 0:
+            print("✓ Successfully cleaned all egg-info directories.")
+        else:
+            print("✗ Failed to clean some directories.")
+    else:
+        # Remove without sudo
+        for egg_dir in egg_info_dirs:
+            try:
+                shutil.rmtree(egg_dir)
+                print(f"✓ Removed {os.path.relpath(egg_dir, COMPOSE_PATH)}")
+            except Exception as e:
+                print(f"✗ Failed to remove {os.path.relpath(egg_dir, COMPOSE_PATH)}: {e}")
+        print("✓ Cleaning complete.")

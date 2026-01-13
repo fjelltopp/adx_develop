@@ -46,3 +46,13 @@
 [submodule "ckan-extensions/ckanext-validation"]
     path = submodules/ckanext-validation
 	url = git@github.com:fjelltopp/ckanext-validation.git
+[submodule "submodules/ckanext-authz-service"]
+	path = submodules/ckanext-authz-service
+	url = https://github.com/datopian/ckanext-authz-service.git
+[submodule "submodules/ckanext-pages"]
+	path = submodules/ckanext-pages
+	url = https://github.com/ckan/ckanext-pages.git
+[submodule "submodules/ckanext-saml2auth"]
+	path = submodules/ckanext-saml2auth
+	url = https://github.com/fjelltopp/ckanext-saml2auth.git
+	branch = toavina/ckan-2.11-migration

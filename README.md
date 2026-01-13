@@ -141,6 +141,16 @@ git submodule foreach "git checkout development|| :"
 git submodule foreach "git pull || :"
 ```
 
+## Cleaning build artifacts
+
+If you encounter issues with `pipenv lock` failing due to permission errors on `.egg-info` directories (especially after running containers as root), you can clean these build artifacts:
+
+```shell
+adx clean
+```
+
+This command will remove all `.egg-info` directories from the submodules, using `sudo` if necessary when files are owned by root.
+
 ## Using a fake SMTP server
 
 We're using [rnwood/smtp4dev](https://github.com/rnwood/smtp4dev) to "fake" an SMTP service, it's deployed as part of docker compose - smtp container. It catches all the emails sent to it, accepts any credentials. Emails can be viewed via a web console available at port 5555, so if your local environment uses "adr.local" as a host name you can access at [http://adr.local:5555/](http://adr.local:5555/).
