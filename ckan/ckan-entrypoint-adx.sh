@@ -79,6 +79,9 @@ echo "CKAN bootstrapping finished, environment ready"
 echo "Initializing CKAN database..."
 ckan --config="$CONFIG" db init || echo "CKAN database already initialized"
 
+echo "Setting up DataStore permissions..."
+ckan --config="$CONFIG" datastore set-permissions | psql "${CKAN_DATASTORE_WRITE_URL}" || echo "Warning: DataStore set-permissions failed or already applied"
+
 echo "Running database migrations for plugins..."
 ckan --config="$CONFIG" db upgrade -p pages || echo "Warning: ckanext-pages migration failed or already applied"
 ckan --config="$CONFIG" versions initdb || echo "Warning: ckanext-versions initdb failed or already applied"
