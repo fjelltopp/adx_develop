@@ -111,3 +111,4 @@ src/
 
 # Hide translation .po file copies
 build/translations/*
+demo_venv/
