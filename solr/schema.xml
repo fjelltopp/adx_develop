@@ -165,8 +165,9 @@ attribute with the form `ckan-X.Y` -->
          (rather than text type).  This allows us to sort on the titleString -->
     <field name="title_string" type="string" indexed="true" stored="false" />
 
-    <field name="data_dict" type="string" indexed="false" stored="true" />
-    <field name="validated_data_dict" type="string" indexed="false" stored="true" />
+    <!-- docValues="false" required for large JSON data that exceeds Solr's DocValues limit of 32766 bytes -->
+    <field name="data_dict" type="string" indexed="false" stored="true" docValues="false" />
+    <field name="validated_data_dict" type="string" indexed="false" stored="true" docValues="false" />
 
     <field name="_version_" type="string" indexed="true" stored="true"/>
 
