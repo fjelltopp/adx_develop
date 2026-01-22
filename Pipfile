@@ -60,6 +60,7 @@ ckanext-blob-storage = {editable = true, path = "./submodules/ckanext-blob-stora
 ckanext-ytp-request = {editable = true, path = "./submodules/ckanext-ytp-request"}
 ckanext-fork = {editable = true, path = "./submodules/ckanext-fork"}
 ckanext-saml2auth = {editable = true, path = "./submodules/ckanext-saml2auth"}
+ckanext-geoview = {editable = true, path = "./submodules/ckanext-geoview"}
 ckan = {editable = true, path = "./submodules/ckan"}
 # end of submodules
 # Additional CKAN extensions (local submodule)

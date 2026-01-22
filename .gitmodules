@@ -56,3 +56,6 @@
 	path = submodules/ckanext-saml2auth
 	url = https://github.com/fjelltopp/ckanext-saml2auth.git
 	branch = toavina/ckan-2.11-migration
+[submodule "submodules/ckanext-geoview"]
+	path = submodules/ckanext-geoview
+	url = https://github.com/ckan/ckanext-geoview.git
