@@ -1,0 +1,116 @@
+name: Build and Deploy CKAN
+
+on:
+  push:
+    branches: [master, ckan211-prod-deploy-pr]
+    tags: ["v*"]
+  workflow_dispatch:
+    inputs:
+      image_tag:
+        description: "Image tag to deploy (e.g., sha-abc1234 or v1.0.0)"
+        required: true
+        type: string
+      environment:
+        description: "Target environment"
+        required: true
+        type: choice
+        options:
+          - staging
+          - production
+
+env:
+  ACR_NAME: adracr
+  IMAGE_NAME: ckan
+
+jobs:
+  build:
+    if: github.event_name != 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    outputs:
+      image_tag: ${{ steps.set-env.outputs.image_tag }}
+      environment: ${{ steps.set-env.outputs.environment }}
+    steps:
+      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+        with:
+          submodules: recursive
+
+      - name: Determine environment and image tag
+        id: set-env
+        run: |
+          if [[ "${{ github.ref }}" == refs/tags/* ]]; then
+            echo "environment=production" >> $GITHUB_OUTPUT
+            echo "image_tag=${{ github.ref_name }}" >> $GITHUB_OUTPUT
+          else
+            echo "environment=staging" >> $GITHUB_OUTPUT
+            echo "image_tag=sha-$(echo ${{ github.sha }} | cut -c1-7)" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Docker meta
+        id: meta
+        uses: docker/metadata-action@c299e40c65443455700f0fdfc63efafe5b349051 # v5.6.1
+        with:
+          images: ${{ env.ACR_NAME }}.azurecr.io/${{ env.IMAGE_NAME }}
+          tags: |
+            type=sha
+            type=ref,event=tag
+
+      - name: Login to ACR
+        uses: docker/login-action@5e57cd118135c172c3672efd75eb46360885c0ef # v3.6.0
+        with:
+          registry: ${{ env.ACR_NAME }}.azurecr.io
+          username: ${{ secrets.ACR_USERNAME }}
+          password: ${{ secrets.ACR_PASSWORD }}
+
+      - name: Build and push
+        uses: docker/build-push-action@263435318d21b8e681c14492fe198d362a7d2c83 # v6.10.0
+        with:
+          context: .
+          file: deploy/Dockerfile.prod
+          push: true
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+
+  deploy:
+    if: always() && (needs.build.result == 'success' || github.event_name == 'workflow_dispatch')
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: ${{ github.event_name == 'workflow_dispatch' && inputs.environment || needs.build.outputs.environment }}
+      url: ${{ steps.params.outputs.url }}
+    steps:
+      - name: Set deploy params
+        id: params
+        run: |
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+            ENV="${{ inputs.environment }}"
+            echo "image_tag=${{ inputs.image_tag }}" >> $GITHUB_OUTPUT
+          else
+            ENV="${{ needs.build.outputs.environment }}"
+            echo "image_tag=${{ needs.build.outputs.image_tag }}" >> $GITHUB_OUTPUT
+          fi
+
+          if [[ "$ENV" == "production" ]]; then
+            echo "namespace=adr-p" >> $GITHUB_OUTPUT
+            echo "url=https://adr-p.fjelltopp.org" >> $GITHUB_OUTPUT
+          else
+            echo "namespace=adr-s" >> $GITHUB_OUTPUT
+            echo "url=https://adr-s.fjelltopp.org" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Setup kubeconfig
+        run: |
+          mkdir -p ~/.kube
+          echo "${{ secrets.KUBECONFIG_BASE64 }}" | base64 -d > ~/.kube/config
+          chmod 600 ~/.kube/config
+
+      - name: Deploy to AKS
+        run: |
+          kubectl set image deployment/ckan \
+            ckan=${{ env.ACR_NAME }}.azurecr.io/${{ env.IMAGE_NAME }}:${{ steps.params.outputs.image_tag }} \
+            -n ${{ steps.params.outputs.namespace }}
+          kubectl rollout status deployment/ckan -n ${{ steps.params.outputs.namespace }} --timeout=5m

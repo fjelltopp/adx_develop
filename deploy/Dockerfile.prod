@@ -1,0 +1,96 @@
+FROM python:3.10
+
+# OCI Annotations
+LABEL org.opencontainers.image.maintainer="support@fjelltopp.org"
+LABEL org.opencontainers.image.title="CKAN-ADX"
+LABEL org.opencontainers.image.description="Fjelltopp's ADX CKAN production image"
+
+ARG CKAN_SITE_URL
+
+# Set timezone
+ENV TZ=UTC
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+
+# Setting the locale
+ENV LC_ALL=en_US.UTF-8
+RUN apt-get update && \
+    apt-get install --no-install-recommends -y locales && \
+    sed -i "/$LC_ALL/s/^# //g" /etc/locale.gen && \
+    dpkg-reconfigure --frontend=noninteractive locales && \
+    update-locale LANG=${LC_ALL}
+
+# Define environment variables
+ENV CKAN_HOME /usr/lib/adx
+ENV CKAN_VENV $CKAN_HOME/venv
+ENV CKAN_CONFIG /etc/ckan
+ENV CKAN_STORAGE_PATH=/var/lib/ckan
+ENV PATH=${CKAN_VENV}/bin:${PATH}
+
+# Install required system packages
+RUN apt-get -q -y update \
+    && apt-get -q -y install \
+        libpq-dev \
+        libmagic-dev \
+        libxml2-dev \
+        libxslt-dev \
+        libgeos-dev \
+        libssl-dev \
+        libffi-dev \
+        postgresql-client \
+        build-essential \
+        git-core \
+        vim \
+        wget \
+        curl \
+        xmlsec1 \
+        jq \
+        supervisor \
+        nginx \
+    && apt-get -q clean \
+    && rm -rf /var/lib/apt/lists/*
+
+# Add CKAN user
+RUN useradd -r -u 900 -m -c "ckan account" -d $CKAN_HOME -s /bin/false ckan
+
+# Install pipenv and uwsgi
+RUN pip3 install pipenv uwsgi
+
+# Copy submodules and Pipfile
+COPY submodules /usr/lib/adx/submodules
+COPY Pipfile Pipfile.lock /usr/lib/adx/
+
+# Install Python dependencies
+WORKDIR /usr/lib/adx
+RUN mkdir .venv && pipenv sync -v && ln -s .venv venv
+
+# Install Node.js and yarn for React build
+RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - && \
+    apt-get install -y nodejs && \
+    npm install --global yarn
+
+# Build React components
+RUN yarn --cwd /usr/lib/adx/submodules/ckanext-unaids/ckanext/unaids/react/ && \
+    yarn --cwd /usr/lib/adx/submodules/ckanext-unaids/ckanext/unaids/react/ build && \
+    chmod -R 777 /usr/lib/adx/submodules/ckanext-unaids/ckanext/unaids/assets/build
+
+RUN chown -R ckan:ckan /usr/lib/adx/
+RUN mkdir -p /var/lib/ckan/resources && chmod 777 -R /var/lib/ckan
+
+# Create symlink for backward compatibility with configs that reference /usr/lib/ckan
+RUN ln -s /usr/lib/adx /usr/lib/ckan
+
+# Copy entrypoint and config files
+COPY deploy/ckan-entrypoint-prod.sh /ckan-entrypoint.sh
+COPY ckan/adx_config.ini $CKAN_CONFIG/ckan.ini
+COPY ckan/adx_who.ini $CKAN_CONFIG/who.ini
+COPY ckan/ckan_supervisor.conf /etc/supervisor/conf.d/ckan_supervisor.conf
+COPY deploy/uwsgi.ini /usr/lib/adx/uwsgi.ini
+COPY deploy/nginx.conf /etc/nginx/nginx.conf
+
+RUN chmod +x /*.sh
+
+USER root
+EXPOSE 5000
+
+ENTRYPOINT ["/ckan-entrypoint.sh"]
+CMD ["supervisord", "-c", "/etc/supervisor/supervisord.conf"]
