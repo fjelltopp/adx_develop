@@ -99,7 +99,7 @@ jobs:
             echo "url=https://adr-p.fjelltopp.org" >> $GITHUB_OUTPUT
           else
             echo "namespace=adr-s" >> $GITHUB_OUTPUT
-            echo "url=https://dev.adr.fjelltopp.org" >> $GITHUB_OUTPUT
+            echo "url=https://dev-adr.fjelltopp.org" >> $GITHUB_OUTPUT
           fi
 
       - name: Setup kubeconfig
