@@ -108,8 +108,24 @@ jobs:
           echo "${{ secrets.KUBECONFIG_BASE64 }}" | base64 -d > ~/.kube/config
           chmod 600 ~/.kube/config
 
+      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+
       - name: Deploy to AKS
         run: |
+          # Determine env config file
+          if [[ "${{ steps.params.outputs.namespace }}" == "adr-p" ]]; then
+            ENV_CONFIG="deploy/production.ini"
+          else
+            ENV_CONFIG="deploy/staging.ini"
+          fi
+
+          # Create/update env ConfigMap
+          kubectl create configmap ckan-env-config \
+            --from-file=env.ini=$ENV_CONFIG \
+            -n ${{ steps.params.outputs.namespace }} \
+            --dry-run=client -o yaml | kubectl apply -f -
+
+          # Update image
           kubectl set image deployment/ckan \
             ckan=${{ env.ACR_NAME }}.azurecr.io/${{ env.IMAGE_NAME }}:${{ steps.params.outputs.image_tag }} \
             -n ${{ steps.params.outputs.namespace }}

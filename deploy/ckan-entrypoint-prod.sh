@@ -11,21 +11,24 @@ export CKAN_HOME=/usr/lib/adx
 export CKAN_VENV=$CKAN_HOME/venv
 export PATH=${CKAN_VENV}/bin:${PATH}
 
-# Combine base config with secrets using Python ConfigParser
-# secrets.ini values override base.ini
+# Combine config files using Python ConfigParser
+# Order: base.ini < env.ini < secrets.ini (later values override earlier)
 echo "Combining configuration files..."
 python3 << 'PYEOF'
 import configparser
+import os
 
 config = configparser.ConfigParser()
 config.read('/etc/ckan/base.ini')
-config.read('/etc/ckan/secrets.ini')  # Later values override earlier
+if os.path.exists('/etc/ckan/env.ini'):
+    config.read('/etc/ckan/env.ini')  # Environment-specific overrides
+config.read('/etc/ckan/secrets.ini')  # Secrets override all
 
-with open('/etc/ckan/production.ini', 'w') as f:
+with open('/tmp/production.ini', 'w') as f:
     config.write(f)
 PYEOF
-export CONFIG="/etc/ckan/production.ini"
-export CKAN_INI="/etc/ckan/production.ini"
+export CONFIG="/tmp/production.ini"
+export CKAN_INI="/tmp/production.ini"
 
 abort () {
   echo "$@" >&2
