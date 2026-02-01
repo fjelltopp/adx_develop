@@ -12,21 +12,20 @@ export CKAN_VENV=$CKAN_HOME/venv
 export PATH=${CKAN_VENV}/bin:${PATH}
 
 # Combine base config with secrets using Python ConfigParser
-# secrets.ini values override production.ini
+# secrets.ini values override base.ini
 echo "Combining configuration files..."
 python3 << 'PYEOF'
 import configparser
-import sys
 
 config = configparser.ConfigParser()
-config.read('/etc/ckan/production.ini')
+config.read('/etc/ckan/base.ini')
 config.read('/etc/ckan/secrets.ini')  # Later values override earlier
 
-with open('/tmp/ckan.ini', 'w') as f:
+with open('/etc/ckan/production.ini', 'w') as f:
     config.write(f)
 PYEOF
-export CONFIG="/tmp/ckan.ini"
-export CKAN_INI="/tmp/ckan.ini"
+export CONFIG="/etc/ckan/production.ini"
+export CKAN_INI="/etc/ckan/production.ini"
 
 abort () {
   echo "$@" >&2
