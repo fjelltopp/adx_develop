@@ -81,7 +81,7 @@ RUN ln -s /usr/lib/adx /usr/lib/ckan
 
 # Copy entrypoint and config files
 COPY deploy/ckan-entrypoint-prod.sh /ckan-entrypoint.sh
-COPY ckan/adx_config.ini $CKAN_CONFIG/ckan.ini
+COPY deploy/production.ini $CKAN_CONFIG/production.ini
 COPY ckan/adx_who.ini $CKAN_CONFIG/who.ini
 COPY ckan/ckan_supervisor.conf /etc/supervisor/conf.d/ckan_supervisor.conf
 COPY deploy/uwsgi.ini /usr/lib/adx/uwsgi.ini
