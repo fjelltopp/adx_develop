@@ -60,4 +60,4 @@
 	path = submodules/ckanext-geoview
 	url = https://github.com/ckan/ckanext-geoview.git
 [submodule "submodules/ckanext-unaids"]
-	url = git@github.com:cooper667/ckanext-unaids.git
+	url = git@github.com:/fjelltopp/ckanext-unaids.git
