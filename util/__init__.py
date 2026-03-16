@@ -5,7 +5,7 @@ from time import sleep
 
 SUDO = os.environ.get('ADX_SUDO', '')
 
-compose = ["docker-compose"]
+compose = ["docker", "compose"]
 
 COMPOSE_PATH = os.path.join(
     os.path.abspath(os.path.dirname(__file__)),

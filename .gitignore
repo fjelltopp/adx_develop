@@ -112,3 +112,7 @@ src/
 # Hide translation .po file copies
 build/translations/*
 demo_venv/
+
+# Local configuration and utility scripts (for personal use)
+.vuhitra/
+rebuild_solr_index.sh
