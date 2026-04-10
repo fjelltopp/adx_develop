@@ -1,0 +1,38 @@
+name: Rebuild Solr Index
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: "Target environment"
+        required: true
+        type: choice
+        options:
+          - staging
+          - production
+
+jobs:
+  reindex:
+    runs-on: ubuntu-latest
+    environment:
+      name: ${{ inputs.environment }}
+    steps:
+      - name: Set namespace
+        id: params
+        run: |
+          if [[ "${{ inputs.environment }}" == "production" ]]; then
+            echo "namespace=adr-p" >> $GITHUB_OUTPUT
+          else
+            echo "namespace=adr-s" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Setup kubeconfig
+        run: |
+          mkdir -p ~/.kube
+          echo "${{ secrets.KUBECONFIG_BASE64 }}" | base64 -d > ~/.kube/config
+          chmod 600 ~/.kube/config
+
+      - name: Rebuild Solr index
+        run: |
+          kubectl exec deployment/ckan -n ${{ steps.params.outputs.namespace }} -- \
+            ckan -c /tmp/production.ini search-index rebuild -i -q
