@@ -1,0 +1,90 @@
+name: Release Deploy CKAN (production)
+
+# Triggered on tag push (v*). Creating a GitHub Release publishes the tag,
+# so the same workflow handles both `git push --tags` and the Release UI flow.
+#
+# This workflow does NOT build. It promotes an existing staging image
+# (tagged `sha-<short>` by build-deploy.yml) to a `v*` tag in ACR,
+# then rolls the `adr-p` deployment over to that image.
+
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Version to deploy (e.g., v1.0.0). Must correspond to an existing tag."
+        required: true
+        type: string
+
+env:
+  ACR_NAME: adracr
+  IMAGE_NAME: ckan
+  NAMESPACE: adr-p
+  URL: https://adr-p.fjelltopp.org
+
+jobs:
+  promote-and-deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: production
+      url: ${{ env.URL }}
+    steps:
+      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+        with:
+          fetch-depth: 0
+
+      - name: Resolve version and source sha
+        id: params
+        run: |
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+            VERSION="${{ inputs.version }}"
+            git fetch origin tag "$VERSION" --no-tags
+            SHA=$(git rev-list -n 1 "$VERSION")
+          else
+            VERSION="${GITHUB_REF_NAME}"
+            SHA="${GITHUB_SHA}"
+          fi
+          SHORT_SHA=$(echo "$SHA" | cut -c1-7)
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "source_tag=sha-$SHORT_SHA" >> $GITHUB_OUTPUT
+
+      - name: Login to ACR
+        uses: docker/login-action@5e57cd118135c172c3672efd75eb46360885c0ef # v3.6.0
+        with:
+          registry: ${{ env.ACR_NAME }}.azurecr.io
+          username: ${{ secrets.ACR_USERNAME }}
+          password: ${{ secrets.ACR_PASSWORD }}
+
+      - name: Verify source image exists in ACR
+        run: |
+          docker buildx imagetools inspect \
+            ${{ env.ACR_NAME }}.azurecr.io/${{ env.IMAGE_NAME }}:${{ steps.params.outputs.source_tag }} \
+            > /dev/null || { \
+              echo "::error::Source image ${{ env.ACR_NAME }}.azurecr.io/${{ env.IMAGE_NAME }}:${{ steps.params.outputs.source_tag }} not found. Push the tagged commit to master or ckan211-prod-deploy-pr first so staging CI builds the sha image."; \
+              exit 1; \
+            }
+
+      - name: Promote image (sha → version)
+        run: |
+          docker buildx imagetools create \
+            --tag ${{ env.ACR_NAME }}.azurecr.io/${{ env.IMAGE_NAME }}:${{ steps.params.outputs.version }} \
+            ${{ env.ACR_NAME }}.azurecr.io/${{ env.IMAGE_NAME }}:${{ steps.params.outputs.source_tag }}
+
+      - name: Setup kubeconfig
+        run: |
+          mkdir -p ~/.kube
+          echo "${{ secrets.KUBECONFIG_BASE64 }}" | base64 -d > ~/.kube/config
+          chmod 600 ~/.kube/config
+
+      - name: Deploy to AKS
+        run: |
+          kubectl create configmap ckan-env-config \
+            --from-file=env.ini=deploy/production.ini \
+            -n ${{ env.NAMESPACE }} \
+            --dry-run=client -o yaml | kubectl apply -f -
+
+          kubectl set image deployment/ckan \
+            ckan=${{ env.ACR_NAME }}.azurecr.io/${{ env.IMAGE_NAME }}:${{ steps.params.outputs.version }} \
+            -n ${{ env.NAMESPACE }}
+          kubectl rollout status deployment/ckan -n ${{ env.NAMESPACE }} --timeout=5m

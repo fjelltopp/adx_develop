@@ -1,49 +1,31 @@
-name: Build and Deploy CKAN
+name: Build and Deploy CKAN (staging)
 
 on:
   push:
     branches: [master, ckan211-prod-deploy-pr]
-    tags: ["v*"]
   workflow_dispatch:
     inputs:
       image_tag:
-        description: "Image tag to deploy (e.g., sha-abc1234 or v1.0.0)"
-        required: true
+        description: "Image tag to deploy (e.g., sha-abc1234). Leave blank to build from the workflow's ref."
+        required: false
         type: string
-      environment:
-        description: "Target environment"
-        required: true
-        type: choice
-        options:
-          - staging
-          - production
 
 env:
   ACR_NAME: adracr
   IMAGE_NAME: ckan
+  NAMESPACE: adr-s
+  URL: https://dev.adr.fjelltopp.org
 
 jobs:
   build:
-    if: github.event_name != 'workflow_dispatch'
+    if: github.event_name != 'workflow_dispatch' || inputs.image_tag == ''
     runs-on: ubuntu-latest
     outputs:
-      image_tag: ${{ steps.set-env.outputs.image_tag }}
-      environment: ${{ steps.set-env.outputs.environment }}
+      image_tag: ${{ steps.meta.outputs.version }}
     steps:
       - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
         with:
           submodules: recursive
-
-      - name: Determine environment and image tag
-        id: set-env
-        run: |
-          if [[ "${{ github.ref }}" == refs/tags/* ]]; then
-            echo "environment=production" >> $GITHUB_OUTPUT
-            echo "image_tag=${{ github.ref_name }}" >> $GITHUB_OUTPUT
-          else
-            echo "environment=staging" >> $GITHUB_OUTPUT
-            echo "image_tag=sha-$(echo ${{ github.sha }} | cut -c1-7)" >> $GITHUB_OUTPUT
-          fi
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
@@ -54,8 +36,7 @@ jobs:
         with:
           images: ${{ env.ACR_NAME }}.azurecr.io/${{ env.IMAGE_NAME }}
           tags: |
-            type=sha
-            type=ref,event=tag
+            type=sha,prefix=sha-,format=short
 
       - name: Login to ACR
         uses: docker/login-action@5e57cd118135c172c3672efd75eb46360885c0ef # v3.6.0
@@ -76,30 +57,22 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
 
   deploy:
-    if: always() && (needs.build.result == 'success' || github.event_name == 'workflow_dispatch')
     needs: build
+    if: always() && (needs.build.result == 'success' || needs.build.result == 'skipped')
     runs-on: ubuntu-latest
     environment:
-      name: ${{ github.event_name == 'workflow_dispatch' && inputs.environment || needs.build.outputs.environment }}
-      url: ${{ steps.params.outputs.url }}
+      name: staging
+      url: ${{ env.URL }}
     steps:
-      - name: Set deploy params
+      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+
+      - name: Resolve image tag
         id: params
         run: |
-          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
-            ENV="${{ inputs.environment }}"
+          if [[ -n "${{ inputs.image_tag }}" ]]; then
             echo "image_tag=${{ inputs.image_tag }}" >> $GITHUB_OUTPUT
           else
-            ENV="${{ needs.build.outputs.environment }}"
             echo "image_tag=${{ needs.build.outputs.image_tag }}" >> $GITHUB_OUTPUT
-          fi
-
-          if [[ "$ENV" == "production" ]]; then
-            echo "namespace=adr-p" >> $GITHUB_OUTPUT
-            echo "url=https://adr-p.fjelltopp.org" >> $GITHUB_OUTPUT
-          else
-            echo "namespace=adr-s" >> $GITHUB_OUTPUT
-            echo "url=https://dev.adr.fjelltopp.org" >> $GITHUB_OUTPUT
           fi
 
       - name: Setup kubeconfig
@@ -108,25 +81,14 @@ jobs:
           echo "${{ secrets.KUBECONFIG_BASE64 }}" | base64 -d > ~/.kube/config
           chmod 600 ~/.kube/config
 
-      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
-
       - name: Deploy to AKS
         run: |
-          # Determine env config file
-          if [[ "${{ steps.params.outputs.namespace }}" == "adr-p" ]]; then
-            ENV_CONFIG="deploy/production.ini"
-          else
-            ENV_CONFIG="deploy/staging.ini"
-          fi
-
-          # Create/update env ConfigMap
           kubectl create configmap ckan-env-config \
-            --from-file=env.ini=$ENV_CONFIG \
-            -n ${{ steps.params.outputs.namespace }} \
+            --from-file=env.ini=deploy/staging.ini \
+            -n ${{ env.NAMESPACE }} \
             --dry-run=client -o yaml | kubectl apply -f -
 
-          # Update image
           kubectl set image deployment/ckan \
             ckan=${{ env.ACR_NAME }}.azurecr.io/${{ env.IMAGE_NAME }}:${{ steps.params.outputs.image_tag }} \
-            -n ${{ steps.params.outputs.namespace }}
-          kubectl rollout status deployment/ckan -n ${{ steps.params.outputs.namespace }} --timeout=5m
+            -n ${{ env.NAMESPACE }}
+          kubectl rollout status deployment/ckan -n ${{ env.NAMESPACE }} --timeout=5m
