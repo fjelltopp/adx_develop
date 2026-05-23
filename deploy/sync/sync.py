@@ -203,7 +203,7 @@ def _drop_and_recreate_db(admin_url: str, db_name: str) -> None:
          "-c", f'CREATE DATABASE "{db_name}";'],
         env=pg_env(admin_url, db_override="postgres"),
     )
-def _scale(deployments: list[str], replicas: int) -> None:
+def _scale(cfg: Config, deployments: list[str], replicas: int) -> None:
     """Scale staging deployments. Used to stop CKAN + datapusher before
     DROP DATABASE so their connections don't block it. datapusher
     connects to Postgres as a different role (`datastore`) than the
@@ -211,14 +211,13 @@ def _scale(deployments: list[str], replicas: int) -> None:
     from inside the sync — scaling it to 0 is the only way to clear
     them. On scale-up we don't wait; the sync moves on and the pods
     come back in parallel with the rest of the apply phase."""
-    namespace = os.environ.get("NAMESPACE", "adr-s")
     for name in deployments:
         run(["kubectl", "scale", "deployment", name,
-             f"--replicas={replicas}", "-n", namespace])
+             f"--replicas={replicas}", "-n", cfg.ckan_namespace])
     if replicas == 0:
         for name in deployments:
             run(["kubectl", "wait", f"--for=delete", "pod",
-                 "-l", f"app={name}", "-n", namespace, "--timeout=120s"])
+                 "-l", f"app={name}", "-n", cfg.ckan_namespace, "--timeout=120s"])
 
 
 def pg_restore_from_blob(cfg: Config, blob_path: str, admin_url: str, db_name: str) -> None:
@@ -401,12 +400,19 @@ def _ckan_exec(cfg: Config, args: list[str], quiet_codes: set[int] | None = None
 
 
 def _enabled_plugins(cfg: Config) -> list[str]:
-    """Parse the `ckan.plugins =` line from /tmp/production.ini inside the
-    CKAN pod and return the plugin names."""
+    """Parse the `ckan.plugins =` value from /tmp/production.ini inside the
+    CKAN pod and return the plugin names. The value spans multiple lines
+    using ConfigParser-style indentation (see deploy/base.ini), so we
+    capture the first match line and any following indented continuation
+    lines until the next non-indented line or EOF."""
+    awk_prog = (
+        r'/^ckan\.plugins[[:space:]]*=/ {sub(/^[^=]*=/, ""); print; in_val=1; next}'
+        r' in_val && /^[[:space:]]/ {print; next}'
+        r' in_val {exit}'
+    )
     result = subprocess.run(
         ["kubectl", "exec", "-n", cfg.ckan_namespace, cfg.ckan_deployment, "--",
-         "awk", "-F=", "/^ckan\\.plugins[[:space:]]*=/{print $2; exit}",
-         "/tmp/production.ini"],
+         "awk", awk_prog, "/tmp/production.ini"],
         capture_output=True, text=True, check=True,
     )
     return result.stdout.split()
@@ -463,11 +469,11 @@ def main() -> int:
         # manual `kubectl scale --replicas=1` to come back.
         scaled = ["ckan", "datapusher"]
         try:
-            _scale(scaled, 0)
+            _scale(cfg, scaled, 0)
             pg_restore_from_blob(cfg, ckan_dump, cfg.staging_ckan_url, "ckan")
             pg_restore_from_blob(cfg, ds_dump, cfg.staging_ckan_url, "datastore")
         finally:
-            _scale(scaled, 1)
+            _scale(cfg, scaled, 1)
         azcopy_sync(
             _blob_url(cfg.snapshots_account, cfg.snapshots_container, cfg.snapshots_sas, prefix="lfs"),
             _blob_url(cfg.staging_lfs_account, cfg.staging_lfs_container, cfg.staging_lfs_sas),
