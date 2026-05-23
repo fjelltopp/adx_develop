@@ -1,73 +1,16 @@
 # Nightly Prod → Staging Sync
 
-A K8s `CronJob` (`adr-sync` in namespace `adr-s`) refreshes the staging
-environment from production every night at 02:00 UTC, while simultaneously
-producing dated backups in a dedicated Azure storage account.
+A K8s `CronJob` (`adr-sync` in namespace `adr-s`) refreshes the staging environment from production every night at 01:00 UTC, while simultaneously producing dated backups in a dedicated Azure storage account.
 
-## Architecture
+Prod is read **once** per night. The staging-apply phase reads exclusively from `adr-snapshots`. Staging can be re-restored at any time without re-hitting prod by re-running the apply phase against a chosen `${RUNDATE}`.
 
-```
-                ┌─────────────────────────────┐
-                │  prod (adr-p)               │
-                │                             │
-                │  ┌──────────┐ ┌──────────┐  │
-                │  │ Postgres │ │   Blob   │  │
-                │  │ (ckan,   │ │ adr-p-   │  │
-                │  │ datastore)│ │ datalake │  │
-                │  └────┬─────┘ └────┬─────┘  │
-                │       │            │        │
-                │       │  ┌─────────┴──┐     │
-                │       │  │ Auth0 prod │     │
-                │       │  │ tenant     │     │
-                │       │  └────┬───────┘     │
-                └───────┼───────┼─────────────┘
-                        │       │
-            backup phase│       │
-                        ▼       ▼
-                ┌─────────────────────────────┐
-                │  adr-snapshots (Azure Blob) │
-                │                             │
-                │  postgres/${RUNDATE}/*.dump │
-                │  lfs/  (versioned mirror)   │
-                │  auth0/${RUNDATE}_users.gz  │
-                └─────────────┬───────────────┘
-                              │
-                  apply phase │
-                              ▼
-                ┌─────────────────────────────┐
-                │  staging (adr-s)            │
-                │  ┌──────────┐ ┌──────────┐  │
-                │  │ Postgres │ │   Blob   │  │
-                │  └──────────┘ └──────────┘  │
-                │  ┌────────────────────┐     │
-                │  │ Auth0 dev tenant   │     │
-                │  │ (users upsert)     │     │
-                │  └────────────────────┘     │
-                └─────────────────────────────┘
-```
-
-Prod is read **once** per night. The staging-apply phase reads exclusively
-from `adr-snapshots`. Staging can be re-restored at any time without re-hitting
-prod by re-running the apply phase against a chosen `${RUNDATE}`.
-
-The apply phase scales staging `ckan` and `datapusher` deployments to 0
-before running `DROP DATABASE`, then scales them back to 1 after the
-restores complete. Without this, `DROP DATABASE` fails because the
-datapusher's `datastore` Postgres role holds open connections that the
-sync (running as `ckan_admin`) cannot terminate. Staging downtime per
-nightly run is currently ~2 hours; that's acceptable at 02:00 UTC.
+The apply phase scales staging `ckan` and `datapusher` deployments to 0 before running `DROP DATABASE`, then scales them back to 1 after the restores complete. Staging downtime per nightly run is currently ~2 hours, mostly taken by the `pg_restore` step.
 
 ## Auth0 layout
 
-One Auth0 tenant (canonical `dev-udfgla0l.eu.auth0.com`) with the custom
-domain `auth-hivtools.unaids.org` promoted on top. The Management API
-token endpoint must be hit against the canonical hostname.
+There's one Auth0 tenant (canonical `dev-udfgla0l.eu.auth0.com`) with the custom domain `auth-hivtools.unaids.org` promoted on top.
 
-Inside the tenant: one SAML SP application per environment (prod CKAN,
-staging CKAN) plus one M2M application for adr-sync's nightly users-exports
-backup. `user_id` values are tenant-scoped, so the saml_ids in CKAN's
-`plugin_extras` already match across environments and `process_user()`'s
-saml_id lookup hits immediately after a sync — no users-imports step needed.
+Inside the tenant: one SAML SP application per environment (prod CKAN, staging CKAN) plus one M2M application for adr-sync's nightly users-exports backup. `user_id` values are tenant-scoped, so the saml_ids in CKAN's `plugin_extras` already match across environments and `process_user()`'s saml_id lookup hits immediately after a sync.
 
 ## Files
 
@@ -79,74 +22,6 @@ saml_id lookup hits immediately after a sync — no users-imports step needed.
 | `deploy/sync/secrets.yaml.template` | Shape of `adr-sync-secrets`. Populate locally — **never** commit a real copy. |
 | `docs/nightly-sync.md` | This file. |
 
-## One-time setup
-
-### Azure
-
-1. Create the snapshots storage account and container:
-   ```bash
-   RG="ADR-EUN-01"
-   az storage account create --name adrsnapshotsta -g $RG \
-       --location northeurope --sku Standard_LRS --kind StorageV2
-   az storage account blob-service-properties update --account-name adrsnapshotsta \
-       --enable-versioning true
-   az storage container create --account-name adrsnapshotsta --name snapshots --auth-mode login
-   ```
-
-2. Apply a lifecycle management policy on the storage account so backups
-   age out automatically. Example JSON (apply via
-   `az storage account management-policy create`):
-   - `postgres/` + `auth0/`: cool@30d, archive@60d, delete@365d.
-   - `lfs/` old versions: cool@7d, archive@30d, delete@90d.
-
-3. Mint SAS tokens (or use a User Assigned Managed Identity — better, but
-   more setup). Minimum SAS scopes:
-   - `PROD_LFS_SAS`: read+list on `adr-p-datalake`.
-   - `SNAPSHOTS_SAS`: read+list+write+delete on `snapshots`.
-   - `STAGING_LFS_SAS`: read+list+write+delete on `adr-s-datalake`.
-
-### Auth0 (dev tenant)
-
-1. In `https://manage.auth0.com` (dev tenant `dev-udfgla0l`), create a
-   Machine-to-Machine Application authorised against the Auth0 Management API.
-   Required scopes: `create:users`, `update:users`, `read:users`,
-   `read:connections`.
-
-2. From a shell with the new M2M creds, find the dev tenant's
-   SAML/DB connection ID:
-   ```bash
-   TOKEN=$(curl -s -X POST https://dev-udfgla0l.eu.auth0.com/oauth/token \
-       -H 'content-type: application/x-www-form-urlencoded' \
-       -d "grant_type=client_credentials&client_id=$CID&client_secret=$CSEC&audience=https://dev-udfgla0l.eu.auth0.com/api/v2/" \
-       | jq -r .access_token)
-   curl -s "https://dev-udfgla0l.eu.auth0.com/api/v2/connections" \
-       -H "Authorization: Bearer $TOKEN" | jq '.[] | {id, name, strategy}'
-   ```
-   Note the `id` of the relevant connection (`samlp` strategy for the
-   federated UNAIDS-style logins, or the Username-Password-Authentication
-   default DB connection if the dev tenant accepts password logins too).
-
-### Kubernetes
-
-1. Build & push the sync image:
-   ```bash
-   docker build --platform linux/amd64 -t adracr.azurecr.io/adr-sync:latest \
-       -f deploy/sync/Dockerfile.sync deploy/sync
-   docker push adracr.azurecr.io/adr-sync:latest
-   ```
-
-2. Populate a local copy of `deploy/sync/secrets.yaml.template` with real
-   values, then:
-   ```bash
-   kubectl apply -f secrets.yaml.local      # NOT the template
-   kubectl apply -f deploy/sync/cronjob.yaml
-   ```
-
-   `cronjob.yaml` provisions a `Role` granting the `adr-sync`
-   ServiceAccount `patch` on `deployments` and `deployments/scale` so
-   the apply phase can scale `ckan` + `datapusher` to 0 and back, plus
-   `pods/exec` for the search-index rebuild step.
-
 ## Operations
 
 ### Manual one-off run
@@ -156,18 +31,76 @@ kubectl create job --from=cronjob/adr-sync adr-sync-manual-$(date +%s) -n adr-s
 kubectl logs -f -l job-name=adr-sync-manual-... -n adr-s
 ```
 
-### Force a specific backup date for the apply phase
+### Rotating SAS tokens
 
-By default the script generates `RUNDATE` from the current UTC date. To
-restore staging from an older snapshot, set `RUNDATE` and disable the backup
-half by tweaking the manifest (or run `sync.py` directly with
-`--skip-backup` — TODO if needed). For now, the simplest path is to copy
-the desired date's blobs into today's path before running.
+The three SAS tokens in `adr-sync-secrets` (`PROD_LFS_SAS`, `SNAPSHOTS_SAS`, `STAGING_LFS_SAS`) were issued with a **365-day** expiry (currently 22-05-2027). Once they expire, `azcopy` calls will fail with `403 AuthenticationFailed` and the nightly job will start dying at the backup or apply phase.
+
+Rotate them like this (one storage account at a time):
+
+```bash
+# Pick an expiry one year out, UTC, ISO-8601.
+EXPIRY=$(date -u -v+365d +%Y-%m-%dT%H:%MZ)        # macOS
+# EXPIRY=$(date -u -d '+365 days' +%Y-%m-%dT%H:%MZ)  # GNU/Linux
+
+# Get an account key (or use --auth-mode login + --as-user for a user-delegation SAS).
+KEY=$(az storage account keys list -g ADR-EUN-01 -n adrpdatalake \
+        --query '[0].value' -o tsv)
+
+# PROD_LFS_SAS — read + list on the adr-p-datalake container.
+az storage container generate-sas \
+    --account-name adrpdatalake --name adr-p-datalake \
+    --permissions rl --expiry "$EXPIRY" \
+    --account-key "$KEY" -o tsv
+
+# SNAPSHOTS_SAS — full r/w/l/d on the snapshots container.
+az storage container generate-sas \
+    --account-name adrsnapshotsta --name snapshots \
+    --permissions rwdl --expiry "$EXPIRY" \
+    --account-key "$(az storage account keys list -g ADR-EUN-01 -n adrsnapshotsta --query '[0].value' -o tsv)" \
+    -o tsv
+
+# STAGING_LFS_SAS — full r/w/l/d on the adr-s-datalake container.
+az storage container generate-sas \
+    --account-name adrsdatalake --name adr-s-datalake \
+    --permissions rwdl --expiry "$EXPIRY" \
+    --account-key "$(az storage account keys list -g ADR-EUN-01 -n adrsdatalake --query '[0].value' -o tsv)" \
+    -o tsv
+```
+
+Each command prints the bare query-string SAS (no leading `?`). Patch the existing secret in place — don't recreate it, since other keys like `PROD_CKAN_PG_URL` live in the same secret:
+
+```bash
+kubectl patch secret adr-sync-secrets -n adr-s \
+    --type='json' -p="$(jq -nc \
+        --arg prod "$(printf %s "$PROD_SAS" | base64)" \
+        --arg snap "$(printf %s "$SNAP_SAS" | base64)" \
+        --arg stag "$(printf %s "$STAG_SAS" | base64)" \
+        '[
+          {op:"replace", path:"/data/PROD_LFS_SAS",     value:$prod},
+          {op:"replace", path:"/data/SNAPSHOTS_SAS",    value:$snap},
+          {op:"replace", path:"/data/STAGING_LFS_SAS",  value:$stag}
+        ]')"
+```
 
 ### Cleaning up
 
-`adr-snapshots` retention is driven by the lifecycle policy — no manual
-cleanup needed for routine operation.
+`adr-snapshots` retention is driven by an Azure Blob lifecycle management policy on the storage account — no manual cleanup needed for routine operation.
+
+The policy has two rules, scoped by blob prefix:
+
+| Prefix | Tier transitions | Delete |
+| ------ | ---------------- | ------ |
+| `postgres/`, `auth0/` | cool @ 30 days, archive @ 60 days | 365 days |
+| `lfs/` (old versions only) | cool @ 7 days, archive @ 30 days | 90 days |
+
+Notes:
+
+- The `lfs/` rule targets **previous versions** only (blob versioning is on for that prefix). The current version of each LFS object stays hot indefinitely — staging needs to read it on every apply phase.
+- `postgres/` and `auth0/` blobs are written once per night under `${RUNDATE}/`, so the age clock starts the moment they land.
+- "Days" are measured from last modification, per Azure's `daysAfterModificationGreaterThan` semantics.
+- View / edit the policy in the portal under `adrsnapshotsta → Data management → Lifecycle management`, or via `az storage account management-policy show -g ADR-EUN-01 --account-name adrsnapshotsta`.
+
+To restore staging from an archived snapshot you must first rehydrate the blob (Azure archive tier is offline — rehydration takes hours). For routine "restore yesterday's prod into staging" workflows you're always in the hot tier, so this only matters for forensic restores older than a month.
 
 ### Failure modes
 

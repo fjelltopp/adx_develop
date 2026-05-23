@@ -7,7 +7,7 @@ metadata:
   name: adr-sync
   namespace: adr-s
 spec:
-  schedule: "0 2 * * *"  # 02:00 UTC daily
+  schedule: "0 1 * * *"  # 01:00 UTC daily
   timeZone: "Etc/UTC"
   concurrencyPolicy: Forbid
   successfulJobsHistoryLimit: 3
