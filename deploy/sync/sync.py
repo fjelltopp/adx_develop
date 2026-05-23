@@ -363,6 +363,35 @@ def _poll_job(domain: str, token: str, job_id: str, timeout_s: int = 600) -> str
 
 # ---------- CKAN ----------
 
+def ckan_migrate(cfg: Config) -> None:
+    """Run CKAN core + extension migrations against the freshly-restored
+    DB. The AWS-era sync didn't do this — staging code is often ahead of
+    prod's schema (new extension table, new alembic revision) and a raw
+    data-copy leaves those extensions complaining at boot until each
+    runs its initdb. All commands here are idempotent. Failures are
+    logged and the sync continues so one extension's broken initdb
+    doesn't block the rest."""
+    commands: list[list[str]] = [
+        ["db", "upgrade"],
+        ["unaids", "initdb"],
+        ["versions", "initdb"],
+        ["validation", "init-db"],
+    ]
+    for cmd_args in commands:
+        result = subprocess.run(
+            [
+                "kubectl", "exec", "-n", cfg.ckan_namespace, cfg.ckan_deployment, "--",
+                "ckan", "-c", "/tmp/production.ini", *cmd_args,
+            ],
+            check=False,
+        )
+        if result.returncode != 0:
+            log.warning(
+                "ckan %s exited %d — check job stderr",
+                " ".join(cmd_args), result.returncode,
+            )
+
+
 def ckan_reindex(cfg: Config) -> None:
     # CKAN config is merged at startup to /tmp/production.ini
     # (base.ini + env.ini + secrets.ini); see deploy/base.ini.
@@ -423,6 +452,7 @@ def main() -> int:
             _blob_url(cfg.snapshots_account, cfg.snapshots_container, cfg.snapshots_sas, prefix="lfs"),
             _blob_url(cfg.staging_lfs_account, cfg.staging_lfs_container, cfg.staging_lfs_sas),
         )
+        ckan_migrate(cfg)
         ckan_reindex(cfg)
 
         slack(cfg, "sync OK", level="OK")

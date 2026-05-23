@@ -179,6 +179,7 @@ cleanup needed for routine operation.
 | Auth0 import reports per-row errors | Email collisions, malformed `user_id` | See job `/errors`. Often fine to ignore; will retry next night. |
 | `ckan search-index rebuild` fails | Solr not ready / Postgres restore incomplete | Check the Solr live-patch state (see `adr-solr-live-patches` memory). |
 | Home page returns 500 `Dataset not found` after sync | Reindex ran without `--clear`; stale Solr docs point at deleted DB rows | Re-run `ckan search-index rebuild --force --clear` against staging. |
+| `CRITI ckanext.X: requires database setup` after sync | Staging code declares a table that prod's DB doesn't have; the sync wipes staging to prod's schema | The sync's `ckan_migrate` step runs `db upgrade` + per-extension `initdb` for unaids/versions/validation. When adding a new extension that needs `initdb`, add it to the `commands` list in `deploy/sync/sync.py`. |
 | `pg_restore` reports ~7 ignored errors | 2 real data duplicates in prod (`pages_alembic_version_pkc`, `user_name_key`) + 5 benign duplicate-index entries from ckanext-harvest | Expected. Fix the prod data duplicates separately. |
 | `ckan` + `datapusher` stuck at 0 replicas after a failed/killed job | k8s SIGKILL on `activeDeadlineSeconds` bypasses Python's `finally:` | `kubectl scale deploy ckan datapusher --replicas=1 -n adr-s`. |
 | Job killed at `activeDeadlineSeconds` | Restore + reindex exceeded 4h | Investigate Postgres / pg_restore slowness; bump deadline if real. |
