@@ -364,32 +364,52 @@ def _poll_job(domain: str, token: str, job_id: str, timeout_s: int = 600) -> str
 # ---------- CKAN ----------
 
 def ckan_migrate(cfg: Config) -> None:
-    """Run CKAN core + extension migrations against the freshly-restored
-    DB. The AWS-era sync didn't do this — staging code is often ahead of
-    prod's schema (new extension table, new alembic revision) and a raw
-    data-copy leaves those extensions complaining at boot until each
-    runs its initdb. All commands here are idempotent. Failures are
-    logged and the sync continues so one extension's broken initdb
-    doesn't block the rest."""
-    commands: list[list[str]] = [
-        ["db", "upgrade"],
-        ["unaids", "initdb"],
-        ["versions", "initdb"],
-        ["validation", "init-db"],
-    ]
-    for cmd_args in commands:
-        result = subprocess.run(
-            [
-                "kubectl", "exec", "-n", cfg.ckan_namespace, cfg.ckan_deployment, "--",
-                "ckan", "-c", "/tmp/production.ini", *cmd_args,
-            ],
-            check=False,
-        )
-        if result.returncode != 0:
-            log.warning(
-                "ckan %s exited %d — check job stderr",
-                " ".join(cmd_args), result.returncode,
-            )
+    """Run CKAN core + per-extension migrations against the freshly-
+    restored DB. The AWS-era sync didn't do this — staging code is often
+    ahead of prod's schema and a raw data-copy leaves new extensions
+    complaining at boot until each runs its initdb.
+
+    Core alembic runs once (`ckan db upgrade`). After that we discover
+    enabled plugins from `ckan.plugins` in the live config and try each
+    one's `initdb` / `init-db` subcommand. Most plugins don't have one —
+    those exit code 2 (Click "no such command") and we swallow silently.
+    This way a new extension that needs initdb works without editing
+    sync.py."""
+    _ckan_exec(cfg, ["db", "upgrade"])
+
+    plugins = _enabled_plugins(cfg)
+    log.info("post-restore: probing %d plugins for initdb", len(plugins))
+    for plugin in plugins:
+        for sub in ("initdb", "init-db"):
+            rc = _ckan_exec(cfg, [plugin, sub], quiet_codes={2})
+            if rc == 0:
+                break  # this plugin's initdb succeeded; don't try the other variant
+
+
+def _ckan_exec(cfg: Config, args: list[str], quiet_codes: set[int] | None = None) -> int:
+    """Run `ckan -c /tmp/production.ini <args>` inside the CKAN pod.
+    Returns the exit code. Logs a warning on non-zero unless the code
+    is in quiet_codes (e.g. {2} for "no such Click subcommand")."""
+    result = subprocess.run(
+        ["kubectl", "exec", "-n", cfg.ckan_namespace, cfg.ckan_deployment, "--",
+         "ckan", "-c", "/tmp/production.ini", *args],
+        check=False,
+    )
+    if result.returncode != 0 and (not quiet_codes or result.returncode not in quiet_codes):
+        log.warning("ckan %s exited %d", " ".join(args), result.returncode)
+    return result.returncode
+
+
+def _enabled_plugins(cfg: Config) -> list[str]:
+    """Parse the `ckan.plugins =` line from /tmp/production.ini inside the
+    CKAN pod and return the plugin names."""
+    result = subprocess.run(
+        ["kubectl", "exec", "-n", cfg.ckan_namespace, cfg.ckan_deployment, "--",
+         "awk", "-F=", "/^ckan\\.plugins[[:space:]]*=/{print $2; exit}",
+         "/tmp/production.ini"],
+        capture_output=True, text=True, check=True,
+    )
+    return result.stdout.split()
 
 
 def ckan_reindex(cfg: Config) -> None:
