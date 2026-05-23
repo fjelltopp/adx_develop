@@ -96,7 +96,7 @@ The policy has two rules, scoped by blob prefix:
 Notes:
 
 - The `lfs/` rule targets **previous versions** only (blob versioning is on for that prefix). The current version of each LFS object stays hot indefinitely — staging needs to read it on every apply phase.
-- `postgres/` and `auth0/` blobs are written once per night under `${RUNDATE}/`, so the age clock starts the moment they land.
+- `postgres/` snapshots are written once per night under `${RUNDATE}/`. Auth0 exports are written once per night under the `auth0/` prefix with `${RUNDATE}` in the filename (for example, `auth0/{RUNDATE}_users.json.gz`), so the age clock starts the moment each blob lands.
 - "Days" are measured from last modification, per Azure's `daysAfterModificationGreaterThan` semantics.
 - View / edit the policy in the portal under `adrsnapshotsta → Data management → Lifecycle management`, or via `az storage account management-policy show -g ADR-EUN-01 --account-name adrsnapshotsta`.
 
