@@ -14,13 +14,13 @@ from __future__ import annotations
 
 import dataclasses
 import datetime as dt
-import json
 import logging
 import os
 import subprocess
 import sys
 import tempfile
 import time
+import urllib.parse
 import urllib.request
 
 import requests
@@ -32,11 +32,12 @@ RUNDATE = os.environ.get("RUNDATE") or dt.datetime.utcnow().strftime("%Y%m%d")
 
 @dataclasses.dataclass
 class Config:
-    # Postgres
+    # Postgres — single admin URL per environment (ckan_admin user); the
+    # datastore URL is derived by swapping the DB path (same role has perms
+    # on both DBs). We deliberately don't use CKAN_DATASTORE_WRITE_URL because
+    # that role can't SELECT from the UUID-named resource tables.
     prod_ckan_url: str
-    prod_datastore_url: str
     staging_ckan_url: str
-    staging_datastore_url: str
 
     # Storage (snapshots + prod + staging Azure accounts)
     snapshots_account: str
@@ -49,14 +50,10 @@ class Config:
     staging_lfs_container: str
     staging_lfs_sas: str
 
-    # Auth0
-    auth0_prod_domain: str
-    auth0_prod_client_id: str
-    auth0_prod_client_secret: str
-    auth0_dev_domain: str
-    auth0_dev_client_id: str
-    auth0_dev_client_secret: str
-    auth0_dev_connection_id: str
+    # Auth0 (single shared tenant; we only need export creds for backups)
+    auth0_domain: str
+    auth0_client_id: str
+    auth0_client_secret: str
 
     # CKAN reindex
     ckan_namespace: str
@@ -75,9 +72,7 @@ class Config:
 
         return cls(
             prod_ckan_url=req("PROD_CKAN_PG_URL"),
-            prod_datastore_url=req("PROD_DATASTORE_PG_URL"),
             staging_ckan_url=req("STAGING_CKAN_PG_URL"),
-            staging_datastore_url=req("STAGING_DATASTORE_PG_URL"),
             snapshots_account=req("SNAPSHOTS_ACCOUNT"),
             snapshots_container=req("SNAPSHOTS_CONTAINER"),
             snapshots_sas=req("SNAPSHOTS_SAS"),
@@ -87,13 +82,9 @@ class Config:
             staging_lfs_account=req("STAGING_LFS_ACCOUNT"),
             staging_lfs_container=req("STAGING_LFS_CONTAINER"),
             staging_lfs_sas=req("STAGING_LFS_SAS"),
-            auth0_prod_domain=req("AUTH0_PROD_DOMAIN"),
-            auth0_prod_client_id=req("AUTH0_PROD_CLIENT_ID"),
-            auth0_prod_client_secret=req("AUTH0_PROD_CLIENT_SECRET"),
-            auth0_dev_domain=req("AUTH0_DEV_DOMAIN"),
-            auth0_dev_client_id=req("AUTH0_DEV_CLIENT_ID"),
-            auth0_dev_client_secret=req("AUTH0_DEV_CLIENT_SECRET"),
-            auth0_dev_connection_id=req("AUTH0_DEV_CONNECTION_ID"),
+            auth0_domain=req("AUTH0_PROD_DOMAIN"),
+            auth0_client_id=req("AUTH0_PROD_CLIENT_ID"),
+            auth0_client_secret=req("AUTH0_PROD_CLIENT_SECRET"),
             ckan_namespace=os.environ.get("CKAN_NAMESPACE", "adr-s"),
             ckan_deployment=os.environ.get("CKAN_DEPLOYMENT", "deploy/ckan"),
             slack_webhook=os.environ.get("SLACK_WEBHOOK_URL"),
@@ -102,11 +93,35 @@ class Config:
 
 def run(cmd: list[str], **kw) -> subprocess.CompletedProcess:
     log.info("$ %s", " ".join(c if not _is_secret(c) else "<redacted>" for c in cmd))
-    return subprocess.run(cmd, check=True, **kw)
+    try:
+        return subprocess.run(cmd, check=True, **kw)
+    except subprocess.CalledProcessError as e:
+        # Rebuild the exception so the traceback doesn't echo redacted args.
+        scrubbed = [c if not _is_secret(c) else "<redacted>" for c in e.cmd]
+        raise subprocess.CalledProcessError(e.returncode, scrubbed) from None
 
 
 def _is_secret(s: str) -> bool:
     return any(k in s for k in ("postgresql://", "?sv=", "client_secret"))
+
+
+def pg_env(url: str, db_override: str | None = None) -> dict[str, str]:
+    """Convert a postgresql:// URL into libpq env vars so creds never appear
+    on the subprocess command line (and therefore never end up in
+    CalledProcessError tracebacks)."""
+    u = urllib.parse.urlsplit(url)
+    env = dict(os.environ)
+    env["PGHOST"] = u.hostname or ""
+    if u.port:
+        env["PGPORT"] = str(u.port)
+    if u.username:
+        env["PGUSER"] = urllib.parse.unquote(u.username)
+    if u.password:
+        env["PGPASSWORD"] = urllib.parse.unquote(u.password)
+    env["PGDATABASE"] = db_override or (u.path.lstrip("/") if u.path else "")
+    # Azure Postgres Flexible Server requires TLS.
+    env.setdefault("PGSSLMODE", "require")
+    return env
 
 
 def slack(cfg: Config, text: str, level: str = "INFO") -> None:
@@ -121,51 +136,55 @@ def slack(cfg: Config, text: str, level: str = "INFO") -> None:
 
 # ---------- Postgres ----------
 
-def pg_dump_to_blob(cfg: Config, pg_url: str, db_label: str) -> str:
-    """pg_dump custom format, stream straight to a blob in snapshots."""
-    blob_path = f"postgres/{RUNDATE}/{db_label}.dump"
+def pg_dump_to_blob(cfg: Config, admin_url: str, db_name: str) -> str:
+    """pg_dump custom format, then upload to snapshots. db_name overrides the
+    DB component of admin_url so the same admin role can dump both ckan and
+    datastore. Set SKIP_PG_BACKUP=1 to reuse an existing dump for this RUNDATE
+    (useful when iterating on later pipeline stages)."""
+    blob_path = f"postgres/{RUNDATE}/{db_name}.dump"
+    if os.environ.get("SKIP_PG_BACKUP") == "1":
+        log.info("SKIP_PG_BACKUP=1: reusing existing %s without re-dumping", blob_path)
+        return blob_path
     blob_url = (
         f"https://{cfg.snapshots_account}.blob.core.windows.net/"
         f"{cfg.snapshots_container}/{blob_path}?{cfg.snapshots_sas}"
     )
-    with tempfile.NamedTemporaryFile(suffix=f".{db_label}.dump", delete=False) as tmp:
+    with tempfile.NamedTemporaryFile(suffix=f".{db_name}.dump", delete=False) as tmp:
         tmp_path = tmp.name
     try:
-        run(["pg_dump", "-Fc", "--no-owner", "--no-privileges", "-f", tmp_path, pg_url])
+        run(
+            ["pg_dump", "-Fc", "--no-owner", "--no-privileges", "-f", tmp_path],
+            env=pg_env(admin_url, db_override=db_name),
+        )
         run(["azcopy", "copy", tmp_path, blob_url, "--overwrite=true"])
     finally:
         try:
             os.unlink(tmp_path)
         except FileNotFoundError:
             pass
-    log.info("postgres %s dumped to %s", db_label, blob_path)
+    log.info("postgres %s dumped to %s", db_name, blob_path)
     return blob_path
 
 
-def pg_restore_from_blob(cfg: Config, blob_path: str, pg_url: str, db_label: str) -> None:
+def pg_restore_from_blob(cfg: Config, blob_path: str, admin_url: str, db_name: str) -> None:
     blob_url = (
         f"https://{cfg.snapshots_account}.blob.core.windows.net/"
         f"{cfg.snapshots_container}/{blob_path}?{cfg.snapshots_sas}"
     )
-    with tempfile.NamedTemporaryFile(suffix=f".{db_label}.dump", delete=False) as tmp:
+    with tempfile.NamedTemporaryFile(suffix=f".{db_name}.dump", delete=False) as tmp:
         tmp_path = tmp.name
     try:
         run(["azcopy", "copy", blob_url, tmp_path, "--overwrite=true"])
-        # pg_restore exits non-zero on clean errors when objects don't pre-exist;
-        # that's expected with --clean --if-exists. Capture stderr but don't fail
-        # the whole sync on it.
-        result = subprocess.run(
+        # pg_restore requires -d/--dbname on the command line (PGDATABASE alone
+        # is not sufficient). Any non-zero exit is fatal — silent partial
+        # restores are how this pipeline can silently rot.
+        run(
             [
                 "pg_restore", "--clean", "--if-exists", "--no-owner",
-                "--no-privileges", "--dbname", pg_url, tmp_path,
+                "--no-privileges", "-d", db_name, tmp_path,
             ],
-            check=False,
+            env=pg_env(admin_url, db_override=db_name),
         )
-        if result.returncode != 0:
-            log.warning(
-                "pg_restore %s exited %d (clean errors are expected, verify counts)",
-                db_label, result.returncode,
-            )
     finally:
         try:
             os.unlink(tmp_path)
@@ -175,12 +194,20 @@ def pg_restore_from_blob(cfg: Config, blob_path: str, pg_url: str, db_label: str
 
 # ---------- LFS ----------
 
-def azcopy_sync(src_account: str, src_container: str, src_sas: str,
-                dst_account: str, dst_container: str, dst_sas: str) -> None:
-    src = f"https://{src_account}.blob.core.windows.net/{src_container}?{src_sas}"
-    dst = f"https://{dst_account}.blob.core.windows.net/{dst_container}?{dst_sas}"
-    # delete-destination=true to mirror; recursive is the default for sync
-    run(["azcopy", "sync", src, dst, "--delete-destination=true"])
+def _blob_url(account: str, container: str, sas: str, prefix: str = "") -> str:
+    """Build an azcopy-friendly blob URL. Trailing slash on the path forces
+    azcopy to treat the target as a directory."""
+    path = container.rstrip("/")
+    if prefix:
+        path = f"{path}/{prefix.strip('/')}/"
+    else:
+        path = f"{path}/"
+    return f"https://{account}.blob.core.windows.net/{path}?{sas}"
+
+
+def azcopy_sync(src_url: str, dst_url: str) -> None:
+    # delete-destination=true to mirror; recursive is default for sync
+    run(["azcopy", "sync", src_url, dst_url, "--delete-destination=true"])
 
 
 # ---------- Auth0 ----------
@@ -203,7 +230,7 @@ def auth0_token(domain: str, client_id: str, client_secret: str) -> str:
 
 def auth0_export_users(cfg: Config) -> str:
     """Create an export job, poll for completion, download users.json.gz, upload to snapshots."""
-    token = auth0_token(cfg.auth0_prod_domain, cfg.auth0_prod_client_id, cfg.auth0_prod_client_secret)
+    token = auth0_token(cfg.auth0_domain, cfg.auth0_client_id, cfg.auth0_client_secret)
     headers = {"Authorization": f"Bearer {token}", "Content-Type": "application/json"}
 
     fields = [
@@ -214,14 +241,14 @@ def auth0_export_users(cfg: Config) -> str:
         )
     ]
     r = requests.post(
-        f"https://{cfg.auth0_prod_domain}/api/v2/jobs/users-exports",
+        f"https://{cfg.auth0_domain}/api/v2/jobs/users-exports",
         headers=headers, json={"format": "json", "fields": fields}, timeout=30,
     )
     r.raise_for_status()
     job_id = r.json()["id"]
     log.info("auth0 export job created: %s", job_id)
 
-    download_url = _poll_job(cfg.auth0_prod_domain, token, job_id)
+    download_url = _poll_job(cfg.auth0_domain, token, job_id)
     blob_path = f"auth0/{RUNDATE}_users.json.gz"
     blob_url = (
         f"https://{cfg.snapshots_account}.blob.core.windows.net/"
@@ -258,81 +285,23 @@ def _poll_job(domain: str, token: str, job_id: str, timeout_s: int = 600) -> str
     raise RuntimeError(f"auth0 job {job_id} timed out after {timeout_s}s")
 
 
-def auth0_import_users(cfg: Config, export_blob_path: str) -> None:
-    """Download export from snapshots, strip role-bearing app_metadata, import into dev tenant."""
-    blob_url = (
-        f"https://{cfg.snapshots_account}.blob.core.windows.net/"
-        f"{cfg.snapshots_container}/{export_blob_path}?{cfg.snapshots_sas}"
-    )
-    with tempfile.NamedTemporaryFile(suffix=".users.json.gz", delete=False) as tmp_gz:
-        gz_path = tmp_gz.name
-    run(["azcopy", "copy", blob_url, gz_path, "--overwrite=true"])
-
-    import gzip
-    with gzip.open(gz_path, "rt") as f:
-        users = json.load(f)
-
-    sanitised = [_sanitise_for_dev(u) for u in users]
-
-    with tempfile.NamedTemporaryFile("w", suffix=".users.json", delete=False) as tmp_json:
-        json.dump(sanitised, tmp_json)
-        json_path = tmp_json.name
-
-    token = auth0_token(cfg.auth0_dev_domain, cfg.auth0_dev_client_id, cfg.auth0_dev_client_secret)
-    with open(json_path, "rb") as fh:
-        r = requests.post(
-            f"https://{cfg.auth0_dev_domain}/api/v2/jobs/users-imports",
-            headers={"Authorization": f"Bearer {token}"},
-            files={"users": ("users.json", fh, "application/json")},
-            data={
-                "connection_id": cfg.auth0_dev_connection_id,
-                "upsert": "true",
-                "send_completion_email": "false",
-            },
-            timeout=60,
-        )
-    r.raise_for_status()
-    job_id = r.json()["id"]
-    log.info("auth0 import job started on dev tenant: %s (%d users)", job_id, len(sanitised))
-    _poll_job(cfg.auth0_dev_domain, token, job_id, timeout_s=1800)
-
-    # Surface errors but don't fail the sync — partial imports are tolerable.
-    err = requests.get(
-        f"https://{cfg.auth0_dev_domain}/api/v2/jobs/{job_id}/errors",
-        headers={"Authorization": f"Bearer {token}"}, timeout=30,
-    )
-    if err.ok and err.json():
-        count = len(err.json())
-        log.warning("auth0 import had %d per-row errors; first: %s", count, err.json()[0])
-        slack(cfg, f"auth0 import: {count} per-row errors (job {job_id})", level="WARN")
-
-    for p in (gz_path, json_path):
-        try:
-            os.unlink(p)
-        except FileNotFoundError:
-            pass
-
-
-def _sanitise_for_dev(user: dict) -> dict:
-    """Strip prod role grants from app_metadata; keep everything else."""
-    out = dict(user)
-    meta = dict(out.get("app_metadata") or {})
-    for k in ("roles", "permissions", "is_sysadmin", "admin"):
-        meta.pop(k, None)
-    if meta:
-        out["app_metadata"] = meta
-    else:
-        out.pop("app_metadata", None)
-    return out
-
-
 # ---------- CKAN ----------
 
 def ckan_reindex(cfg: Config) -> None:
-    run([
-        "kubectl", "exec", "-n", cfg.ckan_namespace, cfg.ckan_deployment, "--",
-        "ckan", "-c", "/etc/ckan/production.ini", "search-index", "rebuild",
-    ])
+    # CKAN config is merged at startup to /tmp/production.ini
+    # (base.ini + env.ini + secrets.ini); see deploy/base.ini.
+    # --force skips datasets that fail to serialize (a CKAN-level data quirk,
+    # not a sync issue) instead of aborting. We don't want the whole sync to
+    # fail just because one bad row prevented its own indexing.
+    result = subprocess.run(
+        [
+            "kubectl", "exec", "-n", cfg.ckan_namespace, cfg.ckan_deployment, "--",
+            "ckan", "-c", "/tmp/production.ini", "search-index", "rebuild", "--force",
+        ],
+        check=False,
+    )
+    if result.returncode != 0:
+        log.warning("ckan search-index rebuild exited %d — check logs for per-dataset failures", result.returncode)
 
 
 # ---------- main ----------
@@ -346,23 +315,22 @@ def main() -> int:
         # Backup phase
         log.info("=== backup phase ===")
         ckan_dump = pg_dump_to_blob(cfg, cfg.prod_ckan_url, "ckan")
-        ds_dump = pg_dump_to_blob(cfg, cfg.prod_datastore_url, "datastore")
+        ds_dump = pg_dump_to_blob(cfg, cfg.prod_ckan_url, "datastore")
         azcopy_sync(
-            cfg.prod_lfs_account, cfg.prod_lfs_container, cfg.prod_lfs_sas,
-            cfg.snapshots_account, "lfs", cfg.snapshots_sas,
+            _blob_url(cfg.prod_lfs_account, cfg.prod_lfs_container, cfg.prod_lfs_sas),
+            _blob_url(cfg.snapshots_account, cfg.snapshots_container, cfg.snapshots_sas, prefix="lfs"),
         )
-        export_blob = auth0_export_users(cfg)
+        auth0_export_users(cfg)
         slack(cfg, "backup phase done")
 
         # Apply phase
         log.info("=== apply phase ===")
         pg_restore_from_blob(cfg, ckan_dump, cfg.staging_ckan_url, "ckan")
-        pg_restore_from_blob(cfg, ds_dump, cfg.staging_datastore_url, "datastore")
+        pg_restore_from_blob(cfg, ds_dump, cfg.staging_ckan_url, "datastore")
         azcopy_sync(
-            cfg.snapshots_account, "lfs", cfg.snapshots_sas,
-            cfg.staging_lfs_account, cfg.staging_lfs_container, cfg.staging_lfs_sas,
+            _blob_url(cfg.snapshots_account, cfg.snapshots_container, cfg.snapshots_sas, prefix="lfs"),
+            _blob_url(cfg.staging_lfs_account, cfg.staging_lfs_container, cfg.staging_lfs_sas),
         )
-        auth0_import_users(cfg, export_blob)
         ckan_reindex(cfg)
 
         slack(cfg, "sync OK", level="OK")

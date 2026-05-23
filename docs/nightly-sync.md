@@ -50,26 +50,17 @@ Prod is read **once** per night. The staging-apply phase reads exclusively
 from `adr-snapshots`. Staging can be re-restored at any time without re-hitting
 prod by re-running the apply phase against a chosen `${RUNDATE}`.
 
-## Why Auth0 needs special handling
+## Auth0 layout
 
-Prod uses Auth0 tenant `auth-hivtools.unaids.org` (UNAIDS-owned). Staging uses
-`dev-udfgla0l.eu.auth0.com` (Fjelltopp-owned). SAML subject IDs are
-tenant-specific. A raw Postgres restore leaves
-`plugin_extras.saml2auth.saml_id` values that don't match anything the dev IdP
-will issue, so the `saml_id`-lookup branch of
-`ckanext-saml2auth/process_user()` misses every prod user after a sync.
+One Auth0 tenant (canonical `dev-udfgla0l.eu.auth0.com`) with the custom
+domain `auth-hivtools.unaids.org` promoted on top. The Management API
+token endpoint must be hit against the canonical hostname.
 
-The email-fallback branch heals it on first login — but only if the dev Auth0
-tenant already knows the user's email. The sync's Auth0 step takes care of
-that: every prod user is upserted into the dev tenant via
-`POST /api/v2/jobs/users-imports`. Role-bearing keys in `app_metadata`
-(`roles`, `permissions`, `is_sysadmin`, `admin`) are stripped before import
-so prod role grants don't leak into staging.
-
-Identity drift: each nightly DB restore clobbers the freshly-written dev
-`saml_id`. First login of the next day re-heals it via email-match. Silent,
-harmless, but it does mean the `saml_id` fast path is never the steady state
-in staging.
+Inside the tenant: one SAML SP application per environment (prod CKAN,
+staging CKAN) plus one M2M application for adr-sync's nightly users-exports
+backup. `user_id` values are tenant-scoped, so the saml_ids in CKAN's
+`plugin_extras` already match across environments and `process_user()`'s
+saml_id lookup hits immediately after a sync — no users-imports step needed.
 
 ## Files
 
