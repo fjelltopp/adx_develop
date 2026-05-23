@@ -166,6 +166,61 @@ def pg_dump_to_blob(cfg: Config, admin_url: str, db_name: str) -> str:
     return blob_path
 
 
+def _assert_staging_url(admin_url: str) -> None:
+    """Refuse destructive DB operations against anything but staging.
+    Staging Azure Postgres host is adr-s-eun-db001; the `-s-` segment is
+    the marker."""
+    host = urllib.parse.urlsplit(admin_url).hostname or ""
+    if "-s-" not in host:
+        raise RuntimeError(f"refusing to drop database on non-staging host {host!r}")
+
+
+def _drop_and_recreate_db(admin_url: str, db_name: str) -> None:
+    """Terminate sessions on db_name then DROP + CREATE it. Run against the
+    `postgres` meta-DB on the same server.
+
+    We don't use `DROP DATABASE ... WITH (FORCE)` because it requires
+    pg_signal_backend, which Azure Flexible Server doesn't grant to
+    non-admin roles like ckan_admin. The terminate filter `usename =
+    current_user` only kills sessions we own; an Azure system superuser
+    session on `ckan` would otherwise refuse termination and abort the
+    whole DROP. main() scales CKAN + datapusher to 0 before this runs
+    so the only sessions left are stragglers from monitoring / extension
+    workers.
+
+    Each statement is its own -c invocation: DROP/CREATE DATABASE cannot
+    run inside a transaction, and psql wraps multi-statement -c in one."""
+    _assert_staging_url(admin_url)
+    log.info("dropping and recreating database %s on staging", db_name)
+    run(
+        ["psql", "-v", "ON_ERROR_STOP=1",
+         "-c", (
+             f"SELECT pg_terminate_backend(pid) FROM pg_stat_activity "
+             f"WHERE datname = '{db_name}' AND pid <> pg_backend_pid() "
+             f"AND usename = current_user;"
+         ),
+         "-c", f'DROP DATABASE IF EXISTS "{db_name}";',
+         "-c", f'CREATE DATABASE "{db_name}";'],
+        env=pg_env(admin_url, db_override="postgres"),
+    )
+def _scale(deployments: list[str], replicas: int) -> None:
+    """Scale staging deployments. Used to stop CKAN + datapusher before
+    DROP DATABASE so their connections don't block it. datapusher
+    connects to Postgres as a different role (`datastore`) than the
+    sync runs as (`ckan_admin`), so we can't terminate its sessions
+    from inside the sync — scaling it to 0 is the only way to clear
+    them. On scale-up we don't wait; the sync moves on and the pods
+    come back in parallel with the rest of the apply phase."""
+    namespace = os.environ.get("NAMESPACE", "adr-s")
+    for name in deployments:
+        run(["kubectl", "scale", "deployment", name,
+             f"--replicas={replicas}", "-n", namespace])
+    if replicas == 0:
+        for name in deployments:
+            run(["kubectl", "wait", f"--for=delete", "pod",
+                 "-l", f"app={name}", "-n", namespace, "--timeout=120s"])
+
+
 def pg_restore_from_blob(cfg: Config, blob_path: str, admin_url: str, db_name: str) -> None:
     blob_url = (
         f"https://{cfg.snapshots_account}.blob.core.windows.net/"
@@ -175,16 +230,37 @@ def pg_restore_from_blob(cfg: Config, blob_path: str, admin_url: str, db_name: s
         tmp_path = tmp.name
     try:
         run(["azcopy", "copy", blob_url, tmp_path, "--overwrite=true"])
-        # pg_restore requires -d/--dbname on the command line (PGDATABASE alone
-        # is not sufficient). Any non-zero exit is fatal — silent partial
-        # restores are how this pipeline can silently rot.
-        run(
-            [
-                "pg_restore", "--clean", "--if-exists", "--no-owner",
-                "--no-privileges", "-d", db_name, tmp_path,
-            ],
+
+        # Drop and recreate the target database so pg_restore lands on a
+        # genuinely empty DB. Avoids the 22-minute serial DROP phase that
+        # --clean --if-exists would otherwise spend on thousands of
+        # UUID-named datastore tables, and the lock/memory pressure that a
+        # single DROP SCHEMA CASCADE causes.
+        _drop_and_recreate_db(admin_url, db_name)
+
+        # pg_restore requires -d/--dbname on the command line (PGDATABASE
+        # alone is not sufficient).
+        # Single-threaded restore — parallel jobs OOM the staging Postgres
+        # building large indexes (the `activity` table PK alone needs ~24MB
+        # work_mem; 3 workers in parallel blow the budget).
+        # pg_restore exits 1 if ANY error occurred. In practice the prod
+        # dump throws a handful of benign errors per restore: duplicate
+        # CREATE INDEX statements from plugins that register the same
+        # index twice (ckanext-harvest), plus a couple of real data
+        # duplicates (pages_alembic_version_pkc, user_name_key) that
+        # predate the migration. Match the AWS-era behaviour: log loudly
+        # but keep going — aborting here would skip the datastore restore
+        # and reindex that follow.
+        result = subprocess.run(
+            ["pg_restore", "--no-owner", "--no-privileges",
+             "-d", db_name, tmp_path],
             env=pg_env(admin_url, db_override=db_name),
         )
+        if result.returncode != 0:
+            log.warning(
+                "pg_restore for %s exited %d — see job stderr for per-row errors",
+                db_name, result.returncode,
+            )
     finally:
         try:
             os.unlink(tmp_path)
@@ -290,13 +366,19 @@ def _poll_job(domain: str, token: str, job_id: str, timeout_s: int = 600) -> str
 def ckan_reindex(cfg: Config) -> None:
     # CKAN config is merged at startup to /tmp/production.ini
     # (base.ini + env.ini + secrets.ini); see deploy/base.ini.
-    # --force skips datasets that fail to serialize (a CKAN-level data quirk,
-    # not a sync issue) instead of aborting. We don't want the whole sync to
-    # fail just because one bad row prevented its own indexing.
+    # --clear wipes Solr before reindexing. Without it, datasets that
+    # existed in staging Solr but not in the freshly-restored DB linger
+    # in the index; `package_search` then returns IDs that the ckanext-
+    # restricted plugin tries to load from the DB, raising ObjectNotFound
+    # and 500-ing the home page.
+    # --force skips datasets that fail to serialize (a CKAN-level data
+    # quirk, not a sync issue) instead of aborting. One known per-dataset
+    # failure: a dataset whose `config` field exceeds Solr's 32766-byte
+    # max term length — that one stays out of the index.
     result = subprocess.run(
         [
             "kubectl", "exec", "-n", cfg.ckan_namespace, cfg.ckan_deployment, "--",
-            "ckan", "-c", "/tmp/production.ini", "search-index", "rebuild", "--force",
+            "ckan", "-c", "/tmp/production.ini", "search-index", "rebuild", "--force", "--clear",
         ],
         check=False,
     )
@@ -325,8 +407,18 @@ def main() -> int:
 
         # Apply phase
         log.info("=== apply phase ===")
-        pg_restore_from_blob(cfg, ckan_dump, cfg.staging_ckan_url, "ckan")
-        pg_restore_from_blob(cfg, ds_dump, cfg.staging_ckan_url, "datastore")
+        # Scale CKAN + datapusher to 0 so DROP DATABASE on staging isn't
+        # blocked. finally: scale back regardless of restore outcome, but
+        # note that k8s SIGKILL on activeDeadlineSeconds bypasses finally
+        # — if the job is killed mid-restore, ckan + datapusher need
+        # manual `kubectl scale --replicas=1` to come back.
+        scaled = ["ckan", "datapusher"]
+        try:
+            _scale(scaled, 0)
+            pg_restore_from_blob(cfg, ckan_dump, cfg.staging_ckan_url, "ckan")
+            pg_restore_from_blob(cfg, ds_dump, cfg.staging_ckan_url, "datastore")
+        finally:
+            _scale(scaled, 1)
         azcopy_sync(
             _blob_url(cfg.snapshots_account, cfg.snapshots_container, cfg.snapshots_sas, prefix="lfs"),
             _blob_url(cfg.staging_lfs_account, cfg.staging_lfs_container, cfg.staging_lfs_sas),

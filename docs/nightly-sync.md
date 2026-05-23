@@ -50,6 +50,13 @@ Prod is read **once** per night. The staging-apply phase reads exclusively
 from `adr-snapshots`. Staging can be re-restored at any time without re-hitting
 prod by re-running the apply phase against a chosen `${RUNDATE}`.
 
+The apply phase scales staging `ckan` and `datapusher` deployments to 0
+before running `DROP DATABASE`, then scales them back to 1 after the
+restores complete. Without this, `DROP DATABASE` fails because the
+datapusher's `datastore` Postgres role holds open connections that the
+sync (running as `ckan_admin`) cannot terminate. Staging downtime per
+nightly run is currently ~2 hours; that's acceptable at 02:00 UTC.
+
 ## Auth0 layout
 
 One Auth0 tenant (canonical `dev-udfgla0l.eu.auth0.com`) with the custom
@@ -135,6 +142,11 @@ saml_id lookup hits immediately after a sync — no users-imports step needed.
    kubectl apply -f deploy/sync/cronjob.yaml
    ```
 
+   `cronjob.yaml` provisions a `Role` granting the `adr-sync`
+   ServiceAccount `patch` on `deployments` and `deployments/scale` so
+   the apply phase can scale `ckan` + `datapusher` to 0 and back, plus
+   `pods/exec` for the search-index rebuild step.
+
 ## Operations
 
 ### Manual one-off run
@@ -166,6 +178,10 @@ cleanup needed for routine operation.
 | Auth0 export job times out | Token expired or M2M scope missing | Check tenant logs in Auth0 dashboard. |
 | Auth0 import reports per-row errors | Email collisions, malformed `user_id` | See job `/errors`. Often fine to ignore; will retry next night. |
 | `ckan search-index rebuild` fails | Solr not ready / Postgres restore incomplete | Check the Solr live-patch state (see `adr-solr-live-patches` memory). |
+| Home page returns 500 `Dataset not found` after sync | Reindex ran without `--clear`; stale Solr docs point at deleted DB rows | Re-run `ckan search-index rebuild --force --clear` against staging. |
+| `pg_restore` reports ~7 ignored errors | 2 real data duplicates in prod (`pages_alembic_version_pkc`, `user_name_key`) + 5 benign duplicate-index entries from ckanext-harvest | Expected. Fix the prod data duplicates separately. |
+| `ckan` + `datapusher` stuck at 0 replicas after a failed/killed job | k8s SIGKILL on `activeDeadlineSeconds` bypasses Python's `finally:` | `kubectl scale deploy ckan datapusher --replicas=1 -n adr-s`. |
+| Job killed at `activeDeadlineSeconds` | Restore + reindex exceeded 4h | Investigate Postgres / pg_restore slowness; bump deadline if real. |
 
 ## Cost
 

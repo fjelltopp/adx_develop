@@ -15,7 +15,7 @@ spec:
   jobTemplate:
     spec:
       backoffLimit: 0  # don't retry — re-run manually after fixing
-      activeDeadlineSeconds: 7200  # 2 hours hard ceiling
+      activeDeadlineSeconds: 14400  # 4 hours; datastore restore alone is ~90 min
       template:
         spec:
           restartPolicy: Never
@@ -54,10 +54,13 @@ metadata:
 rules:
   - apiGroups: ["apps"]
     resources: ["deployments"]
-    verbs: ["get"]
+    verbs: ["get", "patch"]
+  - apiGroups: ["apps"]
+    resources: ["deployments/scale"]
+    verbs: ["get", "patch", "update"]
   - apiGroups: [""]
     resources: ["pods", "pods/exec"]
-    verbs: ["get", "list", "create"]
+    verbs: ["get", "list", "create", "watch"]
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
