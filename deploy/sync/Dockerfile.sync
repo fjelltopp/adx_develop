@@ -1,0 +1,27 @@
+# Image for the nightly prod -> staging sync CronJob.
+# Target: adracr.azurecr.io/adr-sync
+FROM ubuntu:24.04
+
+ENV DEBIAN_FRONTEND=noninteractive
+
+RUN apt-get update -qq && apt-get install -y -qq \
+        ca-certificates curl gnupg lsb-release tar python3 python3-pip python3-requests \
+    && install -d /usr/share/postgresql-common/pgdg \
+    && curl -fsSL https://www.postgresql.org/media/keys/ACCC4CF8.asc \
+        -o /usr/share/postgresql-common/pgdg/apt.postgresql.org.asc \
+    && echo "deb [signed-by=/usr/share/postgresql-common/pgdg/apt.postgresql.org.asc] https://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" \
+        > /etc/apt/sources.list.d/pgdg.list \
+    && apt-get update -qq \
+    && apt-get install -y -qq postgresql-client-16 \
+    && curl -fsSL https://aka.ms/downloadazcopy-v10-linux -o /tmp/azcopy.tgz \
+    && tar -xzf /tmp/azcopy.tgz -C /tmp \
+    && install /tmp/azcopy_linux_*/azcopy /usr/local/bin/azcopy \
+    && curl -fsSL -o /usr/local/bin/kubectl \
+        "https://dl.k8s.io/release/$(curl -fsSL https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl" \
+    && chmod +x /usr/local/bin/kubectl \
+    && rm -rf /var/lib/apt/lists/* /tmp/azcopy*
+
+COPY sync.py /usr/local/bin/sync.py
+RUN chmod +x /usr/local/bin/sync.py
+
+ENTRYPOINT ["python3", "/usr/local/bin/sync.py"]

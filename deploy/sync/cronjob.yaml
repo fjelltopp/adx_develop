@@ -1,0 +1,77 @@
+# Nightly prod -> staging sync CronJob.
+# Apply with: kubectl apply -f deploy/sync/cronjob.yaml
+# Manual one-off run: kubectl create job --from=cronjob/adr-sync adr-sync-manual-$(date +%s) -n adr-s
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: adr-sync
+  namespace: adr-s
+spec:
+  schedule: "0 1 * * *"  # 01:00 UTC daily
+  timeZone: "Etc/UTC"
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 7
+  jobTemplate:
+    spec:
+      backoffLimit: 0  # don't retry — re-run manually after fixing
+      activeDeadlineSeconds: 14400  # 4 hours; datastore restore alone is ~90 min
+      template:
+        spec:
+          restartPolicy: Never
+          serviceAccountName: adr-sync  # needs `kubectl exec` on the ckan deployment
+          containers:
+            - name: sync
+              image: adracr.azurecr.io/adr-sync:latest
+              imagePullPolicy: Always
+              resources:
+                requests:
+                  cpu: "500m"
+                  memory: "1Gi"
+                limits:
+                  cpu: "2"
+                  memory: "4Gi"
+              envFrom:
+                - secretRef:
+                    name: adr-sync-secrets
+              env:
+                - name: CKAN_NAMESPACE
+                  value: "adr-s"
+                - name: CKAN_DEPLOYMENT
+                  value: "deploy/ckan"
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: adr-sync
+  namespace: adr-s
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: adr-sync
+  namespace: adr-s
+rules:
+  - apiGroups: ["apps"]
+    resources: ["deployments"]
+    verbs: ["get", "patch"]
+  - apiGroups: ["apps"]
+    resources: ["deployments/scale"]
+    verbs: ["get", "patch", "update"]
+  - apiGroups: [""]
+    resources: ["pods", "pods/exec"]
+    verbs: ["get", "list", "create", "watch"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: adr-sync
+  namespace: adr-s
+subjects:
+  - kind: ServiceAccount
+    name: adr-sync
+    namespace: adr-s
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: adr-sync
