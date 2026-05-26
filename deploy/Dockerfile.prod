@@ -61,7 +61,9 @@ COPY Pipfile Pipfile.lock /usr/lib/adx/
 
 # Install Python dependencies
 WORKDIR /usr/lib/adx
-RUN mkdir .venv && pipenv sync -v && ln -s .venv venv
+# setuptools 80+ removed pkg_resources; downgrade so CKAN CLI (which still
+# imports pkg_resources) can find it at runtime.
+RUN mkdir .venv && pipenv sync -v && .venv/bin/pip install "setuptools<80" && ln -s .venv venv
 
 # Install Node.js and yarn for React build
 RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - && \
