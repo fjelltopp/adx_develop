@@ -12,10 +12,16 @@ read once per night regardless of how many places we restore to.
 """
 from __future__ import annotations
 
+import base64
 import dataclasses
 import datetime as dt
+import hashlib
+import hmac
+import json
 import logging
 import os
+import re
+import secrets
 import subprocess
 import sys
 import tempfile
@@ -59,6 +65,10 @@ class Config:
     ckan_namespace: str
     ckan_deployment: str
 
+    # DataPusher token rotation
+    ckan_jwt_secret: str
+    ckan_ini_secret_name: str
+
     # Slack
     slack_webhook: str | None
 
@@ -87,6 +97,8 @@ class Config:
             auth0_client_secret=req("AUTH0_PROD_CLIENT_SECRET"),
             ckan_namespace=os.environ.get("CKAN_NAMESPACE", "adr-s"),
             ckan_deployment=os.environ.get("CKAN_DEPLOYMENT", "deploy/ckan"),
+            ckan_jwt_secret=req("CKAN_JWT_SECRET"),
+            ckan_ini_secret_name=os.environ.get("CKAN_INI_SECRET_NAME", "ckan-ini-secrets"),
             slack_webhook=os.environ.get("SLACK_WEBHOOK_URL"),
         )
 
@@ -441,6 +453,80 @@ def ckan_reindex(cfg: Config) -> None:
         log.warning("ckan search-index rebuild exited %d — check logs for per-dataset failures", result.returncode)
 
 
+# ---------- DataPusher token rotation ----------
+
+def _make_api_token(jwt_secret: str) -> tuple[str, str]:
+    """Generate a CKAN-compatible HS256 JWT API token.
+
+    Replicates what `ckan user token add` produces: header.payload.sig with
+    no expiry claim.  The jti is the DB row ID; the token string is what goes
+    in ckan.datapusher.api_token.
+
+    Returns (jti, token_string).
+    """
+    jti = secrets.token_urlsafe(48)
+    header = base64.urlsafe_b64encode(
+        json.dumps({"alg": "HS256", "typ": "JWT"}, separators=(",", ":")).encode()
+    ).rstrip(b"=").decode()
+    payload = base64.urlsafe_b64encode(
+        json.dumps({"jti": jti, "iat": int(time.time())}, separators=(",", ":")).encode()
+    ).rstrip(b"=").decode()
+    msg = f"{header}.{payload}"
+    sig = hmac.new(jwt_secret.encode(), msg.encode(), hashlib.sha256).digest()
+    sig_b64 = base64.urlsafe_b64encode(sig).rstrip(b"=").decode()
+    return jti, f"{msg}.{sig_b64}"
+
+
+def refresh_datapusher_token(cfg: Config) -> None:
+    """Regenerate the DataPusher API token after a DB restore.
+
+    The nightly sync replaces staging's DB with a prod snapshot. Any token
+    previously stored only in staging's api_token table is wiped, breaking
+    DataPusher's ability to call back to CKAN. This function:
+
+      1. Generates a fresh JWT using the same secret CKAN uses.
+      2. Inserts a matching row into the restored staging DB.
+      3. Patches ckan-ini-secrets with the new token value.
+
+    Called inside the scale-to-0 window, before CKAN scales back up, so the
+    pod starts with a token that already exists in the DB.
+    """
+    jti, token = _make_api_token(cfg.ckan_jwt_secret)
+
+    run(
+        ["psql", "-v", "ON_ERROR_STOP=1",
+         "-c", "DELETE FROM api_token WHERE name = 'datapusher_staging';",
+         "-c", (
+             f"INSERT INTO api_token (id, name, user_id) "
+             f"SELECT '{jti}', 'datapusher_staging', id "
+             f"FROM public.user WHERE name = 'admin' LIMIT 1;"
+         )],
+        env=pg_env(cfg.staging_ckan_url),
+    )
+
+    result = subprocess.run(
+        ["kubectl", "get", "secret", cfg.ckan_ini_secret_name,
+         "-n", cfg.ckan_namespace, "-o", "jsonpath={.data.secrets\\.ini}"],
+        capture_output=True, text=True, check=True,
+    )
+    current_ini = base64.b64decode(result.stdout.strip()).decode()
+    new_ini = re.sub(
+        r"(?m)^ckan\.datapusher\.api_token\s*=.*$",
+        f"ckan.datapusher.api_token = {token}",
+        current_ini,
+    )
+    if new_ini == current_ini:
+        log.warning("refresh_datapusher_token: ckan.datapusher.api_token not found in secrets.ini — skipping patch")
+        return
+    new_b64 = base64.b64encode(new_ini.encode()).decode()
+    run(
+        ["kubectl", "patch", "secret", cfg.ckan_ini_secret_name,
+         "-n", cfg.ckan_namespace, "--type=merge",
+         "-p", json.dumps({"data": {"secrets.ini": new_b64}})],
+    )
+    log.info("datapusher api token refreshed (jti=%s…)", jti[:16])
+
+
 # ---------- main ----------
 
 def main() -> int:
@@ -472,6 +558,7 @@ def main() -> int:
             _scale(cfg, scaled, 0)
             pg_restore_from_blob(cfg, ckan_dump, cfg.staging_ckan_url, "ckan")
             pg_restore_from_blob(cfg, ds_dump, cfg.staging_ckan_url, "datastore")
+            refresh_datapusher_token(cfg)
         finally:
             _scale(cfg, scaled, 1)
         azcopy_sync(

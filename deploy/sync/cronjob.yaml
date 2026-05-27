@@ -61,6 +61,9 @@ rules:
   - apiGroups: [""]
     resources: ["pods", "pods/exec"]
     verbs: ["get", "list", "create", "watch"]
+  - apiGroups: [""]
+    resources: ["secrets"]
+    verbs: ["get", "patch"]
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
