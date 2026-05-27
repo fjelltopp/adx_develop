@@ -87,4 +87,4 @@ jobs:
           kubectl set image deployment/ckan \
             ckan=${{ env.ACR_NAME }}.azurecr.io/${{ env.IMAGE_NAME }}:${{ steps.params.outputs.version }} \
             -n ${{ env.NAMESPACE }}
-          kubectl rollout status deployment/ckan -n ${{ env.NAMESPACE }} --timeout=5m
+          kubectl rollout status deployment/ckan -n ${{ env.NAMESPACE }} --timeout=10m
