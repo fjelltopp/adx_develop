@@ -17,6 +17,10 @@ on:
         required: true
         type: string
 
+concurrency:
+  group: deploy-production-${{ github.ref }}
+  cancel-in-progress: true
+
 env:
   ACR_NAME: adracr
   IMAGE_NAME: ckan

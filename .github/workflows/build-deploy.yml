@@ -10,6 +10,10 @@ on:
         required: false
         type: string
 
+concurrency:
+  group: deploy-staging-${{ github.ref }}
+  cancel-in-progress: true
+
 env:
   ACR_NAME: adracr
   IMAGE_NAME: ckan
