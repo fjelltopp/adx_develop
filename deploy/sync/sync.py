@@ -430,6 +430,31 @@ def _enabled_plugins(cfg: Config) -> list[str]:
     return result.stdout.split()
 
 
+def grant_datastore_permissions(cfg: Config) -> None:
+    """Re-apply datastore role GRANTs after restore.
+
+    pg_restore runs with --no-privileges, which strips every GRANT from
+    the restored datastore DB. The datastore_ro role then can't SELECT
+    from _table_metadata, so DataPusher's `datastore_search` call 500s,
+    push_to_datastore aborts before it pushes any rows, and the
+    `complete` callback that creates datatables_view never fires —
+    uploads succeed but views don't appear.
+
+    `ckan datastore set-permissions` prints the canonical GRANT script
+    to stdout; we pipe it into psql as ckan_admin against the datastore
+    DB."""
+    result = subprocess.run(
+        ["kubectl", "exec", "-n", cfg.ckan_namespace, cfg.ckan_deployment, "--",
+         "ckan", "-c", "/tmp/production.ini", "datastore", "set-permissions"],
+        capture_output=True, text=True, check=True,
+    )
+    run(
+        ["psql", "-v", "ON_ERROR_STOP=1"],
+        env=pg_env(cfg.staging_ckan_url, db_override="datastore"),
+        input=result.stdout, text=True,
+    )
+
+
 def ckan_reindex(cfg: Config) -> None:
     # CKAN config is merged at startup to /tmp/production.ini
     # (base.ini + env.ini + secrets.ini); see deploy/base.ini.
@@ -566,6 +591,7 @@ def main() -> int:
             _blob_url(cfg.staging_lfs_account, cfg.staging_lfs_container, cfg.staging_lfs_sas),
         )
         ckan_migrate(cfg)
+        grant_datastore_permissions(cfg)
         ckan_reindex(cfg)
 
         slack(cfg, "sync OK", level="OK")
