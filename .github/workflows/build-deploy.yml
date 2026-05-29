@@ -3,6 +3,10 @@ name: Build and Deploy CKAN (staging)
 on:
   push:
     branches: [master, ckan211-prod-deploy-pr]
+  pull_request:
+    # Runs the test job only (build/deploy are gated off pull_request below),
+    # so PRs get a visible test status check without deploying.
+    branches: [master, ckan211-prod-deploy-pr]
   workflow_dispatch:
     inputs:
       image_tag:
@@ -36,8 +40,27 @@ jobs:
         with:
           submodules: recursive
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
+      # The dominant cost is `pipenv sync --dev` at bootstrap (CKAN + ~19
+      # extensions), which lands in the bind-mounted .adxvenv. Caching it on
+      # Pipfile.lock makes warm runs a near no-op. .adxvenv is gitignored and
+      # written by root in-container, so there are no ownership issues here.
+      - name: Cache Python venv
+        uses: actions/cache@v4
+        with:
+          path: .adxvenv
+          key: adxvenv-${{ runner.os }}-${{ hashFiles('Pipfile.lock') }}
+          restore-keys: |
+            adxvenv-${{ runner.os }}-
+
+      # Second cost: the entrypoint runs `yarn install` + build for the unaids
+      # React app on every boot. Cache its node_modules on the React yarn.lock.
+      - name: Cache unaids React node_modules
+        uses: actions/cache@v4
+        with:
+          path: submodules/ckanext-unaids/ckanext/unaids/react/node_modules
+          key: react-nm-${{ runner.os }}-${{ hashFiles('submodules/ckanext-unaids/ckanext/unaids/react/yarn.lock') }}
+          restore-keys: |
+            react-nm-${{ runner.os }}-
 
       - name: Prepare .env
         run: cp dev.env .env
@@ -83,6 +106,7 @@ jobs:
     # actually building (not a redeploy of an existing tag).
     if: >-
       always()
+      && github.event_name != 'pull_request'
       && needs.test.result != 'failure'
       && needs.test.result != 'cancelled'
       && (github.event_name != 'workflow_dispatch' || inputs.image_tag == '')
@@ -129,6 +153,7 @@ jobs:
     # was built (success) or already exists (build skipped on redeploy).
     if: >-
       always()
+      && github.event_name != 'pull_request'
       && needs.test.result != 'failure'
       && needs.test.result != 'cancelled'
       && (needs.build.result == 'success' || needs.build.result == 'skipped')
