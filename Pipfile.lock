@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "9c65150bc602efed14e2cef6b078391e5656865a1d20a10f3a37025609c9b29a"
+            "sha256": "e0480c0ef39380e1673551bf3abbffc6ac41189380ea5c91507976d9e05324fb"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -586,12 +586,11 @@
         },
         "frictionless": {
             "hashes": [
-                "sha256:6d22dc39126fb65cf7853b6db8d409637b056c77bc709abb344bbd50ca1bdddf",
-                "sha256:ab4bfe55f5d831c15a16760685036fdd85c9026d2d7c633b6672b1b04f8c48c6"
+                "sha256:78ee7c4ea784e85ef7117f17165baf4f2728790ba9406693df8370e812726c4a",
+                "sha256:8e5afc7c08364d4563797944920e044a8d37970c767c0c6920ac804a05c5f1a9"
             ],
             "index": "pypi",
-            "markers": "python_version >= '3.8'",
-            "version": "==5.16.1"
+            "version": "==5.13.1"
         },
         "giftless-client": {
             "hashes": [
@@ -3074,12 +3073,12 @@
         },
         "pyfakefs": {
             "hashes": [
-                "sha256:0968a49db692694ffed420e54a9f1cbae4636637b880e8ab09c8ccc0f11bd7ae",
-                "sha256:e59a36db447bf509ce9c97ab3d1510c08cc51895c5311325a560a5e5b5dc1940"
+                "sha256:6df12a7cf657637a1b036bc20059727c642f92990e90fee2fb003daa3cda6ca1",
+                "sha256:8959fe7058ba7efa65694b7979e123e27921a58f557a88628be93f0a936e6757"
             ],
             "index": "pypi",
-            "markers": "python_version >= '3.10'",
-            "version": "==6.2.0"
+            "markers": "python_version >= '3.6'",
+            "version": "==4.6.3"
         },
         "pygments": {
             "hashes": [

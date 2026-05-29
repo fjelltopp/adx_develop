@@ -92,7 +92,10 @@ python-jose = "==3.3.0"
 setuptools = ">=65.0.0,<80.0.0"
 raven = "==6.10.0"
 tableschema = "==1.20.2"
-frictionless = ">=5.0.0,<6.0.0"
+# Pinned to match ckanext-validation/-unaids requirements.txt (the version
+# those extensions are built and tested against). Newer 5.x dropped
+# frictionless.Resource.__create__, which their test suites still patch.
+frictionless = "==5.13.1"
 markupsafe = "==2.1.5"
 
 [dev-packages]
@@ -121,7 +124,9 @@ pytest-split = "==0.10.0"
 pytest-retry = "==1.7.0"
 pytest-mock = "*"
 mock = "*"
-pyfakefs = "*"
+# Pinned to match ckanext-validation dev-requirements.txt; pyfakefs 5.0+
+# removed the CamelCase API (CreateFile) its TestFiles suite uses.
+pyfakefs = "==4.6.*"
 coverage = "==7.7.1"
 junitparser = "==3.2.0"
 junit2html = "==31.0.2"
