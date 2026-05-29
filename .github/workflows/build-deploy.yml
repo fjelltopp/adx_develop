@@ -21,8 +21,71 @@ env:
   URL: https://dev.adr.fjelltopp.org
 
 jobs:
-  build:
+  test:
+    name: Extension tests
+    # Skip on a pure redeploy (workflow_dispatch with an existing image_tag);
+    # that image was already tested when it was built.
     if: github.event_name != 'workflow_dispatch' || inputs.image_tag == ''
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      # Fresh runner DB — no need to restart the db container during testsetup.
+      SKIP_DB_RESTART: "True"
+    steps:
+      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+        with:
+          submodules: recursive
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Prepare .env
+        run: cp dev.env .env
+
+      - name: Build images and start the dev stack
+        run: |
+          ./adx build
+          ./adx up
+
+      - name: Wait for CKAN bootstrap
+        run: |
+          for i in $(seq 1 90); do
+            if docker logs ckan 2>&1 | grep -q 'CKAN bootstrapping finished, environment ready'; then
+              echo "CKAN ready after ${i} checks"
+              exit 0
+            fi
+            echo "Waiting for CKAN bootstrap (${i}/90)…"
+            sleep 10
+          done
+          echo "::error::CKAN did not finish bootstrapping in time"
+          docker logs ckan
+          exit 1
+
+      - name: Create test databases
+        run: ./adx testsetup
+
+      - name: Run extension tests
+        run: |
+          set -e
+          for ext in unaids validation scheming dhis2harvester emailasusername; do
+            echo "::group::ckanext-${ext}"
+            ./adx test "${ext}" --no-interaction
+            echo "::endgroup::"
+          done
+
+      - name: Dump CKAN logs on failure
+        if: failure()
+        run: docker logs ckan || true
+
+  build:
+    needs: test
+    # Run when tests pass (success) or were skipped (redeploy), and we're
+    # actually building (not a redeploy of an existing tag).
+    if: >-
+      always()
+      && needs.test.result != 'failure'
+      && needs.test.result != 'cancelled'
+      && (github.event_name != 'workflow_dispatch' || inputs.image_tag == '')
     runs-on: ubuntu-latest
     outputs:
       image_tag: ${{ steps.meta.outputs.version }}
@@ -61,8 +124,14 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
 
   deploy:
-    needs: build
-    if: always() && (needs.build.result == 'success' || needs.build.result == 'skipped')
+    needs: [test, build]
+    # Never deploy if tests failed/cancelled. Otherwise deploy when the image
+    # was built (success) or already exists (build skipped on redeploy).
+    if: >-
+      always()
+      && needs.test.result != 'failure'
+      && needs.test.result != 'cancelled'
+      && (needs.build.result == 'success' || needs.build.result == 'skipped')
     runs-on: ubuntu-latest
     environment:
       name: staging
