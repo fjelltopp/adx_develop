@@ -44,8 +44,12 @@ jobs:
       # extensions), which lands in the bind-mounted .adxvenv. Caching it on
       # Pipfile.lock makes warm runs a near no-op. .adxvenv is gitignored and
       # written by root in-container, so there are no ownership issues here.
-      - name: Cache Python venv
-        uses: actions/cache@v4
+      # Restore + save are split (rather than the combined cache action) so the
+      # venv is saved even when the test step fails — otherwise the expensive
+      # `pipenv sync` is repeated cold on every triage run. Saved at job end.
+      - name: Restore Python venv
+        id: venv-cache
+        uses: actions/cache/restore@v4
         with:
           path: .adxvenv
           key: adxvenv-${{ runner.os }}-${{ hashFiles('Pipfile.lock') }}
@@ -54,8 +58,9 @@ jobs:
 
       # Second cost: the entrypoint runs `yarn install` + build for the unaids
       # React app on every boot. Cache its node_modules on the React yarn.lock.
-      - name: Cache unaids React node_modules
-        uses: actions/cache@v4
+      - name: Restore unaids React node_modules
+        id: react-cache
+        uses: actions/cache/restore@v4
         with:
           path: submodules/ckanext-unaids/ckanext/unaids/react/node_modules
           key: react-nm-${{ runner.os }}-${{ hashFiles('submodules/ckanext-unaids/ckanext/unaids/react/yarn.lock') }}
@@ -89,16 +94,43 @@ jobs:
 
       - name: Run extension tests
         run: |
-          set -e
+          # Run every suite (don't fail-fast) so one run shows the full picture,
+          # then fail at the end if any suite failed.
+          failed=()
           for ext in unaids validation scheming dhis2harvester emailasusername; do
             echo "::group::ckanext-${ext}"
-            ./adx test "${ext}" --no-interaction
+            if ./adx test "${ext}" --no-interaction; then
+              echo "ckanext-${ext}: PASS"
+            else
+              echo "ckanext-${ext}: FAIL"
+              failed+=("${ext}")
+            fi
             echo "::endgroup::"
           done
+          echo "--- summary ---"
+          if [ ${#failed[@]} -ne 0 ]; then
+            echo "::error::Failing suites: ${failed[*]}"
+            exit 1
+          fi
+          echo "All extension suites passed"
 
       - name: Dump CKAN logs on failure
         if: failure()
         run: docker logs ckan || true
+
+      - name: Save Python venv
+        if: always() && steps.venv-cache.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v4
+        with:
+          path: .adxvenv
+          key: ${{ steps.venv-cache.outputs.cache-primary-key }}
+
+      - name: Save unaids React node_modules
+        if: always() && steps.react-cache.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v4
+        with:
+          path: submodules/ckanext-unaids/ckanext/unaids/react/node_modules
+          key: ${{ steps.react-cache.outputs.cache-primary-key }}
 
   build:
     needs: test
