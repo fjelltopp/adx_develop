@@ -162,7 +162,12 @@ def run_tests(args, extra):
     # for cases like ckanext-ytp-requests repository which uses ytp_requests test directory internally
     extension_sub_path = extension_sub_path.replace("-", "_")
     retcode = call_command([
+        # Blank out the SMTP server for test runs so tests never reach the
+        # dev stack's smtp4dev and send real mail. Some suites (e.g.
+        # ckanext-unaids' send_dataset_transfer_emails error path) assert that
+        # sending fails when no server is configured.
         f'docker exec {args.interaction} -e CKAN_SQLALCHEMY_URL={CKAN_TEST_SQLALCHEMY_URL} '
+        f'-e CKAN_SMTP_SERVER= '
         f'ckan /usr/local/bin/ckan-pytest --capture=no --disable-warnings '
         f'--ckan-ini={extension_path}/test.ini '
         f'{extension_path}/{extension_sub_path}/tests '
