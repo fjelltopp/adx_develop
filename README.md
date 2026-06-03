@@ -165,7 +165,7 @@ To create and setup the test databases:
 adx testsetup
 ```
 
-Tests should be run with the version of nosetests-2.7 installed in CKAN's virtual environment. There is an alias set up inside the docker container called "ckan-nosetests" that points to this executable.
+Extensions are tested with pytest. The `adx test` command wraps `ckan-pytest` (an alias inside the container pointing to pytest in CKAN's virtual environment) and runs it against the extension's `test.ini`:
 
 ```shell
 adx test extension_name
@@ -177,16 +177,16 @@ e.g.
 adx test restricted
 ```
 
-To run specific test case you can you -k pytest arg:
+To run a specific test case you can use pytest's -k arg:
 
 ```shell
 adx test restricted -k test_regression_example
 ```
 
-To run the ckan core tests:
+To run the ckan core tests against the mounted `test-core.ini`:
 
 ```shell
-docker exec -it ckan ckan-nosetests --ckan --with-pylons=/usr/lib/ckan/venv/src/ckan/test-core.ini ckan ckanext
+docker exec -it ckan ckan-pytest --ckan-ini=/etc/ckan/test-core.ini --pyargs ckan
 ```
 
 ## Debugging with ipdb
