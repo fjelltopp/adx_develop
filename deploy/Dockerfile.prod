@@ -89,6 +89,16 @@ COPY deploy/nginx.conf /etc/nginx/nginx.conf
 
 RUN chmod +x /*.sh
 
+# Build webassets bundles into the image. Runtime env vars are unavailable at
+# build time, so these placeholders stand in only to satisfy CKAN's required
+# config checks - asset building never opens a connection to them.
+RUN CKAN_SQLALCHEMY_URL=postgresql://ckan:ckan@localhost/ckan \
+    CKAN_SOLR_URL=http://localhost:8983/solr/ckan \
+    CKAN_REDIS_URL=redis://localhost:6379/0 \
+    CKAN_DATAPUSHER_URL=http://localhost:8800 \
+    CKAN_SITE_URL=http://localhost:5000 \
+    ckan --config=$CKAN_CONFIG/base.ini asset build
+
 USER root
 EXPOSE 5000
 
