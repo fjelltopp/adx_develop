@@ -25,7 +25,7 @@ env:
   ACR_NAME: adracr
   IMAGE_NAME: ckan
   NAMESPACE: adr-p
-  URL: https://adr-p.fjelltopp.org
+  URL: https://adr.unaids.org
 
 jobs:
   promote-and-deploy:

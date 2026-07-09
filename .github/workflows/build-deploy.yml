@@ -22,7 +22,7 @@ env:
   ACR_NAME: adracr
   IMAGE_NAME: ckan
   NAMESPACE: adr-s
-  URL: https://dev.adr.fjelltopp.org
+  URL: https://dev-adr.unaids.org
 
 jobs:
   test:
