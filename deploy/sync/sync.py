@@ -6,9 +6,10 @@ Flow:
     prod -> adr-snapshots (backup phase)
     adr-snapshots -> staging (apply phase)
 
-Each artefact (Postgres dumps, LFS blobs, Auth0 users) is written to
-adr-snapshots first, then the staging side reads from there. Prod is
-read once per night regardless of how many places we restore to.
+Each artefact (Postgres dumps, LFS blobs, ckan-storage PV files, Auth0
+users) is written to adr-snapshots first, then the staging side reads
+from there. Prod is read once per night regardless of how many places
+we restore to.
 """
 from __future__ import annotations
 
@@ -56,6 +57,16 @@ class Config:
     staging_lfs_container: str
     staging_lfs_sas: str
 
+    # ckan-storage PV (Azure Files, dynamically-provisioned per-PVC storage
+    # account — unlike LFS these aren't named accounts, so account/share
+    # come from env too, not hardcoded).
+    prod_ckan_storage_account: str
+    prod_ckan_storage_share: str
+    prod_ckan_storage_sas: str
+    staging_ckan_storage_account: str
+    staging_ckan_storage_share: str
+    staging_ckan_storage_sas: str
+
     # Auth0 (single shared tenant; we only need export creds for backups)
     auth0_domain: str
     auth0_client_id: str
@@ -92,6 +103,12 @@ class Config:
             staging_lfs_account=req("STAGING_LFS_ACCOUNT"),
             staging_lfs_container=req("STAGING_LFS_CONTAINER"),
             staging_lfs_sas=req("STAGING_LFS_SAS"),
+            prod_ckan_storage_account=req("PROD_CKAN_STORAGE_ACCOUNT"),
+            prod_ckan_storage_share=req("PROD_CKAN_STORAGE_SHARE"),
+            prod_ckan_storage_sas=req("PROD_CKAN_STORAGE_SAS"),
+            staging_ckan_storage_account=req("STAGING_CKAN_STORAGE_ACCOUNT"),
+            staging_ckan_storage_share=req("STAGING_CKAN_STORAGE_SHARE"),
+            staging_ckan_storage_sas=req("STAGING_CKAN_STORAGE_SAS"),
             auth0_domain=req("AUTH0_PROD_DOMAIN"),
             auth0_client_id=req("AUTH0_PROD_CLIENT_ID"),
             auth0_client_secret=req("AUTH0_PROD_CLIENT_SECRET"),
@@ -290,6 +307,16 @@ def _blob_url(account: str, container: str, sas: str, prefix: str = "") -> str:
     else:
         path = f"{path}/"
     return f"https://{account}.blob.core.windows.net/{path}?{sas}"
+
+
+def _file_share_url(account: str, share: str, sas: str, prefix: str = "") -> str:
+    """Build an azcopy-friendly Azure Files URL. Mirrors _blob_url()."""
+    path = share.rstrip("/")
+    if prefix:
+        path = f"{path}/{prefix.strip('/')}/"
+    else:
+        path = f"{path}/"
+    return f"https://{account}.file.core.windows.net/{path}?{sas}"
 
 
 def azcopy_sync(src_url: str, dst_url: str) -> None:
@@ -568,6 +595,10 @@ def main() -> int:
             _blob_url(cfg.prod_lfs_account, cfg.prod_lfs_container, cfg.prod_lfs_sas),
             _blob_url(cfg.snapshots_account, cfg.snapshots_container, cfg.snapshots_sas, prefix="lfs"),
         )
+        azcopy_sync(
+            _file_share_url(cfg.prod_ckan_storage_account, cfg.prod_ckan_storage_share, cfg.prod_ckan_storage_sas),
+            _blob_url(cfg.snapshots_account, cfg.snapshots_container, cfg.snapshots_sas, prefix="ckan-storage"),
+        )
         auth0_export_users(cfg)
         slack(cfg, "backup phase done")
 
@@ -589,6 +620,10 @@ def main() -> int:
         azcopy_sync(
             _blob_url(cfg.snapshots_account, cfg.snapshots_container, cfg.snapshots_sas, prefix="lfs"),
             _blob_url(cfg.staging_lfs_account, cfg.staging_lfs_container, cfg.staging_lfs_sas),
+        )
+        azcopy_sync(
+            _blob_url(cfg.snapshots_account, cfg.snapshots_container, cfg.snapshots_sas, prefix="ckan-storage"),
+            _file_share_url(cfg.staging_ckan_storage_account, cfg.staging_ckan_storage_share, cfg.staging_ckan_storage_sas),
         )
         ckan_migrate(cfg)
         grant_datastore_permissions(cfg)
