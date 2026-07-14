@@ -70,6 +70,78 @@ jobs:
       - name: Prepare .env
         run: cp dev.env .env
 
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      # Pre-build every service image the dev stack builds, with GHA layer
+      # caching, so their apt/pip/node install layers survive across runs
+      # (`./adx build` below then just picks up the already-built images
+      # from the local daemon instead of rebuilding from scratch). `ckan`
+      # covers `supervisor` too - same image. Independent images, so they
+      # run as parallel steps against the same Buildx builder instead of
+      # one at a time.
+      - parallel:
+          - name: Build ckan dev image (cached)
+            uses: docker/build-push-action@263435318d21b8e681c14492fe198d362a7d2c83 # v6.10.0
+            with:
+              context: ./ckan
+              file: ./ckan/Dockerfile
+              load: true
+              cache-from: type=gha,scope=dev-ckan-image
+              cache-to: type=gha,mode=max,scope=dev-ckan-image
+              tags: ghcr.io/fjelltopp/adx_develop/ckan_base:development
+
+          - name: Build db dev image (cached)
+            uses: docker/build-push-action@263435318d21b8e681c14492fe198d362a7d2c83 # v6.10.0
+            with:
+              context: ./db
+              file: ./db/Dockerfile
+              load: true
+              build-args: |
+                DS_RO_PASS=datastore
+                POSTGRES_PASSWORD=ckan
+              cache-from: type=gha,scope=dev-db-image
+              cache-to: type=gha,mode=max,scope=dev-db-image
+              tags: adr.db:development
+
+          - name: Build solr dev image (cached)
+            uses: docker/build-push-action@263435318d21b8e681c14492fe198d362a7d2c83 # v6.10.0
+            with:
+              context: ./solr
+              file: ./solr/Dockerfile
+              load: true
+              cache-from: type=gha,scope=dev-solr-image
+              cache-to: type=gha,mode=max,scope=dev-solr-image
+              tags: adr.solr:development
+
+          - name: Build cron dev image (cached)
+            uses: docker/build-push-action@263435318d21b8e681c14492fe198d362a7d2c83 # v6.10.0
+            with:
+              context: ./cron
+              load: true
+              cache-from: type=gha,scope=dev-cron-image
+              cache-to: type=gha,mode=max,scope=dev-cron-image
+              tags: adr.cron:development
+
+          - name: Build datapusher dev image (cached)
+            uses: docker/build-push-action@263435318d21b8e681c14492fe198d362a7d2c83 # v6.10.0
+            with:
+              context: ./submodules/datapusher
+              load: true
+              cache-from: type=gha,scope=dev-datapusher-image
+              cache-to: type=gha,mode=max,scope=dev-datapusher-image
+              tags: adr.datapusher:development
+
+          - name: Build giftless dev image (cached)
+            uses: docker/build-push-action@263435318d21b8e681c14492fe198d362a7d2c83 # v6.10.0
+            with:
+              context: ./submodules/giftless/
+              file: ./submodules/giftless/Dockerfile
+              load: true
+              cache-from: type=gha,scope=dev-giftless-image
+              cache-to: type=gha,mode=max,scope=dev-giftless-image
+              tags: adr.giftless:development
+
       - name: Build images and start the dev stack
         run: |
           ./adx build
@@ -133,18 +205,18 @@ jobs:
           key: ${{ steps.react-cache.outputs.cache-primary-key }}
 
   build:
-    needs: test
-    # Run when tests pass (success) or were skipped (redeploy), and we're
-    # actually building (not a redeploy of an existing tag).
+    # Runs in parallel with `test` (image isn't pushed here, so there's
+    # nothing to gate on tests passing yet) - just not on a pure redeploy
+    # (workflow_dispatch with an existing image_tag), and not on pull_request
+    # (no image needed until it's actually going to staging).
     if: >-
-      always()
-      && github.event_name != 'pull_request'
-      && needs.test.result != 'failure'
-      && needs.test.result != 'cancelled'
+      github.event_name != 'pull_request'
       && (github.event_name != 'workflow_dispatch' || inputs.image_tag == '')
     runs-on: ubuntu-latest
     outputs:
       image_tag: ${{ steps.meta.outputs.version }}
+      tags: ${{ steps.meta.outputs.tags }}
+      labels: ${{ steps.meta.outputs.labels }}
     steps:
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
@@ -161,6 +233,37 @@ jobs:
           tags: |
             type=sha,prefix=sha-,format=short
 
+      - name: Build (no push)
+        uses: docker/build-push-action@263435318d21b8e681c14492fe198d362a7d2c83 # v6.10.0
+        with:
+          context: .
+          file: deploy/Dockerfile.prod
+          push: false
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+
+  push:
+    name: Push image
+    needs: [test, build]
+    # Only push once tests have actually passed (or were skipped as a pure
+    # redeploy, in which case build itself was skipped and this is too).
+    if: >-
+      always()
+      && github.event_name != 'pull_request'
+      && needs.test.result != 'failure'
+      && needs.test.result != 'cancelled'
+      && needs.build.result == 'success'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+        with:
+          submodules: recursive
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
       - name: Login to ACR
         uses: docker/login-action@af1e73f918a031802d376d3c8bbc3fe56130a9b0 # v4.4.0
         with:
@@ -168,27 +271,29 @@ jobs:
           username: ${{ secrets.ACR_USERNAME }}
           password: ${{ secrets.ACR_PASSWORD }}
 
-      - name: Build and push
+      # Same context/cache-from as the `build` job's step - this is a full
+      # cache hit (nothing to rebuild), it just uploads and pushes the
+      # already-built layers now that tests have passed.
+      - name: Push
         uses: docker/build-push-action@53b7df96c91f9c12dcc8a07bcb9ccacbed38856a # v7.3.0
         with:
           context: .
           file: deploy/Dockerfile.prod
           push: true
           cache-from: type=gha
-          cache-to: type=gha,mode=max
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
+          tags: ${{ needs.build.outputs.tags }}
+          labels: ${{ needs.build.outputs.labels }}
 
   deploy:
-    needs: [test, build]
+    needs: [test, build, push]
     # Never deploy if tests failed/cancelled. Otherwise deploy when the image
-    # was built (success) or already exists (build skipped on redeploy).
+    # was pushed (success) or already exists (build/push skipped on redeploy).
     if: >-
       always()
       && github.event_name != 'pull_request'
       && needs.test.result != 'failure'
       && needs.test.result != 'cancelled'
-      && (needs.build.result == 'success' || needs.build.result == 'skipped')
+      && (needs.push.result == 'success' || needs.push.result == 'skipped')
     runs-on: ubuntu-latest
     environment:
       name: staging
