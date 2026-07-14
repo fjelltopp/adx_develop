@@ -149,18 +149,18 @@ jobs:
           key: ${{ steps.react-cache.outputs.cache-primary-key }}
 
   build:
-    needs: test
-    # Run when tests pass (success) or were skipped (redeploy), and we're
-    # actually building (not a redeploy of an existing tag).
+    # Runs in parallel with `test` (image isn't pushed here, so there's
+    # nothing to gate on tests passing yet) - just not on a pure redeploy
+    # (workflow_dispatch with an existing image_tag), and not on pull_request
+    # (no image needed until it's actually going to staging).
     if: >-
-      always()
-      && github.event_name != 'pull_request'
-      && needs.test.result != 'failure'
-      && needs.test.result != 'cancelled'
+      github.event_name != 'pull_request'
       && (github.event_name != 'workflow_dispatch' || inputs.image_tag == '')
     runs-on: ubuntu-latest
     outputs:
       image_tag: ${{ steps.meta.outputs.version }}
+      tags: ${{ steps.meta.outputs.tags }}
+      labels: ${{ steps.meta.outputs.labels }}
     steps:
       - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
         with:
@@ -177,6 +177,37 @@ jobs:
           tags: |
             type=sha,prefix=sha-,format=short
 
+      - name: Build (no push)
+        uses: docker/build-push-action@263435318d21b8e681c14492fe198d362a7d2c83 # v6.10.0
+        with:
+          context: .
+          file: deploy/Dockerfile.prod
+          push: false
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+
+  push:
+    name: Push image
+    needs: [test, build]
+    # Only push once tests have actually passed (or were skipped as a pure
+    # redeploy, in which case build itself was skipped and this is too).
+    if: >-
+      always()
+      && github.event_name != 'pull_request'
+      && needs.test.result != 'failure'
+      && needs.test.result != 'cancelled'
+      && needs.build.result == 'success'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+        with:
+          submodules: recursive
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
       - name: Login to ACR
         uses: docker/login-action@5e57cd118135c172c3672efd75eb46360885c0ef # v3.6.0
         with:
@@ -184,27 +215,29 @@ jobs:
           username: ${{ secrets.ACR_USERNAME }}
           password: ${{ secrets.ACR_PASSWORD }}
 
-      - name: Build and push
+      # Same context/cache-from as the `build` job's step - this is a full
+      # cache hit (nothing to rebuild), it just uploads and pushes the
+      # already-built layers now that tests have passed.
+      - name: Push
         uses: docker/build-push-action@263435318d21b8e681c14492fe198d362a7d2c83 # v6.10.0
         with:
           context: .
           file: deploy/Dockerfile.prod
           push: true
           cache-from: type=gha
-          cache-to: type=gha,mode=max
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
+          tags: ${{ needs.build.outputs.tags }}
+          labels: ${{ needs.build.outputs.labels }}
 
   deploy:
-    needs: [test, build]
+    needs: [test, build, push]
     # Never deploy if tests failed/cancelled. Otherwise deploy when the image
-    # was built (success) or already exists (build skipped on redeploy).
+    # was pushed (success) or already exists (build/push skipped on redeploy).
     if: >-
       always()
       && github.event_name != 'pull_request'
       && needs.test.result != 'failure'
       && needs.test.result != 'cancelled'
-      && (needs.build.result == 'success' || needs.build.result == 'skipped')
+      && (needs.push.result == 'success' || needs.push.result == 'skipped')
     runs-on: ubuntu-latest
     environment:
       name: staging
