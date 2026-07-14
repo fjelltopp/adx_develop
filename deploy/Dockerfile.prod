@@ -55,22 +55,27 @@ RUN useradd -r -u 900 -m -c "ckan account" -d $CKAN_HOME -s /bin/false ckan
 # Install pipenv and uwsgi
 RUN pip3 install pipenv uwsgi
 
-# Copy submodules and Pipfile
-COPY submodules /usr/lib/adx/submodules
-COPY Pipfile Pipfile.lock /usr/lib/adx/
-
-# Install Python dependencies
-WORKDIR /usr/lib/adx
-RUN mkdir .venv && pipenv sync -v && ln -s .venv venv
-
 # Install Node.js and yarn for React build
 RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - && \
     apt-get install -y nodejs && \
     npm install --global yarn
 
+# Install React dependencies (copy only the yarn manifests first, so this
+# layer survives submodule changes that don't touch the React app)
+COPY submodules/ckanext-unaids/ckanext/unaids/react/package.json submodules/ckanext-unaids/ckanext/unaids/react/yarn.lock /usr/lib/adx/submodules/ckanext-unaids/ckanext/unaids/react/
+RUN yarn --cwd /usr/lib/adx/submodules/ckanext-unaids/ckanext/unaids/react/
+
+# Copy submodules and Pipfile. Several submodules (ckan itself, ckanext-*)
+# are installed as editable path packages straight from the Pipfile, so
+# pipenv sync needs them checked out first - this layer can't be cached
+# independently of submodule changes.
+COPY submodules /usr/lib/adx/submodules
+COPY Pipfile Pipfile.lock /usr/lib/adx/
+WORKDIR /usr/lib/adx
+RUN mkdir .venv && pipenv sync -v && ln -s .venv venv
+
 # Build React components
-RUN yarn --cwd /usr/lib/adx/submodules/ckanext-unaids/ckanext/unaids/react/ && \
-    yarn --cwd /usr/lib/adx/submodules/ckanext-unaids/ckanext/unaids/react/ build && \
+RUN yarn --cwd /usr/lib/adx/submodules/ckanext-unaids/ckanext/unaids/react/ build && \
     chmod -R 777 /usr/lib/adx/submodules/ckanext-unaids/ckanext/unaids/assets/build
 
 RUN chown -R ckan:ckan /usr/lib/adx/
