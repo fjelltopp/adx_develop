@@ -2,11 +2,11 @@ name: Build and Deploy CKAN (staging)
 
 on:
   push:
-    branches: [master, ckan211-prod-deploy-pr]
+    branches: [main]
   pull_request:
     # Runs the test job only (build/deploy are gated off pull_request below),
     # so PRs get a visible test status check without deploying.
-    branches: [master, ckan211-prod-deploy-pr]
+    branches: [main]
   workflow_dispatch:
     inputs:
       image_tag:
