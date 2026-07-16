@@ -71,7 +71,7 @@ jobs:
         run: cp dev.env .env
 
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
+        uses: docker/setup-buildx-action@v4
 
       # Pre-build every service image the dev stack builds, with GHA layer
       # caching, so their apt/pip/node install layers survive across runs
@@ -82,7 +82,7 @@ jobs:
       # one at a time.
       - parallel:
           - name: Build ckan dev image (cached)
-            uses: docker/build-push-action@263435318d21b8e681c14492fe198d362a7d2c83 # v6.10.0
+            uses: docker/build-push-action@53b7df96c91f9c12dcc8a07bcb9ccacbed38856a # v6.10.0
             with:
               context: ./ckan
               file: ./ckan/Dockerfile
@@ -92,7 +92,7 @@ jobs:
               tags: ghcr.io/fjelltopp/adx_develop/ckan_base:development
 
           - name: Build db dev image (cached)
-            uses: docker/build-push-action@263435318d21b8e681c14492fe198d362a7d2c83 # v6.10.0
+            uses: docker/build-push-action@53b7df96c91f9c12dcc8a07bcb9ccacbed38856a # v6.10.0
             with:
               context: ./db
               file: ./db/Dockerfile
@@ -105,7 +105,7 @@ jobs:
               tags: adr.db:development
 
           - name: Build solr dev image (cached)
-            uses: docker/build-push-action@263435318d21b8e681c14492fe198d362a7d2c83 # v6.10.0
+            uses: docker/build-push-action@53b7df96c91f9c12dcc8a07bcb9ccacbed38856a # v6.10.0
             with:
               context: ./solr
               file: ./solr/Dockerfile
@@ -115,7 +115,7 @@ jobs:
               tags: adr.solr:development
 
           - name: Build cron dev image (cached)
-            uses: docker/build-push-action@263435318d21b8e681c14492fe198d362a7d2c83 # v6.10.0
+            uses: docker/build-push-action@53b7df96c91f9c12dcc8a07bcb9ccacbed38856a # v6.10.0
             with:
               context: ./cron
               load: true
@@ -124,7 +124,7 @@ jobs:
               tags: adr.cron:development
 
           - name: Build datapusher dev image (cached)
-            uses: docker/build-push-action@263435318d21b8e681c14492fe198d362a7d2c83 # v6.10.0
+            uses: docker/build-push-action@53b7df96c91f9c12dcc8a07bcb9ccacbed38856a # v6.10.0
             with:
               context: ./submodules/datapusher
               load: true
@@ -133,7 +133,7 @@ jobs:
               tags: adr.datapusher:development
 
           - name: Build giftless dev image (cached)
-            uses: docker/build-push-action@263435318d21b8e681c14492fe198d362a7d2c83 # v6.10.0
+            uses: docker/build-push-action@53b7df96c91f9c12dcc8a07bcb9ccacbed38856a # v6.10.0
             with:
               context: ./submodules/giftless/
               file: ./submodules/giftless/Dockerfile
@@ -234,7 +234,7 @@ jobs:
             type=sha,prefix=sha-,format=short
 
       - name: Build (no push)
-        uses: docker/build-push-action@263435318d21b8e681c14492fe198d362a7d2c83 # v6.10.0
+        uses: docker/build-push-action@53b7df96c91f9c12dcc8a07bcb9ccacbed38856a # v6.10.0
         with:
           context: .
           file: deploy/Dockerfile.prod
@@ -257,12 +257,12 @@ jobs:
       && needs.build.result == 'success'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
           submodules: recursive
 
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
+        uses: docker/setup-buildx-action@v4
 
       - name: Login to ACR
         uses: docker/login-action@af1e73f918a031802d376d3c8bbc3fe56130a9b0 # v4.4.0
