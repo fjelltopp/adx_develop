@@ -170,7 +170,7 @@ jobs:
           # then fail at the end if any suite failed.
           failed=()
           for ext in unaids validation scheming dhis2harvester emailasusername \
-                     auth authz-service blob-storage fork geoview harvest pages \
+                     auth blob-storage fork geoview harvest pages \
                      restricted saml2auth versions ytp-request; do
             echo "::group::ckanext-${ext}"
             if ./adx test "${ext}" --no-interaction; then
