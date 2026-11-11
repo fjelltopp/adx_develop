@@ -169,7 +169,9 @@ jobs:
           # Run every suite (don't fail-fast) so one run shows the full picture,
           # then fail at the end if any suite failed.
           failed=()
-          for ext in unaids validation scheming dhis2harvester emailasusername; do
+          for ext in unaids validation scheming dhis2harvester emailasusername \
+                     auth blob-storage fork geoview harvest \
+                     versions ytp-request; do
             echo "::group::ckanext-${ext}"
             if ./adx test "${ext}" --no-interaction; then
               echo "ckanext-${ext}: PASS"
