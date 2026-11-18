@@ -1,5 +1,3 @@
-version: "3"
-
 volumes:
   ckan_storage:
   giftless_storage:
@@ -10,7 +8,7 @@ services:
 
   ckan:
     container_name: ckan
-    image: ghcr.io/fjelltopp/adx_develop/ckan_base:${CKAN_IMAGE_TAG}
+    image: adr.ckan:${CKAN_IMAGE_TAG}
     build:
       context: ./ckan
       dockerfile: Dockerfile
@@ -44,7 +42,7 @@ services:
       - CKAN_ERROR_EMAIL_FROM=support@fjelltopp_org
       - CKAN_GOOGLE_ANALYTICS_ID=${CKAN_GOOGLE_ANALYTICS_ID}
       - PYTHONDONTWRITEBYTECODE=1
-  
+
     volumes:
       - ckan_storage:/var/lib/ckan
       - ./:/usr/lib/adx
@@ -62,7 +60,7 @@ services:
 
   supervisor:
     container_name: supervisor
-    image: ghcr.io/fjelltopp/adx_develop/ckan_base:${CKAN_IMAGE_TAG}
+    image: adr.ckan:${CKAN_IMAGE_TAG}
     build:
       context: ./ckan
       dockerfile: Dockerfile
